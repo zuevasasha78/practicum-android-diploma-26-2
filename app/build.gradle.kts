@@ -50,34 +50,34 @@ dependencies {
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
 
-    //glide
+    // glide
     implementation(libs.glide)
 
-    //retrofit
+    // retrofit
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
 
-    //okhttp3 logging
+    // okhttp3 logging
     implementation(libs.logging.interceptor)
 
-    //koin
+    // koin
     implementation(libs.koin)
 
-    //fragment
+    // fragment
     implementation(libs.fragment)
 
-    //coroutines
+    // coroutines
     implementation(libs.coroutines)
 
-    //lifecycle
+    // lifecycle
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    //navigation
+    // navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
-    //room
+    // room
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
