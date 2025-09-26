@@ -2,6 +2,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -46,6 +49,38 @@ dependencies {
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
+
+    //glide
+    implementation(libs.glide)
+
+    //retrofit
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
+
+    //okhttp3 logging
+    implementation(libs.logging.interceptor)
+
+    //koin
+    implementation(libs.koin)
+
+    //fragment
+    implementation(libs.fragment)
+
+    //coroutines
+    implementation(libs.coroutines)
+
+    //lifecycle
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    //navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+
+    //room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)
