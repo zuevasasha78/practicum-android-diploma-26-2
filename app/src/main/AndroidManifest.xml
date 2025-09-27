@@ -17,7 +17,7 @@
         android:theme="@style/Theme.PracticumAndroidDiploma"
         tools:targetApi="31">
         <activity
-            android:name=".ui.root.RootActivity"
+            android:name=".main.presentation.RootActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
