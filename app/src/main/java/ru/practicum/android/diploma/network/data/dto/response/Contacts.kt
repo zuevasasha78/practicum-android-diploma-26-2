@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.network.data.dto
+package ru.practicum.android.diploma.network.data.dto.response
 
 data class Contacts(
     val id: String,
