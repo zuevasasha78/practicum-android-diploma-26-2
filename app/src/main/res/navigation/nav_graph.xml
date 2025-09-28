@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="ru.practicum.android.diploma.favourites.presentation.FavouriteFragment"
+        android:label="FavouriteFragment"
+        tools:layout="@layout/fragment_favourite">
+        <action
+            android:id="@+id/action_favouriteFragment_to_vacancyFragment"
+            app:destination="@id/vacancyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="ru.practicum.android.diploma.search.presentation.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_vacancyFragment"
+            app:destination="@id/vacancyFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_mainFilterFragment"
+            app:destination="@id/mainFilterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="ru.practicum.android.diploma.team.presentation.TeamFragment"
+        android:label="TeamFragment"
+        tools:layout="@layout/fragment_team"/>
+    <fragment
+        android:id="@+id/vacancyFragment"
+        android:name="ru.practicum.android.diploma.vacancy.presentation.VacancyFragment"
+        android:label="VacancyFragment"
+        tools:layout="@layout/fragment_vacancy"/>
+    <fragment
+        android:id="@+id/chooserFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment"
+        android:label="ChooserFragment"
+        tools:layout="@layout/fragment_chooser">
+        <argument
+            android:name="isCountry"
+            app:argType="boolean"
+            android:defaultValue="false"
+            />
+        <argument
+            android:name="isTown"
+            app:argType="boolean"
+            android:defaultValue="false"
+            />
+        <argument
+            android:name="isSector"
+            app:argType="boolean"
+            android:defaultValue="false"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFilterFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment"
+        android:label="MainFilterFragment"
+        tools:layout="@layout/fragment_main_filter">
+        <action
+            android:id="@+id/action_mainFilterFragment_to_workPlaceFragment"
+            app:destination="@id/workPlaceFragment" />
+        <action
+            android:id="@+id/action_mainFilterFragment_to_chooserFragment"
+            app:destination="@id/chooserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/workPlaceFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.work_place.WorkPlaceFragment"
+        android:label="WorkPlaceFragment"
+        tools:layout="@layout/fragment_work_place">
+        <action
+            android:id="@+id/action_workPlaceFragment_to_chooserFragment"
+            app:destination="@id/chooserFragment"
+            />
+    </fragment>
+</navigation>
