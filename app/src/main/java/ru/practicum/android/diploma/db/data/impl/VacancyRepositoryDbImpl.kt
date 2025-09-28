@@ -13,7 +13,8 @@ class VacancyRepositoryDbImpl : VacancyRepositoryDb {
 
     private val roomDb = Room.databaseBuilder(
         getAppContext(),
-        AppDatabase::class.java, "database.db"
+        AppDatabase::class.java,
+        "database.db"
     )
         .build()
 

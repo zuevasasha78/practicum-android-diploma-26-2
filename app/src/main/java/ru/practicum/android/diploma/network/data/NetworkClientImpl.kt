@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.network.data
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -82,6 +83,7 @@ class NetworkClientImpl : NetworkClient {
             } catch (e: HttpException) {
                 ApiResult.Error(e.code())
             } catch (e: JsonSyntaxException) {
+                Log.e("NetworkClient", "JSON parsing error", e)
                 ApiResult.Error(HTTP_CODE_400)
             }
         }
