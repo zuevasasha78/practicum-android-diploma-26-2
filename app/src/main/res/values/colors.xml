@@ -9,6 +9,7 @@
     <color name="gray">#AEAFB4</color>
     <color name="gray_light">#E6E8EB</color>
     <color name="background">#1A1B2280</color>
+    <color name="background_text_input">#E6E8EB</color>
     <color name="background_color">@color/white_universal</color>
     <color name="text_color">@color/black_universal</color>
     <color name="button_background">@color/blue</color>

@@ -47,12 +47,8 @@
         <item name="navigationIcon">@drawable/icon_back_arrow_black</item>
     </style>
 
-    <style name="background_bottom_nav" parent="Widget.MaterialComponents.BottomNavigationView">
+    <style name="background_bottom_nav" parent="bottom_nav_colors">
         <item name="itemBackground">@color/white_universal</item>
-    </style>
-
-    <style name="text_input_layout_color">
-        <item name="android:background">@drawable/edittext_background_light</item>
     </style>
 
     <style name="text_input_color">

@@ -6,5 +6,8 @@
     <string name="enter_amount">Введите сумму</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
+    <string name="main">Главная</string>
+    <string name="favorite">Избранное</string>
+    <string name="team">Команда</string>
     <string name="expected_salary">Ожидаемая зарплата</string>
 </resources>
