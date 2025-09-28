@@ -10,7 +10,6 @@ class App : Application() {
         appContext = this
     }
 
-
     // заглушка до подключения di
     companion object {
         private var appContext: App? = null
