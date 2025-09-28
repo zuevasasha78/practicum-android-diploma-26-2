@@ -10,9 +10,11 @@ class App : Application() {
         appContext = this
     }
 
-    companion object {
-        private lateinit var appContext: App
 
-        fun getAppContext(): Context = appContext.applicationContext
+    // заглушка до подключения di
+    companion object {
+        private var appContext: App? = null
+
+        fun getAppContext(): Context = appContext!!.applicationContext
     }
 }
