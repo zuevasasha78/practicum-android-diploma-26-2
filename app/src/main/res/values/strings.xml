@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="search_for_vacancies">Поиск вакансий</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="enter_query">Введите запрос</string>
+    <string name="enter_amount">Введите сумму</string>
+    <string name="apply">Применить</string>
+    <string name="reset">Сбросить</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
 </resources>
