@@ -20,6 +20,11 @@ class VacancyRepositoryDbImpl : VacancyRepositoryDb {
 
     private val vacancyDao: VacancyDao = roomDb.getVacancyDao()
 
+    override suspend fun addVacancy(vacancy: VacancyEntity) {
+        // todo сконвертировать Модель в VacancyDbConvertor через VacancyDbConvertor
+        vacancyDao.addVacancy(vacancy)
+    }
+
     override suspend fun deleteVacancy(vacancyId: String) {
         vacancyDao.deleteVacancy(vacancyId)
     }

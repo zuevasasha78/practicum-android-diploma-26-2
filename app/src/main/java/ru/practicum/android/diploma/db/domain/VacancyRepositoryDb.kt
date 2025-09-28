@@ -5,6 +5,9 @@ import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 
 interface VacancyRepositoryDb {
 
+    // todo заменить VacancyEntity на модель
+    suspend fun addVacancy(vacancy: VacancyEntity)
+
     suspend fun deleteVacancy(vacancyId: String)
 
     // todo заменить VacancyEntity на модель

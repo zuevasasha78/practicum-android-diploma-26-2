@@ -1,8 +1,5 @@
 package ru.practicum.android.diploma.network.data
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +16,7 @@ import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponse
+import ru.practicum.android.diploma.utils.NetworkUtils
 
 class NetworkClientImpl : NetworkClient {
 
@@ -28,6 +26,8 @@ class NetworkClientImpl : NetworkClient {
 
         private const val HTTP_CODE_400 = 400
     }
+
+    private val networkUtils = NetworkUtils(getAppContext())
 
     private val client = OkHttpClient.Builder()
         .retryOnConnectionFailure(true)
@@ -73,7 +73,7 @@ class NetworkClientImpl : NetworkClient {
     }
 
     private suspend fun <T> doRequest(serviceRequest: suspend () -> T): ApiResult<T> {
-        if (isConnected() == false) {
+        if (networkUtils.isInternetAvailable() == false) {
             return ApiResult.NoInternetConnection
         }
         return withContext(Dispatchers.IO) {
@@ -87,17 +87,5 @@ class NetworkClientImpl : NetworkClient {
                 ApiResult.Error(HTTP_CODE_400)
             }
         }
-    }
-
-    private fun isConnected(): Boolean {
-        val connectivityManager =
-            getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val network = connectivityManager.activeNetwork
-        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-        return networkCapabilities != null &&
-            (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
     }
 }
