@@ -7,6 +7,6 @@ interface VacancyRepositoryDb {
 
     suspend fun deleteVacancy(vacancyId: String)
 
-    //todo заменить VacancyEntity на модель
+    // todo заменить VacancyEntity на модель
     suspend fun getVacancies(): Flow<List<VacancyEntity>?>
 }

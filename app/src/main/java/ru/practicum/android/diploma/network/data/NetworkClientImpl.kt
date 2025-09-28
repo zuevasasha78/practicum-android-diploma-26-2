@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.network.data
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
+import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -11,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.App.Companion.appContext
+import ru.practicum.android.diploma.App.Companion.getAppContext
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilter
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
@@ -21,7 +21,12 @@ import ru.practicum.android.diploma.network.data.dto.response.VacancyResponse
 
 class NetworkClientImpl : NetworkClient {
 
-    private val BASE_URL = "https://practicum-diploma-8bc38133faba.herokuapp.com/"
+    companion object {
+
+        private const val BASE_URL = "https://practicum-diploma-8bc38133faba.herokuapp.com/"
+
+        private const val HTTP_CODE_400 = 400
+    }
 
     private val client = OkHttpClient.Builder()
         .retryOnConnectionFailure(true)
@@ -74,32 +79,23 @@ class NetworkClientImpl : NetworkClient {
             try {
                 val response = serviceRequest()
                 ApiResult.Success(response)
-            } catch (e: Throwable) {
-                if (e is HttpException) {
-                    ApiResult.Error(e.code())
-                } else {
-                    ApiResult.Error(400)
-                }
+            } catch (e: HttpException) {
+                ApiResult.Error(e.code())
+            } catch (e: JsonSyntaxException) {
+                ApiResult.Error(HTTP_CODE_400)
             }
         }
     }
 
     private fun isConnected(): Boolean {
-        return true
         val connectivityManager =
-            appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-            return networkCapabilities != null &&
-                (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
-        } else {
-            @Suppress("DEPRECATION")
-            val activeNetwork = connectivityManager.activeNetworkInfo
-            return activeNetwork != null && activeNetwork.isConnected
-        }
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+        return networkCapabilities != null &&
+            (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
     }
 }
