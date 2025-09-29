@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">@color/black_universal</color>
+    <color name="white">@color/white_universal</color>
     <color name="black_universal">#1A1B22</color>
     <color name="white_universal">#FDFDFD</color>
     <color name="blue">#3772E7</color>
@@ -10,9 +10,11 @@
     <color name="gray_light">#E6E8EB</color>
     <color name="background">#1A1B2280</color>
     <color name="background_text_input">@color/gray_light</color>
+    <color name="hint_color_text_input">@color/gray</color>
     <color name="background_color">@color/white_universal</color>
     <color name="text_color">@color/black_universal</color>
     <color name="button_background">@color/blue</color>
     <color name="button_text">@color/white_universal</color>
     <color name="transparent">#00000000</color>
+    <color name="g_board">#E8EAED</color>
 </resources>
