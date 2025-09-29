@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.db.data.dao.VacancyDao
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.db.domain.VacancyRepository
 
-class VacancyRepositoryImpl(private val appDatabase: AppDatabase) : VacancyRepository {
+class VacancyRepositoryImpl(appDatabase: AppDatabase) : VacancyRepository {
 
     private val vacancyDao: VacancyDao = appDatabase.getVacancyDao()
 
