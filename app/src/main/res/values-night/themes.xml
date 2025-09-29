@@ -24,10 +24,6 @@
 
     <style name="BaseTheme" parent="Base.Theme.PracticumAndroidDiploma" />
 
-    <style name="textinput">
-        <item name="android:background">@drawable/edittext_background</item>
-    </style>
-
     <style name="icon_filter" parent="toolbar_icon">
         <item name="android:background">@drawable/icon_filter_off</item>
         <item name="android:backgroundTint">@color/white_universal</item>
