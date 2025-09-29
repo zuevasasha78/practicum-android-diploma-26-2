@@ -9,19 +9,26 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
-import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment.Companion.IS_SECTOR_ARG
+import ru.practicum.android.diploma.filter.domain.ChooserType
+import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment.Companion.ARG_NAME
 
 class MainFilterFragment : Fragment() {
-
     private var _binding: FragmentMainFilterBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentMainFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.placeChooserButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
@@ -29,7 +36,7 @@ class MainFilterFragment : Fragment() {
         binding.sectorChooserButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_mainFilterFragment_to_chooserFragment,
-                bundleOf(IS_SECTOR_ARG to true)
+                bundleOf(ARG_NAME to ChooserType.SectorType),
             )
         }
     }

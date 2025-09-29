@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.work_place
+package ru.practicum.android.diploma.filter.presentation.workplace
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,31 +9,37 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkPlaceBinding
-import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment.Companion.IS_COUNTRY_ARG
-import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment.Companion.IS_TOWN_ARG
+import ru.practicum.android.diploma.filter.domain.ChooserType
+import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment
 
 class WorkPlaceFragment : Fragment() {
-
     private var _binding: FragmentWorkPlaceBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentWorkPlaceBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.townButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_workPlaceFragment_to_chooserFragment,
-                bundleOf(IS_TOWN_ARG to true)
+                bundleOf(ChooserFragment.ARG_NAME to ChooserType.TownType),
             )
         }
         binding.countryButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_workPlaceFragment_to_chooserFragment,
-                bundleOf(IS_COUNTRY_ARG to true)
+                bundleOf(ChooserFragment.ARG_NAME to ChooserType.CountryType),
             )
         }
     }

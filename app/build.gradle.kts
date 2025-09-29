@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
     id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "1.8.0"
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.navigation.safeargs)
 }

@@ -42,20 +42,8 @@
         android:label="ChooserFragment"
         tools:layout="@layout/fragment_chooser">
         <argument
-            android:name="isCountry"
-            app:argType="boolean"
-            android:defaultValue="false"
-            />
-        <argument
-            android:name="isTown"
-            app:argType="boolean"
-            android:defaultValue="false"
-            />
-        <argument
-            android:name="isSector"
-            app:argType="boolean"
-            android:defaultValue="false"
-            />
+            android:name="type"
+            app:argType="ru.practicum.android.diploma.filter.domain.ChooserType"/>
     </fragment>
     <fragment
         android:id="@+id/mainFilterFragment"
@@ -71,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/workPlaceFragment"
-        android:name="ru.practicum.android.diploma.filter.presentation.work_place.WorkPlaceFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.workplace.WorkPlaceFragment"
         android:label="WorkPlaceFragment"
         tools:layout="@layout/fragment_work_place">
         <action

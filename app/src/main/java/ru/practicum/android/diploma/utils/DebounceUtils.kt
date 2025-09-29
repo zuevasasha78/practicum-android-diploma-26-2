@@ -9,12 +9,16 @@ class DebounceUtils {
     private var searchJob: Job? = null
     private var isClickAllowed = true
 
-    fun searchDebounce(scope: CoroutineScope, request: suspend () -> Unit) {
+    fun searchDebounce(
+        scope: CoroutineScope,
+        request: suspend () -> Unit,
+    ) {
         searchJob?.cancel()
-        searchJob = scope.launch {
-            delay(SEARCH_DEBOUNCE_DELAY)
-            request()
-        }
+        searchJob =
+            scope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY)
+                request()
+            }
     }
 
     fun clickDebounce(scope: CoroutineScope): Boolean {
