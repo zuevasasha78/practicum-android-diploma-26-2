@@ -7,9 +7,9 @@ import ru.practicum.android.diploma.App.Companion.getAppContext
 import ru.practicum.android.diploma.db.data.AppDatabase
 import ru.practicum.android.diploma.db.data.dao.VacancyDao
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
-import ru.practicum.android.diploma.db.domain.VacancyRepositoryDb
+import ru.practicum.android.diploma.db.domain.VacancyRepository
 
-class VacancyRepositoryDbImpl : VacancyRepositoryDb {
+class VacancyRepositoryImpl : VacancyRepository {
 
     private val roomDb = Room.databaseBuilder(
         getAppContext(),
