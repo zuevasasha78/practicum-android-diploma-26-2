@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.presentation.RootActivity">
+    tools:context=".main.presentation.RootActivity"
+    android:theme="@style/Theme.PracticumAndroidDiploma">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_view"
@@ -35,5 +36,5 @@
         app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
