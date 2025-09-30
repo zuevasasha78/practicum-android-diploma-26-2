@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">@color/white_universal</color>
+    <color name="white">@color/black_universal</color>
+    <color name="background_text_input">@color/gray</color>
+    <color name="background_color">@color/black_universal</color>
+    <color name="hint_color_text_input">@color/white_universal</color>
+    <color name="g_board">#263238</color>
+</resources>

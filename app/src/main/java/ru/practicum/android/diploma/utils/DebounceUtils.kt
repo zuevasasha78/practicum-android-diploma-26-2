@@ -3,22 +3,23 @@ package ru.practicum.android.diploma.utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class DebounceUtils {
+object DebounceUtils {
+    private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    private const val CLICK_DEBOUNCE_DELAY = 1000L
     private var searchJob: Job? = null
     private var isClickAllowed = true
 
-    fun searchDebounce(
-        scope: CoroutineScope,
-        request: suspend () -> Unit,
-    ) {
+    fun searchDebounce(scope: CoroutineScope, request: suspend () -> Unit) {
         searchJob?.cancel()
-        searchJob =
-            scope.launch {
-                delay(SEARCH_DEBOUNCE_DELAY)
+        searchJob = scope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            if (isActive) {
                 request()
             }
+        }
     }
 
     fun clickDebounce(scope: CoroutineScope): Boolean {
@@ -31,10 +32,5 @@ class DebounceUtils {
             }
         }
         return currentValue
-    }
-
-    private companion object {
-        const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
