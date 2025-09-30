@@ -2,14 +2,11 @@ package ru.practicum.android.diploma.db.data.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.db.data.AppDatabase
 import ru.practicum.android.diploma.db.data.dao.VacancyDao
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.db.domain.VacancyRepository
 
-class VacancyRepositoryImpl(appDatabase: AppDatabase) : VacancyRepository {
-
-    private val vacancyDao: VacancyDao = appDatabase.getVacancyDao()
+class VacancyRepositoryImpl(private val vacancyDao: VacancyDao) : VacancyRepository {
 
     override suspend fun addVacancy(vacancy: VacancyEntity) {
         // todo сконвертировать Модель в VacancyDbConvertor через VacancyDbConvertor

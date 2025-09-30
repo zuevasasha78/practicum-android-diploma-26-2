@@ -14,4 +14,5 @@ val dataBaseModule = module {
     }
     single { Gson() }
     single { VacancyDbConvertor(get()) }
+    single { get<AppDatabase>().getVacancyDao() }
 }
