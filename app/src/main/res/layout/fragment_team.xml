@@ -9,18 +9,10 @@
 
     <TextView
         android:id="@+id/team_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_24dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:paddingVertical="@dimen/_19dp"
+        style="@style/screen_title"
         android:text="@string/team"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textFontWeight="500"
-        android:textSize="@dimen/item_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/about_us"
