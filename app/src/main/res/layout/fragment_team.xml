@@ -39,28 +39,28 @@
         android:id="@+id/developer1"
         style="@style/team_member"
         android:layout_marginTop="@dimen/_24dp"
-        android:text="Александра Зуева"
+        android:text="@string/developer1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_us" />
 
     <TextView
         android:id="@+id/developer2"
         style="@style/team_member"
-        android:text="Владислав Хамин"
+        android:text="@string/developer2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/developer1" />
 
     <TextView
         android:id="@+id/developer3"
         style="@style/team_member"
-        android:text="Максим Овсянников"
+        android:text="@string/developer3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/developer2" />
 
     <TextView
         android:id="@+id/developer4"
         style="@style/team_member"
-        android:text="Руслан Фазлыев"
+        android:text="@string/developer4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/developer3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
