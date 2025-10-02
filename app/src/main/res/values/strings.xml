@@ -10,4 +10,10 @@
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
     <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="team">Команда</string>
+    <string name="about_us">Над приложением работали</string>
+    <string name="developer1">Александра Зуева</string>
+    <string name="developer2">Владислав Хамин</string>
+    <string name="developer3">Максим Овсянников</string>
+    <string name="developer4">Руслан Фазлыев</string>
 </resources>
