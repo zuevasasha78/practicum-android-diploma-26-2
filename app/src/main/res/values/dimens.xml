@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="item_title">22sp</dimen>
-    <dimen name="item_text">16sp</dimen>
+    <!--Common dimensions-->
+    <dimen name="_8dp">8dp</dimen>
     <dimen name="logo_corner_radius">12dp</dimen>
+    <dimen name="_16dp">16dp</dimen>
+    <dimen name="_24dp">24dp</dimen>
+    <dimen name="_19dp">19dp</dimen>
+
+    <!-- Text dimensions-->
+    <dimen name="item_text">16sp</dimen>
+    <dimen name="item_title">22sp</dimen>
+    <dimen name="_32sp">32sp</dimen>
 </resources>
