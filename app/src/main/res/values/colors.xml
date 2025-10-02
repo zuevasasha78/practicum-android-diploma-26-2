@@ -17,4 +17,6 @@
     <color name="button_text">@color/white_universal</color>
     <color name="transparent">#00000000</color>
     <color name="g_board">#E8EAED</color>
+
+    <color name="placeholder">@color/gray_light</color>
 </resources>
