@@ -11,6 +11,9 @@ import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.vacancy.domain.GetVacancyInteractor
 
+const val ERROR_404 = 404
+const val TWO_SECOND = 2000L
+
 class VacancyFragment : Fragment() {
 
     private var _binding: FragmentVacancyBinding? = null
@@ -37,13 +40,16 @@ class VacancyFragment : Fragment() {
     private fun loadVacancy() {
         showLoading()
 
-        // Заглушка - через 2 секунды показываем контент
+        // Заглушка - через 2 секунды показываем случайное состояние
         binding.root.postDelayed({
-            showContent()
+            val randomState = (0..2).random() // 0, 1 или 2
 
-            // showError(404)
-            // showNoInternet()
-        }, 2000)
+            when (randomState) {
+                0 -> showContent() // Успех
+                1 -> showNoInternet() // Нет интернета
+                2 -> showError(ERROR_404) // Ошибка 404
+            }
+        }, TWO_SECOND)
     }
 
     private fun showLoading() {
@@ -65,7 +71,7 @@ class VacancyFragment : Fragment() {
         binding.vacancyDetails.isVisible = false
 
         when (errorCode) {
-            404 -> {
+            ERROR_404 -> {
                 binding.placeholderVacancyNotFound.isVisible = true
                 binding.placeholderServerError.isVisible = false
             }

@@ -121,7 +121,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="От 1 года до 3 лех" />
+                android:text="От 1 года до 3 лех"
+
+                />
 
             <TextView
                 android:id="@+id/employment_type"
@@ -223,22 +225,56 @@
         android:visibility="gone"
         />
 
-    <View
+    <LinearLayout
         android:id="@+id/placeholder_server_error"
-        android:layout_width="328dp"
-        android:layout_height="223dp"
-        android:background="@drawable/placeholder_server_error"
-        style="@style/vacancy_placeholder"
-        android:visibility="gone"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="135dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <View
+        <View
+            android:layout_width="328dp"
+            android:layout_height="223dp"
+            android:background="@drawable/placeholder_server_error"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/server_error"
+            style="@style/vacancy_text_22_medium"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/placeholder_vacancy_not_found"
-        android:layout_width="328dp"
-        android:layout_height="223dp"
-        android:background="@drawable/placeholder_vacancy_not_found"
-        style="@style/vacancy_placeholder"
-        android:visibility="gone"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="135dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="328dp"
+            android:layout_height="223dp"
+            android:background="@drawable/placeholder_vacancy_not_found"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/vacancy_not_found_or_deleted"
+            style="@style/vacancy_text_22_medium"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>
