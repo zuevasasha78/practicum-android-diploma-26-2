@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.practicum.android.diploma.databinding.VacancyItemViewBinding
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 
 class VacancyAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<VacancyViewHolder>() {
@@ -14,7 +16,9 @@ class VacancyAdapter(private val clickListener: VacancyClickListener) : Recycler
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
-        return VacancyViewHolder.from(parent)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = VacancyItemViewBinding.inflate(layoutInflater, parent, false)
+        return VacancyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: VacancyViewHolder, position: Int) {

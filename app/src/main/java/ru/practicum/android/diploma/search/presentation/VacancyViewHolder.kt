@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -27,13 +25,5 @@ class VacancyViewHolder(private val viewBinding: VacancyItemViewBinding) :
                 RoundedCorners(roundValue)
             )
             .into(viewBinding.employerLogoImage)
-    }
-
-    companion object {
-        fun from(parent: ViewGroup): VacancyViewHolder {
-            val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = VacancyItemViewBinding.inflate(layoutInflater, parent, false)
-            return VacancyViewHolder(binding)
-        }
     }
 }
