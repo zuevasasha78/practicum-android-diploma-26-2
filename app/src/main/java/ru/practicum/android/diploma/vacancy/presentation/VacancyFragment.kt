@@ -6,21 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.Job
-import org.koin.android.ext.android.inject
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.vacancy.domain.GetVacancyInteractor
+import ru.practicum.android.diploma.vacancy.domain.VacancyState
+import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 
-const val ERROR_404 = 404
-const val TWO_SECOND = 2000L
 
 class VacancyFragment : Fragment() {
 
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
 
-    private val getVacancyInteractor: GetVacancyInteractor by inject()
-    private var loadJob: Job? = null
+    private val viewModel: VacancyViewModel by viewModel()
+    private var currentVacancy: VacancyModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,22 +39,84 @@ class VacancyFragment : Fragment() {
         binding.toolbarVacancy.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+
+        setupObservers()
         loadVacancy()
     }
 
-    private fun loadVacancy() {
-        showLoading()
-
-        // Заглушка - через 2 секунды показываем случайное состояние
-        binding.root.postDelayed({
-            val randomState = (0..2).random() // 0, 1 или 2
-
-            when (randomState) {
-                0 -> showContent() // Успех
-                1 -> showNoInternet() // Нет интернета
-                2 -> showError(ERROR_404) // Ошибка 404
+    private fun setupObservers() {
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is VacancyState.Loading -> showLoading()
+                is VacancyState.Content -> {
+                    showContent()
+                    currentVacancy = state.vacancy
+                    bindVacancyData(state.vacancy)
+                }
+                is VacancyState.NoInternet -> showNoInternet()
+                is VacancyState.ServerError -> showError()
+                is VacancyState.VacancyNotFound -> showVacancyNotFound()
             }
-        }, TWO_SECOND)
+        }
+
+        viewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
+            updateFavoriteIcon(isFavorite)
+        }
+    }
+
+    private fun loadVacancy() {
+        val vacancyId = arguments?.getString(ARG_VACANCY_ID) ?: ""
+        viewModel.loadVacancy(vacancyId)
+    }
+
+    private fun bindVacancyData(vacancy: VacancyModel) {
+        binding.vacancyName.text = vacancy.name
+        binding.vacancyPayment.text = vacancy.salary ?: "Зарплата не указана"
+        binding.employerName.text = vacancy.employerName
+        binding.area.text = vacancy.area
+        binding.experience.text = vacancy.experience ?: "Не указан"
+        binding.employmentType.text = vacancy.employment ?: "Не указан"
+
+        Glide.with(this).load(vacancy.employerLogoUrl)
+            .placeholder(R.drawable.employer_logo_placeholder)
+            .into(binding.employerLogo)
+
+        binding.vacancyResponsibilities.text = vacancy.responsibilities ?: "Не указаны"
+        binding.vacancyRequirements.text = vacancy.requirements ?: "Не указаны"
+        binding.vacancyConditions.text = vacancy.conditions ?: "Не указаны"
+        binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
+
+        setupClickListeners(vacancy)
+    }
+
+    private fun setupClickListeners(vacancy: VacancyModel) {
+        binding.favorite.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.toggleFavorite(vacancy.id, vacancy)
+            }
+        }
+
+        binding.share.setOnClickListener {
+            val shareContent = viewModel.prepareShareContent(vacancy)
+            shareVacancy(shareContent)
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_on)
+        } else {
+            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_off)
+        }
+    }
+
+    private fun shareVacancy(shareContent: String) {
+        val shareIntent = android.content.Intent().apply {
+            action = android.content.Intent.ACTION_SEND
+            putExtra(android.content.Intent.EXTRA_TEXT, shareContent)
+            type = "text/plain"
+        }
+        startActivity(android.content.Intent.createChooser(shareIntent, "Поделиться вакансией"))
     }
 
     private fun showLoading() {
@@ -69,20 +133,18 @@ class VacancyFragment : Fragment() {
         binding.placeholderVacancyNotFound.isVisible = false
     }
 
-    private fun showError(errorCode: Int) {
+    private fun showError() {
         binding.progressbar.isVisible = false
         binding.vacancyDetails.isVisible = false
+        binding.placeholderServerError.isVisible = true
+        binding.placeholderVacancyNotFound.isVisible = false
+    }
 
-        when (errorCode) {
-            ERROR_404 -> {
-                binding.placeholderVacancyNotFound.isVisible = true
-                binding.placeholderServerError.isVisible = false
-            }
-            else -> {
-                binding.placeholderServerError.isVisible = true
-                binding.placeholderVacancyNotFound.isVisible = false
-            }
-        }
+    private fun showVacancyNotFound() {
+        binding.progressbar.isVisible = false
+        binding.vacancyDetails.isVisible = false
+        binding.placeholderServerError.isVisible = false
+        binding.placeholderVacancyNotFound.isVisible = true
     }
 
     private fun showNoInternet() {
@@ -94,7 +156,10 @@ class VacancyFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        loadJob?.cancel()
         _binding = null
+    }
+
+    companion object {
+        private const val ARG_VACANCY_ID = "vacancy_id"
     }
 }

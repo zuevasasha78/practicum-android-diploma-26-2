@@ -1,12 +1,8 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.vacancy.domain.GetVacancyInteractor
-import ru.practicum.android.diploma.vacancy.domain.RemoveFromFavouriteInteractor
-import ru.practicum.android.diploma.vacancy.domain.ShareVacancyInteractor
+import ru.practicum.android.diploma.vacancy.domain.VacancyInteractor
 
 val interactorModule = module {
-    factory { GetVacancyInteractor(get()) }
-    factory { ShareVacancyInteractor() }
-    factory { RemoveFromFavouriteInteractor() }
+    factory { VacancyInteractor(get(), get()) }
 }
