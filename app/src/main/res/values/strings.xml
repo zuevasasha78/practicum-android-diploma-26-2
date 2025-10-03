@@ -19,4 +19,10 @@
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
     <string name="no_internet">Нет интернета</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="team">Команда</string>
+    <string name="about_us">Над приложением работали</string>
+    <string name="developer1">Александра Зуева</string>
+    <string name="developer2">Владислав Хамин</string>
+    <string name="developer3">Максим Овсянников</string>
+    <string name="developer4">Руслан Фазлыев</string>
 </resources>
