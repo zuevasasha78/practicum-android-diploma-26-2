@@ -9,7 +9,6 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -21,7 +20,7 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
-import ru.practicum.android.diploma.utils.Utils.setImageTop
+import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class SearchFragment : Fragment() {
@@ -75,19 +74,13 @@ class SearchFragment : Fragment() {
     private fun setUi(screenState: SearchScreenState) {
         when (screenState) {
             is SearchScreenState.Init -> {
-                setInitState()
+                showPlaceholder(SearchPlaceholder.SearchInitPlaceholder)
             }
-
-            is SearchScreenState.NoInternet -> {
-                setNoInternetState()
-            }
-
             is SearchScreenState.Error -> {
-                setErrorState()
+                showPlaceholder(screenState.placeholder)
             }
-
             is SearchScreenState.Success -> {
-                binding.placeholder.isVisible = false
+                binding.placeholder.root.isVisible = false
                 binding.vacancyRv.apply {
                     (adapter as VacancyAdapter).setItems(screenState.vacancyList)
                     isVisible = true
@@ -110,45 +103,28 @@ class SearchFragment : Fragment() {
     }
 
     private fun setLoadingState() {
-        binding.placeholder.isVisible = false
+        binding.placeholder.root.isVisible = false
         binding.vacancyRv.isVisible = false
         binding.searchInfo.isVisible = false
         binding.progressBar.isVisible = true
     }
 
-    private fun setInitState() {
+    private fun showPlaceholder(placeholder: SearchPlaceholder) {
         binding.placeholder.apply {
-            setImageTop(getDrawable(requireContext(), R.drawable.search_screen_init_placeholder))
-            text = ""
-            isVisible = true
+            image.setImageResource(placeholder.image)
+            placeholderText.text = placeholder.text?.let { getString(it) } ?: ""
+            root.isVisible = true
         }
-        binding.progressBar.isVisible = false
-        binding.vacancyRv.isVisible = false
-        binding.searchInfo.isVisible = false
-    }
 
-    private fun setNoInternetState() {
-        binding.placeholder.apply {
-            setImageTop(getDrawable(requireContext(), R.drawable.no_internet_placeholder))
-            text = requireContext().getString(R.string.no_internet_placeholder_text)
-            isVisible = true
-        }
-        binding.vacancyRv.isVisible = false
         binding.progressBar.isVisible = false
-        binding.searchInfo.isVisible = false
-    }
-
-    private fun setErrorState() {
-        binding.placeholder.apply {
-            setImageTop(getDrawable(requireContext(), R.drawable.no_result_placeholder))
-            text = requireContext().getString(R.string.no_search_result_placeholder_text)
-            isVisible = true
-        }
         binding.vacancyRv.isVisible = false
-        binding.progressBar.isVisible = false
-        binding.searchInfo.apply {
-            isVisible = true
-            text = requireContext().getString(R.string.search_info_no_vacancy)
+        if (placeholder is SearchPlaceholder.NoSearchResult) {
+            binding.searchInfo.apply {
+                isVisible = true
+                text = requireContext().getString(R.string.search_info_no_vacancy)
+            }
+        } else {
+            binding.searchInfo.isVisible = false
         }
     }
 

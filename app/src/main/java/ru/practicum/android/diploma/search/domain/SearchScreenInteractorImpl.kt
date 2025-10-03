@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convert
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacanciesFilterDto
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
+import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
 
 class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository
@@ -14,9 +15,15 @@ class SearchScreenInteractorImpl(
             VacanciesFilter(text = text).convertToVacanciesFilterDto()
         ).convertToApiResultVacancyResponse()
         return when (res) {
-            is ApiResult.NoInternetConnection -> SearchScreenState.NoInternet
-            is ApiResult.Error -> SearchScreenState.Error
-            is ApiResult.Success -> SearchScreenState.Success(res.data.found, res.data.items)
+            is ApiResult.NoInternetConnection -> SearchScreenState.Error(SearchPlaceholder.NoInternet)
+            is ApiResult.Error -> SearchScreenState.Error(SearchPlaceholder.ServerErrorSearch)
+            is ApiResult.Success -> {
+                if (res.data.found == 0) {
+                    SearchScreenState.Error(SearchPlaceholder.NoSearchResult)
+                } else {
+                    SearchScreenState.Success(res.data.found, res.data.items)
+                }
+            }
         }
     }
 }
