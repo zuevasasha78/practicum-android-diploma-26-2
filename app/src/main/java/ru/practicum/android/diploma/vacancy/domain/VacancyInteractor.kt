@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
+import android.util.Log
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.db.domain.VacancyRepository
 import ru.practicum.android.diploma.network.data.ApiResult
@@ -29,12 +30,11 @@ class VacancyInteractor(
     }
 
     suspend fun removeFromFavourite(vacancyId: String): Boolean {
-        return try {
+        return runCatching {
             vacancyRepository.deleteVacancy(vacancyId)
-            true
-        } catch (e: IllegalStateException) {
-            false
-        }
+        }.onFailure { e ->
+            Log.e("MyLog", "Failed to remove vacancy $vacancyId from favourites", e)
+        }.isSuccess
     }
 
     fun addToFavourite(vacancyId: String): Boolean {
