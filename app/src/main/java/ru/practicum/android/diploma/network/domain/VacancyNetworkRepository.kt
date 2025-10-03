@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponse
 
-interface VacancyRepository {
+interface VacancyNetworkRepository {
 
     suspend fun getAreas(): ApiResult<List<FilterArea>>
 

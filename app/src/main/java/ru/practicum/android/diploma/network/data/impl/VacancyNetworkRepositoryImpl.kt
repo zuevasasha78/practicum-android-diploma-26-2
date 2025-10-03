@@ -8,12 +8,12 @@ import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponse
-import ru.practicum.android.diploma.network.domain.VacancyRepository
+import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 
-class VacancyRepositoryImpl(
+class VacancyNetworkRepositoryImpl(
     private val networkClient: NetworkClient,
     private val diplomaApiService: DiplomaApiService
-) : VacancyRepository {
+) : VacancyNetworkRepository {
 
     override suspend fun getAreas(): ApiResult<List<FilterArea>> {
         return networkClient.doRequest { diplomaApiService.getAreas() }

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="ToolBarTextStyle">
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="fontWeight">500</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="toolbar_general">
         <item name="android:fontFamily">@font/ys_display_bold</item>
         <item name="android:textSize">@dimen/item_title</item>

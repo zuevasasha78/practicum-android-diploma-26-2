@@ -3,7 +3,7 @@
     <string name="search_title">Main</string>
     <string name="fav_title">Favourites</string>
     <string name="team_title">Team</string>
-    <string name="search_for_vacancies">Поиск вакансий</string>
+    <string name="search_screen_title">Поиск вакансий</string>
     <string name="vacancy">Вакансия</string>
     <string name="enter_query">Введите запрос</string>
     <string name="enter_amount">Введите сумму</string>
