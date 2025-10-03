@@ -16,4 +16,7 @@
     <string name="developer2">Владислав Хамин</string>
     <string name="developer3">Максим Овсянников</string>
     <string name="developer4">Руслан Фазлыев</string>
+
+    <string name="server_error">Ошибка сервера</string>
+    <string name="no_internet">Нет интернета</string>
 </resources>

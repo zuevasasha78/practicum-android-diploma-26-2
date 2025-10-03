@@ -19,7 +19,7 @@
         <item name="android:layout_marginEnd">20dp</item>
     </style>
 
-    <style name="vacancy_item_title">
+    <style name="display_medium_22">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/item_title</item>
         <item name="android:textColor">@color/text_color</item>
