@@ -15,7 +15,6 @@ import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 
-
 class VacancyFragment : Fragment() {
 
     private var _binding: FragmentVacancyBinding? = null
@@ -71,19 +70,17 @@ class VacancyFragment : Fragment() {
 
     private fun bindVacancyData(vacancy: VacancyModel) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary ?: "Зарплата не указана"
+        binding.vacancyPayment.text = vacancy.salary ?: R.string.salary_not_specified.toString()
         binding.employerName.text = vacancy.employerName
-        binding.area.text = vacancy.area
-        binding.experience.text = vacancy.experience ?: "Не указан"
-        binding.employmentType.text = vacancy.employment ?: "Не указан"
-
-        Glide.with(this).load(vacancy.employerLogoUrl)
+        binding.experience.text = vacancy.experience ?: ""
+        binding.employmentType.text = vacancy.employment ?: ""
+        Glide.with(this)
+            .load(vacancy.employerLogoUrl)
             .placeholder(R.drawable.employer_logo_placeholder)
             .into(binding.employerLogo)
-
-        binding.vacancyResponsibilities.text = vacancy.responsibilities ?: "Не указаны"
-        binding.vacancyRequirements.text = vacancy.requirements ?: "Не указаны"
-        binding.vacancyConditions.text = vacancy.conditions ?: "Не указаны"
+        binding.vacancyResponsibilities.text = vacancy.responsibilities ?: ""
+        binding.vacancyRequirements.text = vacancy.requirements ?: ""
+        binding.vacancyConditions.text = vacancy.conditions ?: ""
         binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
 
         setupClickListeners(vacancy)
@@ -116,7 +113,7 @@ class VacancyFragment : Fragment() {
             putExtra(android.content.Intent.EXTRA_TEXT, shareContent)
             type = "text/plain"
         }
-        startActivity(android.content.Intent.createChooser(shareIntent, "Поделиться вакансией"))
+        startActivity(android.content.Intent.createChooser(shareIntent, R.string.share_vacancy.toString()))
     }
 
     private fun showLoading() {

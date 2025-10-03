@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.db.domain.VacancyRepository
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.dto.response.Salary
@@ -28,17 +29,16 @@ class VacancyInteractor(
     }
 
     suspend fun removeFromFavourite(vacancyId: String): Boolean {
-        try {
+        return try {
             vacancyRepository.deleteVacancy(vacancyId)
-            return true
-        } catch (e: Exception) {
-            return false
+            true
+        } catch (e: IllegalStateException) {
+            false
         }
     }
 
     fun addToFavourite(vacancyId: String): Boolean {
-        return vacancyId.isEmpty()
-            // Заглушка - просто возвращаем успех
+        return vacancyId.isEmpty() // Заглушка - просто возвращаем true
     }
 
     fun prepareShareContent(vacancy: VacancyModel): String {
@@ -59,6 +59,7 @@ class VacancyInteractor(
             employerName = vacancyDetail.employer.name,
             employerLogoUrl = vacancyDetail.employer.logo,
             area = vacancyDetail.area.name,
+            address = vacancyDetail.address?.city ?: vacancyDetail.area.name,
             experience = vacancyDetail.experience.name,
             employment = vacancyDetail.employment.name,
             description = vacancyDetail.description,
@@ -75,9 +76,10 @@ class VacancyInteractor(
             salary.from != null && salary.to != null -> "от ${salary.from} до ${salary.to} ${salary.currency ?: ""}"
             salary.from != null -> "от ${salary.from} ${salary.currency ?: ""}"
             salary.to != null -> "до ${salary.to} ${salary.currency ?: ""}"
-            else -> "Зарплата не указана"
+            else -> R.string.salary_not_specified.toString()
         }.trim()
     }
+
     companion object {
         private const val CODE_404 = 404
     }

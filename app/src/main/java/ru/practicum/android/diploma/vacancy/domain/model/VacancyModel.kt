@@ -7,6 +7,7 @@ data class VacancyModel(
     val employerName: String,
     val employerLogoUrl: String?,
     val area: String,
+    val address: String?,
     val experience: String?,
     val employment: String?,
     val description: String?,

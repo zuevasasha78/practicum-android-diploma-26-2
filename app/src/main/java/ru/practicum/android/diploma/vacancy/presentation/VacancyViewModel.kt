@@ -9,7 +9,6 @@ import ru.practicum.android.diploma.vacancy.domain.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
 import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
 
-
 class VacancyViewModel(
     private val vacancyInteractor: VacancyInteractor
 ) : ViewModel() {
