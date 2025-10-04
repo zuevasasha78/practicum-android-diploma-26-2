@@ -62,14 +62,16 @@ object Utils {
     fun getSalaryString(salary: Salary, context: Context): String {
         val string = StringBuilder()
         val currencySymbol = Currency.getInstance(salary.currency).symbol
-        if (salary.from == null && salary.to == null) {
-            string.append(ContextCompat.getString(context, R.string.salary_no_data))
-        }
         if (salary.from != null) {
             string.append(ContextCompat.getString(context, R.string.salary_from) + " ${salary.from} ")
         }
         if (salary.to != null) {
-            string.append(ContextCompat.getString(context, R.string.salary_to) + " ${salary.to} $currencySymbol")
+            string.append(ContextCompat.getString(context, R.string.salary_to) + " ${salary.to} ")
+        }
+        if (salary.from == null && salary.to == null) {
+            string.append(ContextCompat.getString(context, R.string.salary_no_data))
+        } else {
+            string.append(currencySymbol)
         }
         return string.toString()
     }
