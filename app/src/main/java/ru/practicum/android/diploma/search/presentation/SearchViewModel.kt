@@ -21,7 +21,7 @@ class SearchViewModel(private val searchScreenInteractor: SearchScreenInteractor
     }
 
     fun searchVacancyDebounce(text: String) {
-        if(lastSearch==text) {
+        if (lastSearch == text) {
             return
         }
         lastSearch = text

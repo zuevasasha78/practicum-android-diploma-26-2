@@ -1,14 +1,19 @@
 package ru.practicum.android.diploma.utils
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
+import ru.practicum.android.diploma.network.data.dto.response.Salary
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
+import java.util.Currency
 
 object Utils {
 
@@ -52,5 +57,20 @@ object Utils {
             this.page,
             this.onlyWithSalary
         )
+    }
+
+    fun getSalaryString(salary: Salary, context: Context): String {
+        val string = StringBuilder()
+        val currencySymbol = Currency.getInstance(salary.currency).symbol
+        if (salary.from == null && salary.to == null) {
+            string.append(ContextCompat.getString(context, R.string.salary_no_data))
+        }
+        if (salary.from != null) {
+            string.append(ContextCompat.getString(context, R.string.salary_from) + " ${salary.from} ")
+        }
+        if (salary.to != null) {
+            string.append(ContextCompat.getString(context, R.string.salary_to) + " ${salary.to} $currencySymbol")
+        }
+        return string.toString()
     }
 }
