@@ -14,7 +14,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:adjustViewBounds="true"
-        app:layout_constraintDimensionRatio="1:1" />
+        tool:src="@drawable/employer_logo_placeholder"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

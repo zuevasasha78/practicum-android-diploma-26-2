@@ -31,7 +31,7 @@ class VacancyNetworkRepositoryImpl(
         val map = mutableMapOf<String, String>()
         vacanciesFilter.area?.let { map["area"] = it.toString() }
         vacanciesFilter.industry?.let { map["industry"] = it.toString() }
-        vacanciesFilter.text?.let { map["text"] = it.toString() }
+        vacanciesFilter.text?.let { map["text"] = it }
         vacanciesFilter.salary?.let { map["salary"] = it.toString() }
         vacanciesFilter.page?.let { map["page"] = it.toString() }
         vacanciesFilter.onlyWithSalary?.let { map["only_with_salary"] = it.toString() }

@@ -24,4 +24,8 @@ class VacancyFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        const val ARG_NAME = "vacancyId"
+    }
 }
