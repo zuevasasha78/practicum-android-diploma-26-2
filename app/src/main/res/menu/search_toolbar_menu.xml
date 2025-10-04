@@ -4,6 +4,6 @@
     <item
         android:id="@+id/filter_button"
         android:icon="@drawable/icon_filter_off"
-        android:title="filter"
+        android:title="@string/filter_hint"
         app:showAsAction="always"/>
 </menu>

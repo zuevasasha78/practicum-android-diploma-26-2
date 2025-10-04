@@ -3,17 +3,16 @@ package ru.practicum.android.diploma.search.presentation
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import androidx.core.widget.addTextChangedListener
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,12 +51,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.vacancyRv.apply {
-            adapter = VacancyAdapter {
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_vacancyFragment,
-                    bundleOf(ARG_NAME to it.id)
-                )
-            }
+            adapter = VacancyAdapter(adapterListener)
             addItemDecoration(VacancyAdapterItemDecorator())
         }
 
@@ -81,38 +75,15 @@ class SearchFragment : Fragment() {
     private fun setUi(screenState: SearchScreenState) {
         when (screenState) {
             is SearchScreenState.Init -> {
-                binding.placeholder.apply {
-                    setImageTop(getDrawable(requireContext(), R.drawable.search_screen_init_placeholder))
-                    isVisible = true
-                }
-                binding.progressBar.isVisible = false
-                binding.vacancyRv.isVisible = false
-                binding.searchInfo.isVisible = false
+                setInitState()
             }
 
             is SearchScreenState.NoInternet -> {
-                binding.placeholder.apply {
-                    setImageTop(getDrawable(requireContext(), R.drawable.no_internet_placeholder))
-                    text = requireContext().getString(R.string.no_internet_placeholder_text)
-                    isVisible = true
-                }
-                binding.vacancyRv.isVisible = false
-                binding.progressBar.isVisible = false
-                binding.searchInfo.isVisible = false
+                setNoInternetState()
             }
 
             is SearchScreenState.Error -> {
-                binding.placeholder.apply {
-                    setImageTop(getDrawable(requireContext(), R.drawable.no_result_placeholder))
-                    text = requireContext().getString(R.string.no_search_result_placeholder_text)
-                    isVisible = true
-                }
-                binding.vacancyRv.isVisible = false
-                binding.progressBar.isVisible = false
-                binding.searchInfo.apply {
-                    isVisible = true
-                    text = requireContext().getString(R.string.search_info_no_vacancy)
-                }
+                setErrorState()
             }
 
             is SearchScreenState.Success -> {
@@ -133,11 +104,51 @@ class SearchFragment : Fragment() {
             }
 
             is SearchScreenState.Loading -> {
-                binding.placeholder.isVisible = false
-                binding.vacancyRv.isVisible = false
-                binding.searchInfo.isVisible = false
-                binding.progressBar.isVisible = true
+                setLoadingState()
             }
+        }
+    }
+
+    private fun setLoadingState() {
+        binding.placeholder.isVisible = false
+        binding.vacancyRv.isVisible = false
+        binding.searchInfo.isVisible = false
+        binding.progressBar.isVisible = true
+    }
+
+    private fun setInitState() {
+        binding.placeholder.apply {
+            setImageTop(getDrawable(requireContext(), R.drawable.search_screen_init_placeholder))
+            text = ""
+            isVisible = true
+        }
+        binding.progressBar.isVisible = false
+        binding.vacancyRv.isVisible = false
+        binding.searchInfo.isVisible = false
+    }
+
+    private fun setNoInternetState() {
+        binding.placeholder.apply {
+            setImageTop(getDrawable(requireContext(), R.drawable.no_internet_placeholder))
+            text = requireContext().getString(R.string.no_internet_placeholder_text)
+            isVisible = true
+        }
+        binding.vacancyRv.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.searchInfo.isVisible = false
+    }
+
+    private fun setErrorState() {
+        binding.placeholder.apply {
+            setImageTop(getDrawable(requireContext(), R.drawable.no_result_placeholder))
+            text = requireContext().getString(R.string.no_search_result_placeholder_text)
+            isVisible = true
+        }
+        binding.vacancyRv.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.searchInfo.apply {
+            isVisible = true
+            text = requireContext().getString(R.string.search_info_no_vacancy)
         }
     }
 
@@ -157,6 +168,13 @@ class SearchFragment : Fragment() {
         imm?.hideSoftInputFromWindow(it.windowToken, 0)
         binding.editText.text?.clear()
         (binding.vacancyRv.adapter as VacancyAdapter).setItems(emptyList())
+    }
+
+    private val adapterListener = VacancyAdapter.VacancyClickListener {
+        findNavController().navigate(
+            R.id.action_searchFragment_to_vacancyFragment,
+            bundleOf(ARG_NAME to it.id)
+        )
     }
 
     override fun onDestroyView() {

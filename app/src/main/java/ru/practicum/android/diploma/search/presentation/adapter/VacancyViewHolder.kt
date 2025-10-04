@@ -35,11 +35,11 @@ class VacancyViewHolder(private val viewBinding: VacancyItemViewBinding) :
         if (salary.from == null && salary.to == null) {
             string.append(getString(context, R.string.salary_no_data))
         }
-        if(salary.from!=null) {
-            string.append(getString(context, R.string.salary_from)+" ${salary.from} ")
+        if (salary.from != null) {
+            string.append(getString(context, R.string.salary_from) + " ${salary.from} ")
         }
-        if(salary.to!=null) {
-            string.append(getString(context, R.string.salary_to)+" ${salary.to} $currencySymbol")
+        if (salary.to != null) {
+            string.append(getString(context, R.string.salary_to) + " ${salary.to} $currencySymbol")
         }
         return string.toString()
     }

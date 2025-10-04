@@ -25,4 +25,5 @@
     </plurals>
     <string name="no_internet_placeholder_text">No internet</string>
     <string name="no_search_result_placeholder_text">Unable to retrieve vacancies</string>
+    <string name="filter_hint">Filter</string>
 </resources>

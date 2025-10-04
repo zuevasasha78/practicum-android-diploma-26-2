@@ -28,4 +28,5 @@
     </plurals>
     <string name="no_internet_placeholder_text">Нет интернета</string>
     <string name="no_search_result_placeholder_text">Не удалось получить список вакансий</string>
+    <string name="filter_hint">Фильтр</string>
 </resources>
