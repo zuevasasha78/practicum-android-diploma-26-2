@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.network.data.dto.response
 
-data class VacancyResponse(
+data class VacancyResponseDto(
     val found: Int,
     val pages: Int,
     val page: Int,

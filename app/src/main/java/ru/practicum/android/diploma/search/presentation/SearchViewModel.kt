@@ -9,10 +9,10 @@ import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.SearchScreenState
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
-import ru.practicum.android.diploma.utils.Utils.map
 
-class SearchViewModel(val searchScreenInteractor: SearchScreenInteractor) : ViewModel() {
+class SearchViewModel(private val searchScreenInteractor: SearchScreenInteractor) : ViewModel() {
 
+    private var lastSearch = ""
     private val screenState: MutableLiveData<SearchScreenState> = MutableLiveData(SearchScreenState.Init)
     fun getScreenState(): LiveData<SearchScreenState> = screenState
 
@@ -21,6 +21,10 @@ class SearchViewModel(val searchScreenInteractor: SearchScreenInteractor) : View
     }
 
     fun searchVacancyDebounce(text: String) {
+        if(lastSearch==text) {
+            return
+        }
+        lastSearch = text
         searchDebounce(viewModelScope) {
             searchVacancy(text)
         }
@@ -31,8 +35,9 @@ class SearchViewModel(val searchScreenInteractor: SearchScreenInteractor) : View
         viewModelScope.launch {
             when (val result = searchScreenInteractor.searchVacancy(text)) {
                 is ApiResult.Success -> setScreenState(
-                    SearchScreenState.Success(result.data.found, result.data.items.map { it.map() })
+                    SearchScreenState.Success(result.data.found, result.data.items)
                 )
+
                 is ApiResult.NoInternetConnection -> setScreenState(SearchScreenState.NoInternet)
                 is ApiResult.Error -> setScreenState(SearchScreenState.Error)
             }

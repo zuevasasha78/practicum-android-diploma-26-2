@@ -2,8 +2,13 @@ package ru.practicum.android.diploma.utils
 
 import android.graphics.drawable.Drawable
 import android.widget.TextView
+import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
+import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyResponse
+import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 
 object Utils {
 
@@ -18,6 +23,34 @@ object Utils {
             this.employer.name,
             this.salary,
             this.employer.logo
+        )
+    }
+
+    fun VacancyResponseDto.map(): VacancyResponse {
+        return VacancyResponse(
+            this.found,
+            this.pages,
+            this.page,
+            this.items.map { it.map() }
+        )
+    }
+
+    fun ApiResult<VacancyResponseDto>.map(): ApiResult<VacancyResponse> {
+        return when (this) {
+            is ApiResult.Success -> ApiResult.Success(data.map())
+            is ApiResult.Error -> ApiResult.Error(code)
+            is ApiResult.NoInternetConnection -> ApiResult.NoInternetConnection
+        }
+    }
+
+    fun VacanciesFilter.map(): VacanciesFilterDto {
+        return VacanciesFilterDto(
+            this.area,
+            this.industry,
+            this.text,
+            this.salary,
+            this.page,
+            this.onlyWithSalary
         )
     }
 }

@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.network.data.dto.requests
 
-data class VacanciesFilter(
+data class VacanciesFilterDto(
     val area: Int? = null,
     val industry: Int? = null,
     val text: String? = null,
