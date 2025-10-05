@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.vacancy.presentation
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,11 +19,11 @@ class VacancyViewModel(
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
 
-    fun loadVacancy(vacancyId: String, context: Context) {
+    fun loadVacancy(vacancyId: String) {
         _state.value = VacancyState.Loading
 
         viewModelScope.launch {
-            val result = vacancyInteractor.getVacancy(vacancyId, context)
+            val result = vacancyInteractor.getVacancy(vacancyId)
             _state.value = result
             // При загрузке вакансии устанавливаем начальное состояние избранного
             if (result is VacancyState.Content) {

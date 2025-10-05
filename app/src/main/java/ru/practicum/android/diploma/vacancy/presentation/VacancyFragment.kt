@@ -13,6 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.utils.StringUtils
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
 
 class VacancyFragment : Fragment() {
@@ -65,12 +66,12 @@ class VacancyFragment : Fragment() {
 
     private fun loadVacancy() {
         val vacancyId = arguments?.getString(ARG_NAME) ?: ""
-        viewModel.loadVacancy(vacancyId, requireContext())
+        viewModel.loadVacancy(vacancyId)
     }
 
     private fun bindVacancyData(vacancy: VacancyDetail) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary
+        binding.vacancyPayment.text = StringUtils(requireContext()).getSalaryString(vacancy.salary)
         binding.employerName.text = vacancy.employerName
         binding.experience.text = vacancy.experience ?: ""
         binding.employmentType.text = vacancy.employment ?: ""

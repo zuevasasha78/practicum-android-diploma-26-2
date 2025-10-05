@@ -6,7 +6,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.VacancyItemViewBinding
 import ru.practicum.android.diploma.network.domain.models.Vacancy
-import ru.practicum.android.diploma.utils.Utils.getSalaryString
+import ru.practicum.android.diploma.utils.StringUtils
 
 class VacancyViewHolder(private val viewBinding: VacancyItemViewBinding) :
     RecyclerView.ViewHolder(viewBinding.root) {
@@ -14,7 +14,7 @@ class VacancyViewHolder(private val viewBinding: VacancyItemViewBinding) :
     fun bind(vacancy: Vacancy) {
         viewBinding.vacancyName.text = vacancy.name
         viewBinding.employerName.text = vacancy.employerName
-        viewBinding.salary.text = getSalaryString(vacancy.salary, itemView.context)
+        viewBinding.salary.text = StringUtils(itemView.context).getSalaryString(vacancy.salaryDto)
 
         val roundValue = itemView.context.resources.getDimensionPixelSize(R.dimen.logo_corner_radius)
         Glide.with(itemView.context)
@@ -25,4 +25,5 @@ class VacancyViewHolder(private val viewBinding: VacancyItemViewBinding) :
             )
             .into(viewBinding.employerLogoImage)
     }
+
 }

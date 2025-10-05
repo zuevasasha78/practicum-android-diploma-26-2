@@ -1,22 +1,21 @@
 package ru.practicum.android.diploma.vacancy.domain
 
-import android.content.Context
 import android.util.Log
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
-import ru.practicum.android.diploma.utils.Utils.convertToVacancyModel
 
 class VacancyInteractor(
     private val vacancyRepository: VacancyDbRepository,
     private val networkRepository: VacancyNetworkRepository
 ) {
 
-    suspend fun getVacancy(vacancyId: String, context: Context): VacancyState {
+    suspend fun getVacancy(vacancyId: String): VacancyState {
         return when (val result = networkRepository.getVacancy(vacancyId)) {
             is ApiResult.Success -> {
-                VacancyState.Content(result.data.convertToVacancyModel(context))
+                VacancyState.Content(result.data.convertToVacancyDetail())
             }
             is ApiResult.Error -> {
                 if (result.code == CODE_404) {
