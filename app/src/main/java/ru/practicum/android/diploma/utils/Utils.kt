@@ -8,9 +8,10 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
 import ru.practicum.android.diploma.network.data.dto.response.Salary
-import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
+import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import java.util.Currency
@@ -21,7 +22,7 @@ object Utils {
         this.setCompoundDrawablesRelativeWithIntrinsicBounds(null, drawable, null, null)
     }
 
-    fun VacancyDetail.map(): Vacancy {
+    fun VacancyDetailDto.map(): Vacancy {
         return Vacancy(
             this.id,
             this.name,
@@ -56,6 +57,26 @@ object Utils {
             this.salary,
             this.page,
             this.onlyWithSalary
+        )
+    }
+
+    fun VacancyDetailDto.convertToVacancyModel(context: Context): VacancyDetail {
+        return VacancyDetail(
+            id = this.id,
+            name = this.name,
+            salary = getSalaryString(this.salary, context),
+            employerName = this.employer.name,
+            employerLogoUrl = this.employer.logo,
+            area = this.area.name,
+            address = this.address.city,
+            experience = this.experience.name,
+            employment = this.employment.name,
+            description = this.description,
+            responsibilities = this.description,
+            requirements = this.description,
+            conditions = this.description,
+            skills = this.skills,
+            url = this.url
         )
     }
 

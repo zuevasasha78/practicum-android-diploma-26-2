@@ -1,13 +1,14 @@
 package ru.practicum.android.diploma.vacancy.presentation
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.vacancy.domain.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
-import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
 
 class VacancyViewModel(
     private val vacancyInteractor: VacancyInteractor
@@ -19,11 +20,11 @@ class VacancyViewModel(
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
 
-    fun loadVacancy(vacancyId: String) {
+    fun loadVacancy(vacancyId: String, context: Context) {
         _state.value = VacancyState.Loading
 
         viewModelScope.launch {
-            val result = vacancyInteractor.getVacancy(vacancyId)
+            val result = vacancyInteractor.getVacancy(vacancyId, context)
             _state.value = result
             // При загрузке вакансии устанавливаем начальное состояние избранного
             if (result is VacancyState.Content) {
@@ -33,7 +34,7 @@ class VacancyViewModel(
         }
     }
 
-    suspend fun toggleFavorite(vacancyId: String, vacancy: VacancyModel? = null) {
+    suspend fun toggleFavorite(vacancyId: String, vacancy: VacancyDetail? = null) {
         val currentState = _isFavorite.value ?: false
 
         if (currentState) {
@@ -49,7 +50,7 @@ class VacancyViewModel(
         }
     }
 
-    fun prepareShareContent(vacancy: VacancyModel): String {
+    fun prepareShareContent(vacancy: VacancyDetail): String {
         return vacancyInteractor.prepareShareContent(vacancy)
     }
 }

@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.network.data.dto.response
 
-data class VacancyDetail(
+data class VacancyDetailDto(
     val id: String,
     val name: String,
     val description: String,
