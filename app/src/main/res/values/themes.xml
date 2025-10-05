@@ -1,9 +1,55 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/white_universal</item>
+        <item name="colorSurface">@color/white_universal</item>
+        <item name="android:textColorPrimary">@color/black_universal</item>
+        <item name="android:textColorSecondary">@color/black_universal</item>
+        <item name="android:textColorTertiary">@color/black_universal</item>
+        <item name="colorOnSurface">@color/black_universal</item>
+        <item name="colorOnBackground">@color/black_universal</item>
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/white_universal</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
-    <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
+    <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma">
+        <item name="bottomNavigationStyle">@style/BottomNavigationStyle</item>
+    </style>
+
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextColor">@color/blue_gray_color_selector</item>
+        <item name="itemIconTint">@color/blue_gray_color_selector</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">12sp</item>
+        <item name="itemTextAppearanceActiveBoldEnabled">false</item>
+    </style>
+
+    <style name="BaseTheme" parent="Base.Theme.PracticumAndroidDiploma" />
+
+    <style name="icon_filter" parent="toolbar_icon">
+        <item name="android:background">@drawable/icon_filter_off</item>
+        <item name="android:backgroundTint">@color/black_universal</item>
+    </style>
+
+    <style name="icon_share" parent="toolbar_icon">
+        <item name="android:background">@drawable/icon_sharing</item>
+        <item name="android:backgroundTint">@color/black_universal</item>
+    </style>
+
+    <style name="icon_favorite" parent="toolbar_icon">
+        <item name="android:background">@drawable/icon_favorite_off</item>
+        <item name="android:backgroundTint">@color/black_universal</item>
+    </style>
+    
+    <style name="toolbar_vacancy">
+        <item name="navigationIcon">@drawable/icon_back_arrow_black</item>
+    </style>
+
+    <style name="text_input_color">
+        <item name="hintTextColor">@color/gray</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
+    </style>
+
 </resources>

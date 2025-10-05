@@ -2,6 +2,10 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "1.8.0"
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -36,6 +40,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -46,6 +51,38 @@ dependencies {
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
+
+    // glide
+    implementation(libs.glide)
+
+    // retrofit
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
+
+    // okhttp3 logging
+    implementation(libs.logging.interceptor)
+
+    // koin
+    implementation(libs.koin)
+
+    // fragment
+    implementation(libs.fragment)
+
+    // coroutines
+    implementation(libs.coroutines)
+
+    // lifecycle
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+
+    // room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)
