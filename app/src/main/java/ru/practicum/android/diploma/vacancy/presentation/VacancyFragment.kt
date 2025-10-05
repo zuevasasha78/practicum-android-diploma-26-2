@@ -70,7 +70,7 @@ class VacancyFragment : Fragment() {
 
     private fun bindVacancyData(vacancy: VacancyDetail) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary ?: R.string.salary_not_specified.toString()
+        binding.vacancyPayment.text = vacancy.salary
         binding.employerName.text = vacancy.employerName
         binding.experience.text = vacancy.experience ?: ""
         binding.employmentType.text = vacancy.employment ?: ""
