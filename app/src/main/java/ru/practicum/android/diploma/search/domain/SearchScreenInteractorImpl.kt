@@ -10,9 +10,10 @@ import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
 class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository
 ) : SearchScreenInteractor {
-    override suspend fun searchVacancy(text: String): SearchScreenState {
+
+    override suspend fun searchVacancy(text: String, page: Int): SearchScreenState {
         val res = vacancyNetworkRepository.getVacancies(
-            VacanciesFilter(text = text).convertToVacanciesFilterDto()
+            VacanciesFilter(text = text, page = page).convertToVacanciesFilterDto()
         ).convertToApiResultVacancyResponse()
         return when (res) {
             is ApiResult.NoInternetConnection -> SearchScreenState.Error(SearchPlaceholder.NoInternet)
@@ -21,7 +22,11 @@ class SearchScreenInteractorImpl(
                 if (res.data.found == 0) {
                     SearchScreenState.Error(SearchPlaceholder.NoSearchResult)
                 } else {
-                    SearchScreenState.Success(res.data.found, res.data.items)
+                    SearchScreenState.Success(
+                        amount = res.data.found,
+                        lastPage = res.data.pages,
+                        vacancyList = res.data.items
+                    )
                 }
             }
         }

@@ -18,4 +18,3 @@ sealed class SearchPlaceholder(@StringRes val text: Int?, @DrawableRes val image
             R.drawable.no_result_placeholder
         )
 }
-
