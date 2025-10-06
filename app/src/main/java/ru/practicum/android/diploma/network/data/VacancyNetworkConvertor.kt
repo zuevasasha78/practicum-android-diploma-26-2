@@ -17,7 +17,7 @@ object VacancyNetworkConvertor {
             this.id,
             this.name,
             this.employer.name,
-            this.salaryDto.convertToSalary(),
+            this.salary.convertToSalary(),
             this.employer.logo
         )
     }
@@ -27,7 +27,8 @@ object VacancyNetworkConvertor {
             this.found,
             this.pages,
             this.page,
-            this.items.map { it.convertToVacancy() }
+            this.items.map {
+                it.convertToVacancy() }
         )
     }
 
@@ -62,7 +63,7 @@ object VacancyNetworkConvertor {
         return VacancyDetail(
             id = this.id,
             name = this.name,
-            salary = this.salaryDto.convertToSalary(),
+            salary = this.salary.convertToSalary(),
             employerName = this.employer.name,
             employerLogoUrl = this.employer.logo,
             area = this.area.name,
