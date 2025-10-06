@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -12,9 +11,10 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
-import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.network.domain.models.Salary
 
 class VacancyFragment : Fragment() {
 
@@ -22,7 +22,7 @@ class VacancyFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VacancyViewModel by viewModel()
-    private var currentVacancy: VacancyModel? = null
+    private var currentVacancy: VacancyDetail? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,64 +65,54 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadVacancy() {
-        val vacancyId = arguments?.getString(ARG_VACANCY_ID) ?: "test" // временно для теста
+        val vacancyId = arguments?.getString(ARG_NAME) ?: ""
         viewModel.loadVacancy(vacancyId)
     }
 
-    private fun bindVacancyData(vacancy: VacancyModel) {
+    private fun bindVacancyData(vacancy: VacancyDetail) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary ?: getString(R.string.salary_not_specified)
+        binding.vacancyPayment.text = formatSalary(vacancy.salary)
         binding.employerName.text = vacancy.employerName
-        binding.area.text = vacancy.address ?: vacancy.area
-        binding.experience.text = vacancy.experience ?: ""
-        binding.employmentType.text = vacancy.employment ?: ""
+        binding.experience.text = vacancy.experience
+        binding.employmentType.text = vacancy.employment
         Glide.with(this)
             .load(vacancy.employerLogoUrl)
             .placeholder(R.drawable.empty_placeholder)
             .into(binding.employerLogo)
-        binding.vacancyResponsibilities.text = vacancy.responsibilities ?: ""
-        binding.vacancyRequirements.text = vacancy.requirements ?: ""
-        binding.vacancyConditions.text = vacancy.conditions ?: ""
-        val hasSkills = vacancy.skills.isNotEmpty()
-        binding.vacancySkills.isVisible = hasSkills
-        binding.titleVacancySkills.isVisible = hasSkills
-        if (hasSkills) {
-            binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
-        }
-        val hasContacts = !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()
-        binding.contacts.isVisible = hasContacts
-        binding.address.isVisible = hasContacts && !vacancy.address.isNullOrEmpty()
-        binding.phone.isVisible = hasContacts && !vacancy.phone.isNullOrEmpty()
-        binding.email.isVisible = hasContacts && !vacancy.email.isNullOrEmpty()
-        binding.address.text = vacancy.address ?: ""
-        binding.phone.text = vacancy.phone ?: ""
-        binding.email.text = vacancy.email ?: ""
+        binding.vacancyResponsibilities.text = vacancy.responsibilities
+        binding.vacancyRequirements.text = vacancy.requirements
+        binding.vacancyConditions.text = vacancy.conditions
+        binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
+
+        setupClickListeners(vacancy)
+    }
+
+    private fun formatSalary(salary: Salary?): String {
+        if (salary == null) return "Зарплата не указана"
+
+        return when {
+            salary.from != null && salary.to != null ->
+                "от ${salary.from} до ${salary.to} ${salary.currency ?: ""}"
+            salary.from != null -> "от ${salary.from} ${salary.currency ?: ""}"
+            salary.to != null -> "до ${salary.to} ${salary.currency ?: ""}"
+            else -> "Зарплата не указана"
+        }.trim()
+    }
+
+    private fun setupClickListeners(vacancy: VacancyDetail) {
         binding.favorite.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.toggleFavorite(vacancy.id)
+                viewModel.toggleFavorite(vacancy.id, vacancy)
             }
-        }
-        binding.share.setOnClickListener {
-            val shareContent = viewModel.prepareShareContent(vacancy)
-            shareVacancy(shareContent)
         }
     }
 
     private fun updateFavoriteIcon(isFavorite: Boolean) {
         if (isFavorite) {
-            binding.favorite.setImageResource(R.drawable.icon_favorite_red)
+            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_red)
         } else {
-            binding.favorite.setImageResource(R.drawable.icon_favorite_off)
+            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_off)
         }
-    }
-
-    private fun shareVacancy(shareContent: String) {
-        val shareIntent = android.content.Intent().apply {
-            action = android.content.Intent.ACTION_SEND
-            putExtra(android.content.Intent.EXTRA_TEXT, shareContent)
-            type = "text/plain"
-        }
-        startActivity(android.content.Intent.createChooser(shareIntent, R.string.share_vacancy.toString()))
     }
 
     private fun showLoading() {
@@ -166,6 +156,6 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_VACANCY_ID = "vacancy_id"
+        const val ARG_NAME = "vacancy_id"
     }
 }

@@ -1,15 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
-    <string name="search_title">Main</string>
-    <string name="fav_title">Favourites</string>
-    <string name="team_title">Team</string>
-    <string name="search_for_vacancies">Поиск вакансий</string>
+    <string name="search_title">Главная</string>
+    <string name="fav_title">Избранное</string>
+    <string name="team_title">Команда</string>
+    <string name="search_screen_title">Поиск вакансий</string>
     <string name="vacancy">Вакансия</string>
     <string name="enter_query">Введите запрос</string>
     <string name="enter_amount">Введите сумму</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
     <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="about_us">Над приложением работали</string>
+    <string name="developer1">Александра Зуева</string>
+    <string name="developer2">Владислав Хамин</string>
+    <string name="developer3">Максим Овсянников</string>
+    <string name="developer4">Руслан Фазлыев</string>
+    <string name="salary_from">от</string>
+    <string name="salary_to">до</string>
+    <string name="salary_no_data">Зарплата не указана</string>
+    <string name="search_info_no_vacancy">Нет таких вакансий</string>
+    <plurals name="search_info_vacancy">
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="few">Найдено %d вакансий</item>
+        <item quantity="many">Найдено %d вакансий</item>
+        <item quantity="other">Найдено %d вакансий</item>
+    </plurals>
+    <string name="no_internet_placeholder_text">Нет интернета</string>
+    <string name="no_search_result_placeholder_text">Не удалось получить список вакансий</string>
+    <string name="filter_hint">Фильтр</string>
     <string name="required_experience">Требуемый опыт</string>
     <string name="vacancy_description">Описание вакансии</string>
     <string name="responsibilities">Обязанности</string>
@@ -18,14 +37,7 @@
     <string name="key_skills">Ключевые навыки</string>
     <string name="contacts">Контакты</string>
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
-    <string name="no_internet">Нет интернета</string>
     <string name="server_error">Ошибка сервера</string>
-    <string name="team">Команда</string>
-    <string name="about_us">Над приложением работали</string>
-    <string name="developer1">Александра Зуева</string>
-    <string name="developer2">Владислав Хамин</string>
-    <string name="developer3">Максим Овсянников</string>
-    <string name="developer4">Руслан Фазлыев</string>
     <string name="salary_not_specified">Зарплата не указана</string>
     <string name="share_vacancy">Поделиться вакансией</string>
 </resources>

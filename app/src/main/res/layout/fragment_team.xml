@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/team_title"
         style="@style/screen_title"
-        android:text="@string/team"
+        android:text="@string/team_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
