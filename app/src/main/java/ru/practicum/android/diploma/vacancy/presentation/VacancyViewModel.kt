@@ -48,7 +48,7 @@ class VacancyViewModel(
                 _isFavorite.value = false
             }
         } else {
-            vacancy?.let { //!!!
+            vacancy?.let { // !!!
                 val success = vacancyInteractor.addToFavourite(it)
                 if (success) {
                     _isFavorite.value = true

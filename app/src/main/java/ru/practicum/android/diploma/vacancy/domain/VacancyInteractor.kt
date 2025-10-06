@@ -1,13 +1,13 @@
 package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import java.util.Currency
 
 class VacancyInteractor(
     private val vacancyRepository: VacancyDbRepository,
@@ -35,7 +35,7 @@ class VacancyInteractor(
         return VacancyDetail(
             id = "test_123",
             name = "Тестовая вакансия",
-            salary = Salary(100000, 200000, "RUR"),
+            salary = Salary(SALARY_FROM, SALARY_TO, CURRENCY),
             employerName = "Тестовая компания",
             employerLogoUrl = null,
             area = "Москва",
@@ -69,7 +69,7 @@ class VacancyInteractor(
 
     suspend fun isVacancyFavorite(vacancyId: String): Boolean {
         // Временная реализация - нужно получить все избранные и проверить наличие
-        return false
+        return FALSE
     }
 
     fun prepareShareContent(vacancy: VacancyDetail): String {
@@ -93,5 +93,9 @@ class VacancyInteractor(
 
     companion object {
         private const val CODE_404 = 404
+        private const val SALARY_FROM = 100000
+        private const val SALARY_TO = 200000
+        private const val CURRENCY = "RU"
+        private const val FALSE = false
     }
 }
