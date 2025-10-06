@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convert
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
-import java.util.Currency
 
 class VacancyInteractor(
     private val vacancyRepository: VacancyDbRepository,
@@ -93,8 +92,8 @@ class VacancyInteractor(
 
     companion object {
         private const val CODE_404 = 404
-        private const val SALARY_FROM = 100000
-        private const val SALARY_TO = 200000
+        private const val SALARY_FROM = 100_000
+        private const val SALARY_TO = 200_000
         private const val CURRENCY = "RU"
         private const val FALSE = false
     }
