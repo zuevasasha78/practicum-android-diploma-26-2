@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
