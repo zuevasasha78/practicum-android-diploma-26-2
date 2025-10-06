@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.vacancy.domain.VacancyState
-import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.utils.StringUtils
+import ru.practicum.android.diploma.vacancy.domain.VacancyState
 
 class VacancyFragment : Fragment() {
 
@@ -21,7 +22,7 @@ class VacancyFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VacancyViewModel by viewModel()
-    private var currentVacancy: VacancyModel? = null
+    private var currentVacancy: VacancyDetail? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,13 +65,13 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadVacancy() {
-        val vacancyId = arguments?.getString(ARG_VACANCY_ID) ?: ""
+        val vacancyId = arguments?.getString(ARG_NAME) ?: ""
         viewModel.loadVacancy(vacancyId)
     }
 
-    private fun bindVacancyData(vacancy: VacancyModel) {
+    private fun bindVacancyData(vacancy: VacancyDetail) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary ?: R.string.salary_not_specified.toString()
+        binding.vacancyPayment.text = StringUtils(requireContext()).getSalaryString(vacancy.salary)
         binding.employerName.text = vacancy.employerName
         binding.experience.text = vacancy.experience ?: ""
         binding.employmentType.text = vacancy.employment ?: ""
@@ -86,7 +87,7 @@ class VacancyFragment : Fragment() {
         setupClickListeners(vacancy)
     }
 
-    private fun setupClickListeners(vacancy: VacancyModel) {
+    private fun setupClickListeners(vacancy: VacancyDetail) {
         binding.favorite.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.toggleFavorite(vacancy.id, vacancy)
@@ -157,6 +158,6 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_VACANCY_ID = "vacancy_id"
+        const val ARG_NAME = "vacancyId"
     }
 }

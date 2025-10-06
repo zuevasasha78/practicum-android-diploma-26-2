@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.db.domain
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 
-interface VacancyRepository {
+interface VacancyDbRepository {
 
     // todo заменить VacancyEntity на модель
     suspend fun addVacancy(vacancy: VacancyEntity)
