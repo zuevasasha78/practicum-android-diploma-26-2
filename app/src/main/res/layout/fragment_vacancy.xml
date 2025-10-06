@@ -15,11 +15,11 @@
         style="@style/toolbar_vacancy"
         >
 
-        <View
+        <ImageView
             android:id="@+id/favorite"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            style="@style/icon_favorite" />
+            style="@style/toolbar_icon" />
 
         <View
             android:id="@+id/share"
@@ -74,7 +74,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
-                    android:background="@mipmap/ic_launcher"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -194,6 +193,7 @@
                 />
 
             <TextView
+                android:id="@+id/title_vacancy_skills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/vacancy_text_22_bold"
@@ -209,6 +209,41 @@
                 android:text="Знание классических алгоритмов и структуры данных
 Программирование для Android больше одного года
 Знание WebRTC"
+                />
+
+            <TextView
+                android:id="@+id/contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/vacancy_text_22_bold"
+                android:layout_marginTop="24dp"
+                android:text="@string/contacts"/>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                style="@style/vacancy_text_16_regular"
+                android:text="Москва"
+                />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/vacancy_text_16_regular"
+                android:text="8-800-555-35-35"
+                />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/vacancy_text_16_regular"
+                android:text="mail_@mail.ru"
                 />
 
         </LinearLayout>

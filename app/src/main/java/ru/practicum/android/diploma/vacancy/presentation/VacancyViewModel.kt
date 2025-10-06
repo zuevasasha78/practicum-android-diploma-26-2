@@ -33,7 +33,7 @@ class VacancyViewModel(
         }
     }
 
-    suspend fun toggleFavorite(vacancyId: String, vacancy: VacancyModel? = null) {
+    suspend fun toggleFavorite(vacancyId: String) {
         val currentState = _isFavorite.value ?: false
 
         if (currentState) {

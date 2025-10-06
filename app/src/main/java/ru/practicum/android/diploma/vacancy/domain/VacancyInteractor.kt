@@ -4,6 +4,7 @@ import android.util.Log
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.db.domain.VacancyRepository
 import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.dto.response.Contacts
 import ru.practicum.android.diploma.network.data.dto.response.Salary
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
 import ru.practicum.android.diploma.vacancy.domain.model.VacancyModel
@@ -14,18 +15,23 @@ class VacancyInteractor(
 ) {
 
     suspend fun getVacancy(vacancyId: String): VacancyState {
-        return when (val result = networkRepository.getVacancy(vacancyId)) {
-            is ApiResult.Success -> {
-                VacancyState.Content(convertToVacancyModel(result.data))
-            }
-            is ApiResult.Error -> {
-                if (result.code == CODE_404) {
-                    VacancyState.VacancyNotFound
-                } else {
-                    VacancyState.ServerError
+        // Для тестирования - временная заглушка
+        return if (vacancyId == "test") {
+            VacancyState.Content(createTestVacancy())
+        } else {
+            when (val result = networkRepository.getVacancy(vacancyId)) {
+                is ApiResult.Success -> {
+                    VacancyState.Content(convertToVacancyModel(result.data))
                 }
+                is ApiResult.Error -> {
+                    if (result.code == CODE_404) {
+                        VacancyState.VacancyNotFound
+                    } else {
+                        VacancyState.ServerError
+                    }
+                }
+                is ApiResult.NoInternetConnection -> VacancyState.NoInternet
             }
-            is ApiResult.NoInternetConnection -> VacancyState.NoInternet
         }
     }
 
@@ -38,14 +44,14 @@ class VacancyInteractor(
     }
 
     fun addToFavourite(vacancyId: String): Boolean {
-        return vacancyId.isEmpty() // Заглушка - просто возвращаем true
+        return vacancyId.isNotEmpty() // Заглушка - просто возвращаем true
     }
 
     fun prepareShareContent(vacancy: VacancyModel): String {
         return buildString {
             append("Вакансия: ${vacancy.name}\n")
             append("Компания: ${vacancy.employerName}\n")
-            append("Зарплата: ${vacancy.salary}\n")
+            append("Зарплата: ${vacancy.salary ?: "не указана"}\n")
             append("Город: ${vacancy.area}\n")
             append("Ссылка: ${vacancy.url}")
         }
@@ -59,25 +65,75 @@ class VacancyInteractor(
             employerName = vacancyDetail.employer.name,
             employerLogoUrl = vacancyDetail.employer.logo,
             area = vacancyDetail.area.name,
-            address = vacancyDetail.address?.city ?: vacancyDetail.area.name,
+            address = vacancyDetail.address?.city,
             experience = vacancyDetail.experience.name,
             employment = vacancyDetail.employment.name,
             description = vacancyDetail.description,
-            responsibilities = vacancyDetail.description,
-            requirements = vacancyDetail.description,
-            conditions = vacancyDetail.description,
+            responsibilities = extractResponsibilities(vacancyDetail.description),
+            requirements = extractRequirements(vacancyDetail.description),
+            conditions = extractConditions(vacancyDetail.description),
             skills = vacancyDetail.skills,
-            url = vacancyDetail.url
+            url = vacancyDetail.url,
+            phone = formatPhone(vacancyDetail.contacts),
+            email = vacancyDetail.contacts?.email,
         )
     }
 
-    private fun formatSalary(salary: Salary): String {
+    private fun formatSalary(salary: Salary?): String? {
+        if (salary == null) return null
+
         return when {
             salary.from != null && salary.to != null -> "от ${salary.from} до ${salary.to} ${salary.currency ?: ""}"
             salary.from != null -> "от ${salary.from} ${salary.currency ?: ""}"
             salary.to != null -> "до ${salary.to} ${salary.currency ?: ""}"
-            else -> R.string.salary_not_specified.toString()
-        }.trim()
+            else -> null
+        }?.trim()
+    }
+
+    private fun formatPhone(contacts: Contacts?): String? {
+        return contacts?.phone?.firstOrNull()
+    }
+
+    // Временные методы для извлечения данных из описания (заглушки)
+    private fun extractResponsibilities(description: String?): String? {
+        return description?.takeIf { it.isNotBlank() }?.let {
+            "• Разработка нового функционала\n• Участие в код-ревью\n• Оптимизация производительности"
+        }
+    }
+
+    private fun extractRequirements(description: String?): String? {
+        return description?.takeIf { it.isNotBlank() }?.let {
+            "• Опыт разработки на Kotlin/Java\n• Знание Android SDK\n• Опыт работы с REST API"
+        }
+    }
+
+    private fun extractConditions(description: String?): String? {
+        return description?.takeIf { it.isNotBlank() }?.let {
+            "• Удаленная работа\n• Гибкий график\n• Медицинская страховка"
+        }
+    }
+
+    // Тестовая вакансия для проверки UI
+    private fun createTestVacancy(): VacancyModel {
+        return VacancyModel(
+            id = "test",
+            name = "Android Developer",
+            salary = "от 150 000 ₽",
+            employerName = "Яндекс",
+            employerLogoUrl = "https://example.com/logo.png",
+            area = "Москва",
+            address = "ул. Льва Толстого, 16",
+            experience = "От 1 года до 3 лет",
+            employment = "Полная занятость, удаленная работа",
+            description = "Мы ищем опытного Android-разработчика для работы над нашим флагманским приложением.",
+            responsibilities = "• Разработка нового функционала\n• Участие в код-ревью\n• Оптимизация производительности",
+            requirements = "• Опыт разработки на Kotlin/Java\n• Знание Android SDK\n• Опыт работы с REST API",
+            conditions = "• Чистый офис (как уберётесь)\n• Печенье (раз в месяц и самое дешевое)\n• Бесплатный проезд (зайцем)",
+            skills = listOf("Kotlin", "Android SDK", "Coroutines", "REST API", "Git"),
+            url = "https://hh.ru/vacancy/123",
+            phone = "8 (800) 555-35-35",
+            email = "mail_@mail.ru",
+        )
     }
 
     companion object {

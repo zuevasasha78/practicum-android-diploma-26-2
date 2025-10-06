@@ -15,5 +15,7 @@ data class VacancyModel(
     val requirements: String?,
     val conditions: String?,
     val skills: List<String>,
-    val url: String
+    val url: String,
+    val phone: String? = null,
+    val email: String? = null
 )

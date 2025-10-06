@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -64,35 +65,43 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadVacancy() {
-        val vacancyId = arguments?.getString(ARG_VACANCY_ID) ?: ""
+        val vacancyId = arguments?.getString(ARG_VACANCY_ID) ?: "test" // временно для теста
         viewModel.loadVacancy(vacancyId)
     }
 
     private fun bindVacancyData(vacancy: VacancyModel) {
         binding.vacancyName.text = vacancy.name
-        binding.vacancyPayment.text = vacancy.salary ?: R.string.salary_not_specified.toString()
+        binding.vacancyPayment.text = vacancy.salary ?: getString(R.string.salary_not_specified)
         binding.employerName.text = vacancy.employerName
+        binding.area.text = vacancy.address ?: vacancy.area
         binding.experience.text = vacancy.experience ?: ""
         binding.employmentType.text = vacancy.employment ?: ""
         Glide.with(this)
             .load(vacancy.employerLogoUrl)
-            .placeholder(R.drawable.employer_logo_placeholder)
+            .placeholder(R.drawable.empty_placeholder)
             .into(binding.employerLogo)
         binding.vacancyResponsibilities.text = vacancy.responsibilities ?: ""
         binding.vacancyRequirements.text = vacancy.requirements ?: ""
         binding.vacancyConditions.text = vacancy.conditions ?: ""
-        binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
-
-        setupClickListeners(vacancy)
-    }
-
-    private fun setupClickListeners(vacancy: VacancyModel) {
+        val hasSkills = vacancy.skills.isNotEmpty()
+        binding.vacancySkills.isVisible = hasSkills
+        binding.titleVacancySkills.isVisible = hasSkills
+        if (hasSkills) {
+            binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
+        }
+        val hasContacts = !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()
+        binding.contacts.isVisible = hasContacts
+        binding.address.isVisible = hasContacts && !vacancy.address.isNullOrEmpty()
+        binding.phone.isVisible = hasContacts && !vacancy.phone.isNullOrEmpty()
+        binding.email.isVisible = hasContacts && !vacancy.email.isNullOrEmpty()
+        binding.address.text = vacancy.address ?: ""
+        binding.phone.text = vacancy.phone ?: ""
+        binding.email.text = vacancy.email ?: ""
         binding.favorite.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.toggleFavorite(vacancy.id, vacancy)
+                viewModel.toggleFavorite(vacancy.id)
             }
         }
-
         binding.share.setOnClickListener {
             val shareContent = viewModel.prepareShareContent(vacancy)
             shareVacancy(shareContent)
@@ -101,9 +110,9 @@ class VacancyFragment : Fragment() {
 
     private fun updateFavoriteIcon(isFavorite: Boolean) {
         if (isFavorite) {
-            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_on)
+            binding.favorite.setImageResource(R.drawable.icon_favorite_red)
         } else {
-            binding.favorite.setBackgroundResource(R.drawable.icon_favorite_off)
+            binding.favorite.setImageResource(R.drawable.icon_favorite_off)
         }
     }
 
