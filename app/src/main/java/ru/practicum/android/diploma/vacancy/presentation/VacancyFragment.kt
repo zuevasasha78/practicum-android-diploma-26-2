@@ -12,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.utils.StringUtils
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VacancyFragment : Fragment() {
 

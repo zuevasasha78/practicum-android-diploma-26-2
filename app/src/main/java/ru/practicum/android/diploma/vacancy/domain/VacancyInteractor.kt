@@ -38,7 +38,6 @@ class VacancyInteractor(
         }
     }
 
-
     suspend fun removeFromFavourite(vacancyId: String): Boolean {
         return runCatching {
             vacancyRepository.deleteVacancy(vacancyId)
@@ -57,7 +56,7 @@ class VacancyInteractor(
 
     suspend fun isVacancyFavorite(vacancyId: String): Boolean {
         // Временная реализация - нужно получить все избранные и проверить наличие
-        return false
+        return FALSE
     }
 
     fun prepareShareContent(vacancy: VacancyDetail): String {
@@ -72,5 +71,6 @@ class VacancyInteractor(
 
     companion object {
         private const val CODE_404 = 404
+        private const val FALSE = false
     }
 }
