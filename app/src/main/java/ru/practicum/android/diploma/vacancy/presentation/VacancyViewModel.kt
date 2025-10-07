@@ -23,18 +23,11 @@ class VacancyViewModel(
         _state.value = VacancyState.Loading
 
         viewModelScope.launch {
-            // Временно используем тестовые данные
-            if (vacancyId.isEmpty()) {
-                val testVacancy = vacancyInteractor.getTestVacancy()
-                _state.value = VacancyState.Content(testVacancy)
-                _isFavorite.value = false
-            } else {
-                val result = vacancyInteractor.getVacancy(vacancyId)
-                _state.value = result
-                if (result is VacancyState.Content) {
-                    val isFavorite = vacancyInteractor.isVacancyFavorite(vacancyId)
-                    _isFavorite.value = isFavorite
-                }
+            val result = vacancyInteractor.getVacancy(vacancyId)
+            _state.value = result
+            if (result is VacancyState.Content) {
+                val isFavorite = vacancyInteractor.isVacancyFavorite(vacancyId)
+                _isFavorite.value = isFavorite
             }
         }
     }
@@ -48,12 +41,16 @@ class VacancyViewModel(
                 _isFavorite.value = false
             }
         } else {
-            vacancy?.let { // !!!
+            vacancy?.let {
                 val success = vacancyInteractor.addToFavourite(it)
                 if (success) {
                     _isFavorite.value = true
                 }
             }
         }
+    }
+
+    fun prepareShareContent(vacancy: VacancyDetail): String {
+        return vacancyInteractor.prepareShareContent(vacancy)
     }
 }
