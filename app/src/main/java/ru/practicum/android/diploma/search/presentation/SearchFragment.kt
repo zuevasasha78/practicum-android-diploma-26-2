@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private lateinit var vacancyAdapter: VacancyAdapter
+    private var vacancyAdapter: VacancyAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,7 +102,7 @@ class SearchFragment : Fragment() {
             is SearchScreenState.Success -> {
                 binding.placeholder.root.isVisible = false
                 binding.vacancyRv.isVisible = true
-                vacancyAdapter.setItems(screenState.vacancyList)
+                vacancyAdapter?.setItems(screenState.vacancyList)
                 binding.searchInfo.apply {
                     isVisible = true
                     text = requireContext().resources.getQuantityString(
@@ -174,7 +174,7 @@ class SearchFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.hideSoftInputFromWindow(it.windowToken, 0)
         binding.editText.text?.clear()
-        vacancyAdapter.setItems(emptyList())
+        vacancyAdapter?.setItems(emptyList())
     }
 
     private val adapterListener = VacancyAdapter.VacancyClickListener {

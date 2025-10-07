@@ -51,18 +51,7 @@ class SearchViewModel(
 
             if (result is SearchScreenState.Success) {
                 isLastPage = result.lastPage == currentPage
-
-                if (page > 1 && _screenState.value is SearchScreenState.Success) {
-                    val current = _screenState.value as SearchScreenState.Success
-                    val newItems = current.vacancyList + result.vacancyList
-                    val newState = result.copy(
-                        vacancyList = newItems,
-                        paginationState = PaginationState.Idle
-                    )
-                    setScreenState(newState)
-                } else {
-                    setScreenState(result.copy(paginationState = PaginationState.Idle))
-                }
+                loadNewItems(page, result)
             } else {
                 if (page > 1 && _screenState.value is SearchScreenState.Success) {
                     val current = _screenState.value as SearchScreenState.Success
@@ -82,6 +71,20 @@ class SearchViewModel(
         }
     }
 
+    private fun loadNewItems(page: Int, result: SearchScreenState.Success) {
+        if (page > 1 && _screenState.value is SearchScreenState.Success) {
+            val current = _screenState.value as SearchScreenState.Success
+            val newItems = current.vacancyList + result.vacancyList
+            val newState = result.copy(
+                vacancyList = newItems,
+                paginationState = PaginationState.Idle
+            )
+            setScreenState(newState)
+        } else {
+            setScreenState(result.copy(paginationState = PaginationState.Idle))
+        }
+    }
+
     fun loadNextPage() {
         val currentState = _screenState.value
         if (currentState !is SearchScreenState.Success ||
@@ -91,9 +94,7 @@ class SearchViewModel(
         }
 
         currentPage++
-
         setScreenState(currentState.copy(paginationState = PaginationState.Loading))
-
         searchVacancy(lastSearch, currentPage)
     }
 }
