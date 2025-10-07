@@ -16,7 +16,7 @@ class VacancyViewModel(
     private val _state = MutableLiveData<VacancyState>()
     val state: LiveData<VacancyState> = _state
 
-    private val _isFavorite = MutableLiveData(false)
+    private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
 
     fun loadVacancy(vacancyId: String) {
@@ -25,10 +25,9 @@ class VacancyViewModel(
         viewModelScope.launch {
             val result = vacancyInteractor.getVacancy(vacancyId)
             _state.value = result
-            // При загрузке вакансии устанавливаем начальное состояние избранного
             if (result is VacancyState.Content) {
-                // Проверить в базе данных, добавлена ли вакансия в избранное
-                _isFavorite.value = false
+                val isFavorite = vacancyInteractor.isVacancyFavorite(vacancyId)
+                _isFavorite.value = isFavorite
             }
         }
     }
@@ -42,9 +41,11 @@ class VacancyViewModel(
                 _isFavorite.value = false
             }
         } else {
-            val success = vacancyInteractor.addToFavourite(vacancyId)
-            if (success) {
-                _isFavorite.value = true
+            vacancy?.let {
+                val success = vacancyInteractor.addToFavourite(it)
+                if (success) {
+                    _isFavorite.value = true
+                }
             }
         }
     }

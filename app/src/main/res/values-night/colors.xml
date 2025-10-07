@@ -4,6 +4,7 @@
     <color name="white">@color/black_universal</color>
     <color name="background_text_input">@color/gray</color>
     <color name="background_color">@color/black_universal</color>
+    <color name="revers_background_color">@color/white_universal</color>
     <color name="hint_color_text_input">@color/white_universal</color>
     <color name="g_board">#263238</color>
     <color name="text_color">@color/white_universal</color>
