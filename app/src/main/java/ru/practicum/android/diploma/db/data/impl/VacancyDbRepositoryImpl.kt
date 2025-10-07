@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.db.data.VacancyDbConvertor
 import ru.practicum.android.diploma.db.data.dao.VacancyDao
-import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
@@ -17,7 +16,7 @@ class VacancyDbRepositoryImpl(
     private val vacancyDbConvertor: VacancyDbConvertor
 ) : VacancyDbRepository {
 
-    override suspend fun addVacancy(vacancy: VacancyEntity) {
+    override suspend fun addVacancy(vacancy: VacancyDetail) {
         // todo сконвертировать Модель в VacancyDbConvertor через VacancyDbConvertor
         vacancyDao.addVacancy(vacancy)
     }

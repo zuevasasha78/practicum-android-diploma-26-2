@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
-import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
@@ -28,6 +27,9 @@ class VacancyInteractor(
             }
         } catch (e: SocketTimeoutException) {
             Log.e("VacancyInteractor", "Socket timeout for vacancy $vacancyId", e)
+            VacancyState.ServerError
+        } catch (e: Exception) {
+            Log.e("VacancyInteractor", "Unknown error for vacancy $vacancyId", e)
             VacancyState.ServerError
         }
     }
@@ -57,7 +59,7 @@ class VacancyInteractor(
         }.isSuccess
     }
 
-    suspend fun addToFavourite(vacancy: VacancyEntity): Boolean {
+    suspend fun addToFavourite(vacancy: VacancyDetail): Boolean {
         return runCatching {
             vacancyRepository.addVacancy(vacancy)
             true
