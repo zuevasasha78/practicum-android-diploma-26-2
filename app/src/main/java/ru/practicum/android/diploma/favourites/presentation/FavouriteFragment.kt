@@ -4,14 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
+import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
+import ru.practicum.android.diploma.utils.Utils.setImageTop
+import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class FavouriteFragment : Fragment() {
+    private val favouriteViewModel by viewModel<FavouriteVacanciesViewModel>()
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
+    private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
+        override fun onVacancyClick(vacancy: Vacancy) {
+            openVacancy(vacancy)
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,9 +42,60 @@ class FavouriteFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vacancyButton.setOnClickListener {
-            findNavController().navigate(R.id.action_favouriteFragment_to_vacancyFragment)
+        binding.favouriteRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.favouriteRecyclerView.adapter = favouriteAdapter
+        favouriteViewModel.screenState.observe(viewLifecycleOwner) {
+            renderScreen(it)
         }
+    }
+
+    private fun renderScreen(favouriteScreenState: FavouriteScreenState) {
+        when (favouriteScreenState) {
+            is FavouriteScreenState.Loading -> setLoadingState()
+            is FavouriteScreenState.Empty -> setEmptyState()
+            is FavouriteScreenState.Error -> setErrorState()
+            is FavouriteScreenState.Content -> showResult(favouriteScreenState.vacanciesList)
+        }
+    }
+
+    private fun setLoadingState() {
+        binding.progressBar.isVisible = true
+        binding.placeholder.isVisible = false
+        binding.favouriteRecyclerView.isVisible = false
+    }
+
+    private fun setEmptyState() {
+        binding.progressBar.isVisible = false
+        binding.favouriteRecyclerView.isVisible = false
+        binding.placeholder.apply {
+            setImageTop(getDrawable(requireContext(), R.drawable.empty_favourite_list))
+            text = requireContext().getString(R.string.empty_favourite_list)
+            isVisible = true
+        }
+    }
+
+    private fun setErrorState() {
+        binding.progressBar.isVisible = false
+        binding.favouriteRecyclerView.isVisible = false
+        binding.placeholder.apply {
+            setImageTop(getDrawable(requireContext(), R.drawable.no_result_placeholder))
+            text = requireContext().getString(R.string.no_search_result_placeholder_text)
+            isVisible = true
+        }
+    }
+
+    private fun showResult(vacanciesList: List<Vacancy>) {
+        binding.progressBar.isVisible = false
+        binding.placeholder.isVisible = false
+        favouriteAdapter.setItems(vacanciesList)
+        binding.favouriteRecyclerView.isVisible = true
+    }
+
+    private fun openVacancy(vacancy: Vacancy) {
+        findNavController().navigate(
+            R.id.action_favouriteFragment_to_vacancyFragment,
+            bundleOf(ARG_NAME to vacancy.id)
+        )
     }
 
     override fun onDestroyView() {
