@@ -149,9 +149,9 @@ class VacancyFragment : Fragment() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:$emailAddress")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
-            putExtra(Intent.EXTRA_SUBJECT, "Отклик на вакансию")
+            putExtra(Intent.EXTRA_SUBJECT, R.string.response_to_vacancy)
         }
-        startActivity(Intent.createChooser(intent, "Выберите почтовое приложение"))
+        startActivity(Intent.createChooser(intent, R.string.select_mail_app.toString()))
     }
 
     private fun setupClickListeners(vacancy: VacancyDetail) {
