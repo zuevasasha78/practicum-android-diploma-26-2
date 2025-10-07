@@ -17,4 +17,7 @@ interface VacancyDao {
 
     @Query("DELETE FROM vacancy_table WHERE vacancyId = :vacancyId")
     suspend fun deleteVacancy(vacancyId: String)
+
+    @Query("SELECT * FROM vacancy_table WHERE id = :vacancyId")
+    suspend fun getVacancyById(vacancyId: String): VacancyEntity?
 }

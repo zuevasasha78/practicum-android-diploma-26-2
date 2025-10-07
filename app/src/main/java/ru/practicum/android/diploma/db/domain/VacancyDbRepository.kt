@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.db.domain
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
 interface VacancyDbRepository {
 
@@ -12,4 +13,6 @@ interface VacancyDbRepository {
     suspend fun deleteVacancy(vacancyId: String)
 
     fun getVacancies(): Flow<List<Vacancy>?>
+
+    suspend fun getVacancyById(vacancyId: String): VacancyDetail?
 }

@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.db.data.dao.VacancyDao
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
 class VacancyDbRepositoryImpl(
     private val vacancyDao: VacancyDao,
@@ -32,4 +33,8 @@ class VacancyDbRepositoryImpl(
     }.catch {
         emit(null)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getVacancyById(vacancyId: String): VacancyDetail? {
+        TODO("Not yet implemented")
+    }
 }
