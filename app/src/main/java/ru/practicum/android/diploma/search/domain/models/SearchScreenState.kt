@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.domain
+package ru.practicum.android.diploma.search.domain.models
 
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
@@ -9,7 +9,8 @@ sealed class SearchScreenState {
     data class Success(
         val amount: Int,
         val lastPage: Int,
-        val vacancyList: List<Vacancy>
+        val vacancyList: List<Vacancy>,
+        val paginationState: PaginationState = PaginationState.Idle,
     ) : SearchScreenState()
 
     data class Error(val placeholder: SearchPlaceholder) : SearchScreenState()

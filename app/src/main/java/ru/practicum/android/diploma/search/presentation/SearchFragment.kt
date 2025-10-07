@@ -8,6 +8,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -19,7 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.SearchScreenState
+import ru.practicum.android.diploma.search.domain.models.PaginationState
+import ru.practicum.android.diploma.search.domain.models.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
 import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
@@ -30,6 +32,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private lateinit var vacancyAdapter: VacancyAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,29 +43,27 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setOnMenuItemClickListener(menuListener)
 
-        searchViewModel.screenState.observe(viewLifecycleOwner) {
-            setUi(it)
+        vacancyAdapter = VacancyAdapter(adapterListener)
+        binding.vacancyRv.apply {
+            adapter = vacancyAdapter
+            addItemDecoration(VacancyAdapterItemDecorator())
         }
 
-        binding.vacancyRv.apply {
-            adapter = VacancyAdapter(adapterListener)
-            addItemDecoration(VacancyAdapterItemDecorator())
+        searchViewModel.screenState.observe(viewLifecycleOwner) { state ->
+            setUi(state)
         }
 
         binding.editText.addTextChangedListener(
             beforeTextChanged = { _: CharSequence?, _: Int, _: Int, _: Int -> },
-            onTextChanged = { p0: CharSequence?, _: Int, _: Int, _: Int ->
-                if (!p0.isNullOrEmpty()) {
+            onTextChanged = { text: CharSequence?, _: Int, _: Int, _: Int ->
+                if (!text.isNullOrEmpty()) {
                     binding.etEndIcon.setImageResource(R.drawable.icon_close)
                     binding.etEndIcon.setOnClickListener(etEndIconListener)
-                    searchViewModel.searchVacancyDebounce(p0.toString())
+                    searchViewModel.searchVacancyDebounce(text.toString())
                 } else {
                     binding.etEndIcon.setImageResource(R.drawable.icon_search)
                     binding.etEndIcon.setOnClickListener(null)
@@ -80,7 +81,7 @@ class SearchFragment : Fragment() {
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                     val pos = layoutManager.findLastVisibleItemPosition()
                     val itemsCount = layoutManager.itemCount
-                    if (pos >= itemsCount - 1 && searchViewModel.canLoadNextPage.value) {
+                    if (pos >= itemsCount - 1 && searchViewModel.canLoadNextPage.value == true) {
                         searchViewModel.loadNextPage()
                     }
                 }
@@ -93,15 +94,15 @@ class SearchFragment : Fragment() {
             is SearchScreenState.Init -> {
                 showPlaceholder(SearchPlaceholder.SearchInitPlaceholder)
             }
+
             is SearchScreenState.Error -> {
                 showPlaceholder(screenState.placeholder)
             }
+
             is SearchScreenState.Success -> {
                 binding.placeholder.root.isVisible = false
-                binding.vacancyRv.apply {
-                    (adapter as VacancyAdapter).setItems(screenState.vacancyList)
-                    isVisible = true
-                }
+                binding.vacancyRv.isVisible = true
+                vacancyAdapter.setItems(screenState.vacancyList)
                 binding.searchInfo.apply {
                     isVisible = true
                     text = requireContext().resources.getQuantityString(
@@ -110,7 +111,19 @@ class SearchFragment : Fragment() {
                         screenState.amount
                     )
                 }
-                binding.progressBar.isVisible = false
+
+                when (screenState.paginationState) {
+                    PaginationState.Idle -> binding.progressBar.isVisible = false
+                    PaginationState.Loading -> binding.progressBar.isVisible = true
+                    is PaginationState.Error -> {
+                        binding.progressBar.isVisible = false
+                        Toast.makeText(
+                            requireContext(),
+                            getString(screenState.paginationState.message),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
 
             is SearchScreenState.Loading -> {
@@ -157,10 +170,11 @@ class SearchFragment : Fragment() {
     }
 
     private val etEndIconListener = OnClickListener {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.hideSoftInputFromWindow(it.windowToken, 0)
         binding.editText.text?.clear()
-        (binding.vacancyRv.adapter as VacancyAdapter).setItems(emptyList())
+        vacancyAdapter.setItems(emptyList())
     }
 
     private val adapterListener = VacancyAdapter.VacancyClickListener {

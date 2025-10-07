@@ -41,4 +41,6 @@
 
     <string name="server_error">Ошибка сервера</string>
     <string name="no_internet">Нет интернета</string>
+    <string name="check_internet_connection">Проверьте подключение к интернету</string>
+    <string name="error_occurred">Произошла ошибка</string>
 </resources>
