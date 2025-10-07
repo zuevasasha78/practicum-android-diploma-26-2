@@ -42,4 +42,6 @@
     <string name="share_vacancy">Поделиться вакансией</string>
     <string name="select_mail_app">Выберите почтовое приложение</string>
     <string name="response_to_vacancy">Отклик на вакансию</string>
+    <string name="favourite">Избранное</string>
+    <string name="empty_favourite_list">Список пуст</string>
 </resources>

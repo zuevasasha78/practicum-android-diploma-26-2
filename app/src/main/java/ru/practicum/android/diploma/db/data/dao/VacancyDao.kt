@@ -13,7 +13,7 @@ interface VacancyDao {
     suspend fun addVacancy(vacancy: VacancyEntity)
 
     @Query("SELECT * FROM vacancy_table")
-    suspend fun getVacancies(): List<VacancyEntity>?
+    suspend fun getVacancies(): List<VacancyEntity>
 
     @Query("DELETE FROM vacancy_table WHERE vacancyId = :vacancyId")
     suspend fun deleteVacancy(vacancyId: String)
