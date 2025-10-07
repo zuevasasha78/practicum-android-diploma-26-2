@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.vacancy.domain.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
 
 class VacancyViewModel(
-    private val vacancyInteractor: VacancyInteractor
+    private val vacancyInteractor: VacancyInteractor,
+    private val favouriteVacancyInteractor: FavouriteVacancyInteractor,
 ) : ViewModel() {
 
     private val _state = MutableLiveData<VacancyState>()
@@ -26,7 +28,7 @@ class VacancyViewModel(
             val result = vacancyInteractor.getVacancy(vacancyId)
             _state.value = result
             if (result is VacancyState.Content) {
-                val isFavorite = vacancyInteractor.isVacancyFavorite(vacancyId)
+                val isFavorite = favouriteVacancyInteractor.isVacancyFavorite(vacancyId)
                 _isFavorite.value = isFavorite
             }
         }
@@ -36,13 +38,13 @@ class VacancyViewModel(
         val currentState = _isFavorite.value ?: false
 
         if (currentState) {
-            val success = vacancyInteractor.removeFromFavourite(vacancyId)
+            val success = favouriteVacancyInteractor.deleteVacancy(vacancyId)
             if (success) {
                 _isFavorite.value = false
             }
         } else {
             vacancy?.let {
-                val success = vacancyInteractor.addToFavourite(it)
+                val success = favouriteVacancyInteractor.addVacancy(it)
                 if (success) {
                     _isFavorite.value = true
                 }

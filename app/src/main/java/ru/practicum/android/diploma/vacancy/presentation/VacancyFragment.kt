@@ -102,7 +102,7 @@ class VacancyFragment : Fragment() {
         binding.vacancySkills.isVisible = hasSkills
 
         if (hasSkills) {
-            binding.vacancySkills.text = vacancy.skills.joinToString("\n") { "• $it" }
+            binding.vacancySkills.text = vacancy.skills
         }
     }
 

@@ -17,7 +17,7 @@ object VacancyNetworkConvertor {
             this.id,
             this.name,
             this.employer.name,
-            this.salaryDto.convertToSalary(),
+            this.salary.convertToSalary(),
             this.employer.logo
         )
     }
@@ -62,7 +62,7 @@ object VacancyNetworkConvertor {
         return VacancyDetail(
             id = this.id,
             name = this.name,
-            salary = this.salaryDto.convertToSalary(),
+            salary = this.salary.convertToSalary(),
             employerName = this.employer.name,
             employerLogoUrl = this.employer.logo,
             area = this.area.name,
@@ -73,8 +73,20 @@ object VacancyNetworkConvertor {
             responsibilities = this.description,
             requirements = this.description,
             conditions = this.description,
-            skills = this.skills,
+            skills = this.skills.joinToString("\n") { "• $it" },
             url = this.url
         )
+    }
+
+    fun List<VacancyDetail>.convertToVacancyList(): List<Vacancy> {
+        return this.map { vacancyDetail ->
+            Vacancy(
+                id = vacancyDetail.id,
+                name = vacancyDetail.name,
+                employerName = vacancyDetail.employerName,
+                salaryDto = vacancyDetail.salary,
+                employerLogo = vacancyDetail.employerLogoUrl.let { it } ?: "",
+            )
+        }
     }
 }
