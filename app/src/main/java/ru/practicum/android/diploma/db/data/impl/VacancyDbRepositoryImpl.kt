@@ -27,7 +27,7 @@ class VacancyDbRepositoryImpl(
 
     override fun getVacancies(): Flow<List<Vacancy>?> = flow<List<Vacancy>?> {
         val entities = vacancyDao.getVacancies()
-        val domainVacancies = entities.map { vacancyDbConvertor.map(it) }
+        val domainVacancies = entities.map { vacancyDbConvertor.convertToVacancy(it) }
         emit(domainVacancies)
     }.catch {
         emit(null)

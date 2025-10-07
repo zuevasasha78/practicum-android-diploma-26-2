@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 
 class VacancyDbConvertor(private val gson: Gson) {
-    fun map(vacancyEntity: VacancyEntity): Vacancy {
+    fun convertToVacancy(vacancyEntity: VacancyEntity): Vacancy {
         val type = object : TypeToken<Salary>() {}.type
         val salary = gson.fromJson<Salary>(vacancyEntity.salary, type)
         return Vacancy(
