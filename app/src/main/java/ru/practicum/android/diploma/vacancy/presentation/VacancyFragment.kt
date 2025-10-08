@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.utils.StringUtils
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
+import ru.practicum.android.diploma.vacancy.presentation.models.VacancyPlaceholder
 
 class VacancyFragment : Fragment() {
 
@@ -57,9 +58,9 @@ class VacancyFragment : Fragment() {
                     currentVacancy = state.vacancy
                     bindVacancyData(state.vacancy)
                 }
-                is VacancyState.NoInternet -> showNoInternet()
-                is VacancyState.ServerError -> showError()
-                is VacancyState.VacancyNotFound -> showVacancyNotFound()
+                is VacancyState.NoInternet -> showPlaceholder(VacancyPlaceholder.NoInternet)
+                is VacancyState.ServerError -> showPlaceholder(VacancyPlaceholder.ServerError)
+                is VacancyState.VacancyNotFound -> showPlaceholder(VacancyPlaceholder.VacancyNotFound)
             }
         }
 
@@ -187,41 +188,24 @@ class VacancyFragment : Fragment() {
     private fun showLoading() {
         binding.progressbar.isVisible = true
         binding.vacancyDetails.isVisible = false
-        binding.placeholderServerError.isVisible = false
-        binding.placeholderVacancyNotFound.isVisible = false
-        binding.placeholderVacancyNoInternet.isVisible = false
+        binding.placeholder.root.isVisible = false
     }
 
     private fun showContent() {
         binding.progressbar.isVisible = false
         binding.vacancyDetails.isVisible = true
-        binding.placeholderServerError.isVisible = false
-        binding.placeholderVacancyNotFound.isVisible = false
-        binding.placeholderVacancyNoInternet.isVisible = false
+        binding.placeholder.root.isVisible = false
     }
 
-    private fun showError() {
+    private fun showPlaceholder(placeholder: VacancyPlaceholder) {
         binding.progressbar.isVisible = false
         binding.vacancyDetails.isVisible = false
-        binding.placeholderServerError.isVisible = true
-        binding.placeholderVacancyNotFound.isVisible = false
-        binding.placeholderVacancyNoInternet.isVisible = false
-    }
 
-    private fun showVacancyNotFound() {
-        binding.progressbar.isVisible = false
-        binding.vacancyDetails.isVisible = false
-        binding.placeholderServerError.isVisible = false
-        binding.placeholderVacancyNotFound.isVisible = true
-        binding.placeholderVacancyNoInternet.isVisible = false
-    }
-
-    private fun showNoInternet() {
-        binding.progressbar.isVisible = false
-        binding.vacancyDetails.isVisible = false
-        binding.placeholderServerError.isVisible = false
-        binding.placeholderVacancyNotFound.isVisible = false
-        binding.placeholderVacancyNoInternet.isVisible = true
+        binding.placeholder.apply {
+            image.setImageResource(placeholder.image)
+            placeholderText.text = placeholder.text?.let { getString(it) } ?: ""
+            root.isVisible = true
+        }
     }
 
     override fun onDestroyView() {
