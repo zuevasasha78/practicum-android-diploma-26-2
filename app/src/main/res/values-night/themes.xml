@@ -9,6 +9,7 @@
         <item name="colorOnBackground">@color/white_universal</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/white_universal</item>
+        <item name="leadingColor">@color/white_universal</item>
     </style>
 
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma">
