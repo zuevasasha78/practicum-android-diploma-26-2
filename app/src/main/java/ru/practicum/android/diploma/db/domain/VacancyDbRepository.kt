@@ -11,4 +11,6 @@ interface VacancyDbRepository {
 
     fun getVacancies(): Flow<List<VacancyDetail>?>
     suspend fun isVacancyFavorite(vacancyId: String): Boolean
+
+    suspend fun getVacancyById(vacancyId: String): VacancyDetail?
 }

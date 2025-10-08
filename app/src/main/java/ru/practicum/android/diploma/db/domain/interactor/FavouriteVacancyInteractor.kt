@@ -11,4 +11,6 @@ interface FavouriteVacancyInteractor {
     suspend fun addVacancy(vacancyDetail: VacancyDetail): Boolean
 
     suspend fun isVacancyFavorite(vacancyId: String): Boolean
+
+    suspend fun getVacancyById(vacancyId: String): VacancyDetail?
 }

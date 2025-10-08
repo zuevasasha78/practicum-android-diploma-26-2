@@ -13,7 +13,7 @@ val interactorModule = module {
     factory<SearchScreenInteractor> {
         SearchScreenInteractorImpl(get())
     }
-    factory { VacancyInteractor(get(), get()) }
+    factory { VacancyInteractor(get(), get(), get()) }
 
     factory { StringUtils(get()) }
     factory<FavouriteVacancyInteractor> { FavouriteVacancyInteractorImpl(get()) }
