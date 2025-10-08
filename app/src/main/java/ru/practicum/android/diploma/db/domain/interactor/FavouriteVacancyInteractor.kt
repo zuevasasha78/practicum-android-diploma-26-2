@@ -1,14 +1,14 @@
-package ru.practicum.android.diploma.db.domain
+package ru.practicum.android.diploma.db.domain.interactor
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
-interface VacancyDbRepository {
-
-    suspend fun addVacancy(vacancy: VacancyDetail): Boolean
+interface FavouriteVacancyInteractor {
+    fun getFavouriteVacancies(): Flow<List<VacancyDetail>?>
 
     suspend fun deleteVacancy(vacancyId: String): Boolean
 
-    fun getVacancies(): Flow<List<VacancyDetail>?>
+    suspend fun addVacancy(vacancyDetail: VacancyDetail): Boolean
+
     suspend fun isVacancyFavorite(vacancyId: String): Boolean
 }

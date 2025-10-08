@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
-import ru.practicum.android.diploma.db.domain.VacancyDbRepository
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
@@ -10,9 +9,8 @@ import ru.practicum.android.diploma.utils.StringUtils
 import java.net.SocketTimeoutException
 
 class VacancyInteractor(
-    private val vacancyRepository: VacancyDbRepository,
     private val networkRepository: VacancyNetworkRepository,
-    private val stringUtils: StringUtils
+    private val stringUtils: StringUtils,
 ) {
 
     suspend fun getVacancy(vacancyId: String): VacancyState {
@@ -38,27 +36,6 @@ class VacancyInteractor(
         }
     }
 
-    suspend fun removeFromFavourite(vacancyId: String): Boolean {
-        return runCatching {
-            vacancyRepository.deleteVacancy(vacancyId)
-        }.onFailure { e ->
-            Log.e("MyLog", "Failed to remove vacancy $vacancyId from favourites", e)
-        }.isSuccess
-    }
-
-    suspend fun addToFavourite(vacancy: VacancyDetail): Boolean {
-        return runCatching {
-            true // временная заглушка
-        }.onFailure { e ->
-            Log.e("MyLog", "Failed to add vacancy ${vacancy.id} to favourites", e)
-        }.isSuccess
-    }
-
-    suspend fun isVacancyFavorite(vacancyId: String): Boolean {
-        // Временная реализация - нужно получить все избранные и проверить наличие
-        return FALSE
-    }
-
     fun prepareShareContent(vacancy: VacancyDetail): String {
         return buildString {
             append("Вакансия: ${vacancy.name}\n")
@@ -71,6 +48,5 @@ class VacancyInteractor(
 
     companion object {
         private const val CODE_404 = 404
-        private const val FALSE = false
     }
 }

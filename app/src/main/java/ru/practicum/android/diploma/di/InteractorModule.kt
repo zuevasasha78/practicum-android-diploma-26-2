@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.favourites.domain.FavouriteVacancyInteractor
-import ru.practicum.android.diploma.favourites.domain.FavouriteVacancyInteractorImpl
+import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
+import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractorImpl
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractorImpl
 import ru.practicum.android.diploma.utils.StringUtils
@@ -13,7 +13,7 @@ val interactorModule = module {
     factory<SearchScreenInteractor> {
         SearchScreenInteractorImpl(get())
     }
-    factory { VacancyInteractor(get(), get(), get()) }
+    factory { VacancyInteractor(get(), get()) }
 
     factory { StringUtils(get()) }
     factory<FavouriteVacancyInteractor> { FavouriteVacancyInteractorImpl(get()) }

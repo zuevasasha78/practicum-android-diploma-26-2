@@ -12,7 +12,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
 import ru.practicum.android.diploma.favourites.presentation.models.FavoritePlaceholder
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyList
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
@@ -22,7 +24,7 @@ class FavouriteFragment : Fragment() {
     private val binding get() = _binding!!
     private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
         override fun onVacancyClick(vacancy: Vacancy) {
-            openVacancy(vacancy)
+            openVacancy(vacancy.id)
         }
     })
 
@@ -41,6 +43,7 @@ class FavouriteFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.favouriteRecyclerView.adapter = favouriteAdapter
+        favouriteViewModel.uploadFavoriteVacancy()
         favouriteViewModel.screenState.observe(viewLifecycleOwner) {
             renderScreen(it)
         }
@@ -72,17 +75,18 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun showResult(vacanciesList: List<Vacancy>) {
+    private fun showResult(vacanciesListDetails: List<VacancyDetail>) {
         binding.progressBar.isVisible = false
         binding.placeholder.root.isVisible = false
-        favouriteAdapter.setItems(vacanciesList)
+        val vacancyList = vacanciesListDetails.convertToVacancyList()
+        favouriteAdapter.setItems(vacancyList)
         binding.favouriteRecyclerView.isVisible = true
     }
 
-    private fun openVacancy(vacancy: Vacancy) {
+    private fun openVacancy(vacancyId: String) {
         findNavController().navigate(
             R.id.action_favouriteFragment_to_vacancyFragment,
-            bundleOf(ARG_NAME to vacancy.id)
+            bundleOf(ARG_NAME to vacancyId)
         )
     }
 

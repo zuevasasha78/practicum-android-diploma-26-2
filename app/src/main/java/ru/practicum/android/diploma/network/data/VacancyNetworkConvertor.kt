@@ -74,8 +74,20 @@ object VacancyNetworkConvertor {
             responsibilities = this.description,
             requirements = this.description,
             conditions = this.description,
-            skills = this.skills,
+            skills = this.skills.joinToString("\n") { "• $it" },
             url = this.url
         )
+    }
+
+    fun List<VacancyDetail>.convertToVacancyList(): List<Vacancy> {
+        return this.map { vacancyDetail ->
+            Vacancy(
+                id = vacancyDetail.id,
+                name = vacancyDetail.name,
+                employerName = vacancyDetail.employerName,
+                salaryDto = vacancyDetail.salary,
+                employerLogo = vacancyDetail.employerLogoUrl.let { it } ?: "",
+            )
+        }
     }
 }
