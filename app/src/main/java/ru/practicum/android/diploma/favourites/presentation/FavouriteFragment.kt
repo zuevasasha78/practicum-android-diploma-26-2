@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
+import ru.practicum.android.diploma.favourites.presentation.models.FavoritePlaceholder
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyList
 import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
-import ru.practicum.android.diploma.utils.Utils.setImageTop
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class FavouriteFragment : Fragment() {
@@ -23,7 +24,7 @@ class FavouriteFragment : Fragment() {
     private val binding get() = _binding!!
     private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
         override fun onVacancyClick(vacancy: Vacancy) {
-            openVacancy(vacancy)
+            openVacancy(vacancy.id)
         }
     })
 
@@ -42,6 +43,7 @@ class FavouriteFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.favouriteRecyclerView.adapter = favouriteAdapter
+        favouriteViewModel.uploadFavoriteVacancy()
         favouriteViewModel.screenState.observe(viewLifecycleOwner) {
             renderScreen(it)
         }
@@ -50,49 +52,41 @@ class FavouriteFragment : Fragment() {
     private fun renderScreen(favouriteScreenState: FavouriteScreenState) {
         when (favouriteScreenState) {
             is FavouriteScreenState.Loading -> setLoadingState()
-            is FavouriteScreenState.Empty -> setEmptyState()
-            is FavouriteScreenState.Error -> setErrorState()
+            is FavouriteScreenState.Empty -> setPlaceholder(FavoritePlaceholder.EmptyList)
+            is FavouriteScreenState.Error -> setPlaceholder(FavoritePlaceholder.Error)
             is FavouriteScreenState.Content -> showResult(favouriteScreenState.vacanciesList)
         }
     }
 
     private fun setLoadingState() {
         binding.progressBar.isVisible = true
-        binding.placeholder.isVisible = false
+        binding.placeholder.root.isVisible = false
         binding.favouriteRecyclerView.isVisible = false
     }
 
-    private fun setEmptyState() {
+    private fun setPlaceholder(placeholder: FavoritePlaceholder) {
         binding.progressBar.isVisible = false
         binding.favouriteRecyclerView.isVisible = false
+
         binding.placeholder.apply {
-            setImageTop(getDrawable(requireContext(), R.drawable.empty_favourite_list))
-            text = requireContext().getString(R.string.empty_favourite_list)
-            isVisible = true
+            image.setImageResource(placeholder.image)
+            placeholderText.text = placeholder.text?.let { getString(it) } ?: ""
+            root.isVisible = true
         }
     }
 
-    private fun setErrorState() {
+    private fun showResult(vacanciesListDetails: List<VacancyDetail>) {
         binding.progressBar.isVisible = false
-        binding.favouriteRecyclerView.isVisible = false
-        binding.placeholder.apply {
-            setImageTop(getDrawable(requireContext(), R.drawable.no_result_placeholder))
-            text = requireContext().getString(R.string.no_search_result_placeholder_text)
-            isVisible = true
-        }
-    }
-
-    private fun showResult(vacanciesList: List<Vacancy>) {
-        binding.progressBar.isVisible = false
-        binding.placeholder.isVisible = false
-        favouriteAdapter.setItems(vacanciesList)
+        binding.placeholder.root.isVisible = false
+        val vacancyList = vacanciesListDetails.convertToVacancyList()
+        favouriteAdapter.setItems(vacancyList)
         binding.favouriteRecyclerView.isVisible = true
     }
 
-    private fun openVacancy(vacancy: Vacancy) {
+    private fun openVacancy(vacancyId: String) {
         findNavController().navigate(
             R.id.action_favouriteFragment_to_vacancyFragment,
-            bundleOf(ARG_NAME to vacancy.id)
+            bundleOf(ARG_NAME to vacancyId)
         )
     }
 
