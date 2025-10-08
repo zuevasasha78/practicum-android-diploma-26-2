@@ -27,7 +27,8 @@ object VacancyNetworkConvertor {
             this.found,
             this.pages,
             this.page,
-            this.items.map { it.convertToVacancy() }
+            this.items.map {
+                it.convertToVacancy() }
         )
     }
 

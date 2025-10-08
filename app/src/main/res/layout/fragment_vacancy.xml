@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_vacancy"
+        style="@style/toolbar_vacancy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/vacancy"
-        app:titleTextAppearance="@style/toolbar_general"
-        style="@style/toolbar_vacancy"
-        >
+        app:titleTextAppearance="@style/toolbar_general">
 
         <ImageView
             android:id="@+id/favorite"
+            style="@style/toolbar_icon"
             android:layout_width="24dp"
-            android:layout_height="24dp"
-            style="@style/toolbar_icon" />
+            android:layout_height="24dp" />
 
         <View
             android:id="@+id/share"
+            style="@style/icon_share"
             android:layout_width="24dp"
-            android:layout_height="24dp"
-            style="@style/icon_share" />
+            android:layout_height="24dp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -39,34 +38,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/vacancy_name"
+                style="@style/vacancy_text_general"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/vacancy_text_general"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/ys_display_bold"
-                android:textSize="32sp"/>
+                android:textSize="32sp" />
 
             <TextView
                 android:id="@+id/vacancy_payment"
+                style="@style/vacancy_text_22_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_22_medium"
-                />
+                android:layout_marginTop="4dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginHorizontal="16dp"
-                android:paddingEnd="@dimen/_16dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/gray_light_background"
-                >
+                android:paddingEnd="@dimen/_16dp">
 
                 <ImageView
                     android:id="@+id/employer_logo"
@@ -83,10 +79,10 @@
                     android:id="@+id/employer_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black_universal"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/ys_display_medium"
+                    android:textColor="@color/black_universal"
                     android:textSize="22sp"
                     app:layout_constraintStart_toEndOf="@+id/employer_logo"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -95,236 +91,152 @@
                     android:id="@+id/area"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/ys_display_regular"
-                    android:textColor="@color/black_universal"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="@color/black_universal"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="@+id/employer_name"
                     app:layout_constraintTop_toBottomOf="@+id/employer_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                style="@style/vacancy_text_16_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                style="@style/vacancy_text_16_medium"
-                android:text="@string/required_experience"
-                />
+                android:text="@string/required_experience" />
 
             <TextView
                 android:id="@+id/experience"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
 
                 />
 
             <TextView
                 android:id="@+id/employment_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/vacancy_text_22_bold"
-                android:layout_marginTop="24dp"
-                android:text="@string/vacancy_description"
-                />
+                android:layout_marginTop="4dp" />
 
             <TextView
+                style="@style/vacancy_text_22_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/vacancy_description" />
+
+            <TextView
+                style="@style/vacancy_text_16_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                style="@style/vacancy_text_16_medium"
-                android:text="@string/responsibilities"
-                />
+                android:text="@string/responsibilities" />
 
             <TextView
                 android:id="@+id/vacancy_responsibilities"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="4dp" />
 
             <TextView
+                style="@style/vacancy_text_16_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                style="@style/vacancy_text_16_medium"
-                android:text="@string/requirements"
-                />
+                android:text="@string/requirements" />
 
             <TextView
                 android:id="@+id/vacancy_requirements"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="4dp" />
 
             <TextView
+                style="@style/vacancy_text_16_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                style="@style/vacancy_text_16_medium"
-                android:text="@string/conditions"
-                />
+                android:text="@string/conditions" />
 
             <TextView
                 android:id="@+id/vacancy_conditions"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/title_vacancy_skills"
+                style="@style/vacancy_text_22_bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/vacancy_text_22_bold"
                 android:layout_marginTop="24dp"
-                android:text="@string/key_skills"/>
+                android:text="@string/key_skills" />
 
             <TextView
                 android:id="@+id/vacancy_skills"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/contacts"
+                style="@style/vacancy_text_22_bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/vacancy_text_22_bold"
                 android:layout_marginTop="24dp"
-                android:text="@string/contacts"/>
+                android:text="@string/contacts" />
 
             <TextView
                 android:id="@+id/address"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/phone"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/email"
+                style="@style/vacancy_text_16_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                style="@style/vacancy_text_16_regular"
-                />
+                android:layout_marginTop="4dp" />
 
         </LinearLayout>
 
     </ScrollView>
-    
+
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:indeterminateTint="@color/blue"
-        android:layout_marginTop="244dp"
         android:layout_gravity="center"
-        android:visibility="gone"
-        />
+        android:layout_marginTop="244dp"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/placeholder_server_error"
+    <include
+        android:id="@+id/placeholder"
+        layout="@layout/placeholder_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="135dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <View
-            android:layout_width="328dp"
-            android:layout_height="223dp"
-            android:background="@drawable/placeholder_server_error"
-            android:layout_gravity="center"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/server_error"
-            style="@style/vacancy_text_22_medium"
-            android:textAlignment="center"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/placeholder_vacancy_not_found"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="135dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <View
-            android:layout_width="328dp"
-            android:layout_height="223dp"
-            android:background="@drawable/placeholder_vacancy_not_found"
-            android:layout_gravity="center"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/vacancy_not_found_or_deleted"
-            style="@style/vacancy_text_22_medium"
-            android:textAlignment="center"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/placeholder_vacancy_no_internet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="135dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <View
-            android:layout_width="328dp"
-            android:layout_height="223dp"
-            android:background="@drawable/no_internet_placeholder"
-            android:layout_gravity="center"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/no_internet_placeholder_text"
-            style="@style/vacancy_text_22_medium"
-            android:textAlignment="center"
-            />
-
-    </LinearLayout>
-
+        android:visibility="gone" />
 </LinearLayout>
