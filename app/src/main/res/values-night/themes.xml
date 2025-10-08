@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:colorBackground">@color/black_universal</item>
         <item name="colorSurface">@color/black_universal</item>
@@ -34,13 +34,8 @@
         <item name="android:backgroundTint">@color/white_universal</item>
     </style>
 
-    <style name="toolbar_vacancy">
-        <item name="navigationIcon">@drawable/icon_back_arrow_white</item>
-    </style>
-
     <style name="text_input_color">
         <item name="hintTextColor">@color/white_universal</item>
         <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
     </style>
-
 </resources>

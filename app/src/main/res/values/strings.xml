@@ -49,4 +49,5 @@
     <string name="response_to_vacancy">Отклик на вакансию</string>
     <string name="favourite">Избранное</string>
     <string name="empty_favourite_list">Список пуст</string>
+    <string name="filter_settings">Настройка фильтрации</string>
 </resources>
