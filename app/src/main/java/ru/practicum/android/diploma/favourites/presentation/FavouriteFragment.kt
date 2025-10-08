@@ -86,7 +86,7 @@ class FavouriteFragment : Fragment() {
     private fun openVacancy(vacancyId: String) {
         findNavController().navigate(
             R.id.action_favouriteFragment_to_vacancyFragment,
-            bundleOf(ARG_NAME to vacancy.id)
+            bundleOf(ARG_NAME to vacancyId)
         )
     }
 
