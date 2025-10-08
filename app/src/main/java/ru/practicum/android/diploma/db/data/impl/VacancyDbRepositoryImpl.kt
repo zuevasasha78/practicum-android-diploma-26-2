@@ -37,4 +37,11 @@ class VacancyDbRepositoryImpl(
     override suspend fun isVacancyFavorite(vacancyId: String): Boolean {
         return vacancyDao.getVacancy(vacancyId) != null
     }
+
+    override suspend fun getVacancyById(vacancyId: String): VacancyDetail? {
+        val result = vacancyDao.getVacancy(vacancyId)
+        return result?.let {
+            vacancyDbConvertor.convertToVacancy(result)
+        }
+    }
 }

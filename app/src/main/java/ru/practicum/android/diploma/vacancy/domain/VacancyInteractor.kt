@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
+import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
 import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
@@ -10,12 +11,17 @@ import java.net.SocketTimeoutException
 
 class VacancyInteractor(
     private val networkRepository: VacancyNetworkRepository,
+    private val favouriteVacancyInteractor: FavouriteVacancyInteractor,
     private val stringUtils: StringUtils,
 ) {
 
     suspend fun getVacancy(vacancyId: String): VacancyState {
         return try {
-            return when (val result = networkRepository.getVacancy(vacancyId)) {
+            val favoriteVacancy = favouriteVacancyInteractor.getVacancyById(vacancyId)
+            if (favoriteVacancy != null) {
+                return VacancyState.Content(favoriteVacancy)
+            }
+            when (val result = networkRepository.getVacancy(vacancyId)) {
                 is ApiResult.Success -> {
                     val vacancyDetail = result.data.convertToVacancyDetail()
                     VacancyState.Content(vacancyDetail)
