@@ -5,10 +5,12 @@ import ru.practicum.android.diploma.network.data.ApiResult
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.utils.StringUtils
 import java.net.SocketTimeoutException
 
 class VacancyInteractor(
     private val networkRepository: VacancyNetworkRepository,
+    private val stringUtils: StringUtils,
 ) {
 
     suspend fun getVacancy(vacancyId: String): VacancyState {
@@ -38,7 +40,7 @@ class VacancyInteractor(
         return buildString {
             append("Вакансия: ${vacancy.name}\n")
             append("Компания: ${vacancy.employerName}\n")
-            append("Зарплата: ${vacancy.salary}\n")
+            append("Зарплата: ${stringUtils.getSalaryString(vacancy.salary)}\n")
             append("Город: ${vacancy.area}\n")
             append("Ссылка: ${vacancy.url}")
         }
