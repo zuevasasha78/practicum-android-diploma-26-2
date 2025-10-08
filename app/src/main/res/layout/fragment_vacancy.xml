@@ -15,11 +15,11 @@
         style="@style/toolbar_vacancy"
         >
 
-        <View
+        <ImageView
             android:id="@+id/favorite"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            style="@style/icon_favorite" />
+            style="@style/toolbar_icon" />
 
         <View
             android:id="@+id/share"
@@ -48,7 +48,6 @@
                 android:layout_height="wrap_content"
                 style="@style/vacancy_text_general"
                 android:layout_marginTop="24dp"
-                android:text="Android-разработчик"
                 android:fontFamily="@font/ys_display_bold"
                 android:textSize="32sp"/>
 
@@ -56,7 +55,6 @@
                 android:id="@+id/vacancy_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="от 100 000 ₽"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_22_medium"
                 />
@@ -66,6 +64,7 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginHorizontal="16dp"
+                android:paddingEnd="@dimen/_16dp"
                 android:background="@drawable/gray_light_background"
                 >
 
@@ -88,7 +87,6 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/ys_display_medium"
-                    android:text="Еда"
                     android:textSize="22sp"
                     app:layout_constraintStart_toEndOf="@+id/employer_logo"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +98,9 @@
                     android:textSize="16sp"
                     android:fontFamily="@font/ys_display_regular"
                     android:textColor="@color/black_universal"
-                    android:text="Москва"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     app:layout_constraintStart_toStartOf="@+id/employer_name"
                     app:layout_constraintTop_toBottomOf="@+id/employer_name" />
 
@@ -120,7 +120,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="От 1 года до 3 лех"
 
                 />
 
@@ -130,7 +129,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="Полная занятость, Удаленная работа"
                 />
 
             <TextView
@@ -155,7 +153,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="Разрабатывать новую функциональность приложения"
                 />
 
             <TextView
@@ -172,7 +169,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="100% Kotlin"
                 />
 
             <TextView
@@ -189,10 +185,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="сильная команда, с которой можно расти возможность влиять на процесс"
                 />
 
             <TextView
+                android:id="@+id/title_vacancy_skills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/vacancy_text_22_bold"
@@ -205,9 +201,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 style="@style/vacancy_text_16_regular"
-                android:text="Знание классических алгоритмов и структуры данных
-Программирование для Android больше одного года
-Знание WebRTC"
+                />
+
+            <TextView
+                android:id="@+id/contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/vacancy_text_22_bold"
+                android:layout_marginTop="24dp"
+                android:text="@string/contacts"/>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                style="@style/vacancy_text_16_regular"
+                />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/vacancy_text_16_regular"
+                />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/vacancy_text_16_regular"
                 />
 
         </LinearLayout>
@@ -270,6 +295,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/vacancy_not_found_or_deleted"
+            style="@style/vacancy_text_22_medium"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/placeholder_vacancy_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="135dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="328dp"
+            android:layout_height="223dp"
+            android:background="@drawable/no_internet_placeholder"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_internet_placeholder_text"
             style="@style/vacancy_text_22_medium"
             android:textAlignment="center"
             />
