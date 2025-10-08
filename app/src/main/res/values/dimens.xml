@@ -5,6 +5,7 @@
     <dimen name="_8dp">8dp</dimen>
     <dimen name="logo_corner_radius">12dp</dimen>
     <dimen name="_16dp">16dp</dimen>
+    <dimen name="size_22dp">22dp</dimen>
     <dimen name="_24dp">24dp</dimen>
     <dimen name="_19dp">19dp</dimen>
     <dimen name="size_44dp">44dp</dimen>

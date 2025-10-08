@@ -49,4 +49,9 @@
         <item name="colorControlActivated">@color/blue</item>
     </style>
 
+    <style name="HintTextAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
