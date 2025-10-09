@@ -21,6 +21,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "API_BASE_URL", "\"https://practicum-diploma-8bc38133faba.herokuapp.com/\"")
         buildConfigField(type = "String", name = "API_ACCESS_TOKEN", value = "\"${developProperties.apiAccessToken}\"")
     }
 

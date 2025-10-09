@@ -5,8 +5,8 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
-import ru.practicum.android.diploma.network.data.dto.response.VacancyDetail
-import ru.practicum.android.diploma.network.data.dto.response.VacancyResponse
+import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
+import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 
 interface DiplomaApiService {
 
@@ -17,8 +17,8 @@ interface DiplomaApiService {
     suspend fun getIndustries(): List<FilterIndustry>
 
     @GET("/vacancies/{id}")
-    suspend fun getVacancy(@Path("id") id: String): VacancyDetail
+    suspend fun getVacancy(@Path("id") id: String): VacancyDetailDto
 
     @GET("/vacancies")
-    suspend fun getVacancies(@QueryMap options: Map<String, String>): VacancyResponse
+    suspend fun getVacancies(@QueryMap options: Map<String, String>): VacancyResponseDto
 }

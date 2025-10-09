@@ -7,6 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.network.data.DiplomaApiService
+import ru.practicum.android.diploma.network.data.NetworkClient
 
 val networkModule = module {
     single {
@@ -27,10 +28,12 @@ val networkModule = module {
 
     single<DiplomaApiService> {
         Retrofit.Builder()
-            .baseUrl("https://practicum-diploma-8bc38133faba.herokuapp.com/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DiplomaApiService::class.java)
     }
+
+    single<NetworkClient> { NetworkClient(get()) }
 }

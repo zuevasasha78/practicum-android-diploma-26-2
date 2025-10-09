@@ -10,11 +10,14 @@ import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 interface VacancyDao {
 
     @Insert(entity = VacancyEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addVacancy(vacancy: VacancyEntity)
+    suspend fun addVacancy(vacancy: VacancyEntity): Long
 
     @Query("SELECT * FROM vacancy_table")
-    suspend fun getVacancies(): List<VacancyEntity>?
+    suspend fun getVacancies(): List<VacancyEntity>
 
     @Query("DELETE FROM vacancy_table WHERE vacancyId = :vacancyId")
-    suspend fun deleteVacancy(vacancyId: String)
+    suspend fun deleteVacancy(vacancyId: String): Int
+
+    @Query("SELECT * FROM vacancy_table WHERE vacancyId = :vacancyId")
+    suspend fun getVacancy(vacancyId: String): VacancyEntity?
 }

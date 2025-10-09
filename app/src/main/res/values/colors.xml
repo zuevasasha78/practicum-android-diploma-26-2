@@ -12,9 +12,12 @@
     <color name="background_text_input">@color/gray_light</color>
     <color name="hint_color_text_input">@color/gray</color>
     <color name="background_color">@color/white_universal</color>
+    <color name="revers_background_color">@color/black_universal</color>
     <color name="text_color">@color/black_universal</color>
     <color name="button_background">@color/blue</color>
     <color name="button_text">@color/white_universal</color>
     <color name="transparent">#00000000</color>
     <color name="g_board">#E8EAED</color>
+
+    <color name="placeholder">@color/gray_light</color>
 </resources>

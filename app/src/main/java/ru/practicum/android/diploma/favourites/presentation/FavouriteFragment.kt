@@ -4,14 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
+import ru.practicum.android.diploma.favourites.presentation.models.FavoritePlaceholder
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyList
+import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
+import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class FavouriteFragment : Fragment() {
+    private val favouriteViewModel by viewModel<FavouriteVacanciesViewModel>()
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
+    private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
+        override fun onVacancyClick(vacancy: Vacancy) {
+            openVacancy(vacancy.id)
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,9 +42,52 @@ class FavouriteFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vacancyButton.setOnClickListener {
-            findNavController().navigate(R.id.action_favouriteFragment_to_vacancyFragment)
+        binding.favouriteRecyclerView.adapter = favouriteAdapter
+        favouriteViewModel.uploadFavoriteVacancy()
+        favouriteViewModel.screenState.observe(viewLifecycleOwner) {
+            renderScreen(it)
         }
+    }
+
+    private fun renderScreen(favouriteScreenState: FavouriteScreenState) {
+        when (favouriteScreenState) {
+            is FavouriteScreenState.Loading -> setLoadingState()
+            is FavouriteScreenState.Empty -> setPlaceholder(FavoritePlaceholder.EmptyList)
+            is FavouriteScreenState.Error -> setPlaceholder(FavoritePlaceholder.Error)
+            is FavouriteScreenState.Content -> showResult(favouriteScreenState.vacanciesList)
+        }
+    }
+
+    private fun setLoadingState() {
+        binding.progressBar.isVisible = true
+        binding.placeholder.root.isVisible = false
+        binding.favouriteRecyclerView.isVisible = false
+    }
+
+    private fun setPlaceholder(placeholder: FavoritePlaceholder) {
+        binding.progressBar.isVisible = false
+        binding.favouriteRecyclerView.isVisible = false
+
+        binding.placeholder.apply {
+            image.setImageResource(placeholder.image)
+            placeholderText.text = placeholder.text?.let { getString(it) } ?: ""
+            root.isVisible = true
+        }
+    }
+
+    private fun showResult(vacanciesListDetails: List<VacancyDetail>) {
+        binding.progressBar.isVisible = false
+        binding.placeholder.root.isVisible = false
+        val vacancyList = vacanciesListDetails.convertToVacancyList()
+        favouriteAdapter.setItems(vacancyList)
+        binding.favouriteRecyclerView.isVisible = true
+    }
+
+    private fun openVacancy(vacancyId: String) {
+        findNavController().navigate(
+            R.id.action_favouriteFragment_to_vacancyFragment,
+            bundleOf(ARG_NAME to vacancyId)
+        )
     }
 
     override fun onDestroyView() {
