@@ -8,7 +8,7 @@
     <color name="hint_color_text_input">@color/white_universal</color>
     <color name="g_board">#263238</color>
     <color name="text_color">@color/white_universal</color>
-    <color name="back_arrow">#FDFDFD</color>
+    <color name="back_arrow">@color/white_universal</color>
     <color name="placeholder">@color/black_universal</color>
     <color name="hint_color_filter_screen">@color/gray</color>
     <color name="salary_input">@color/gray</color>

@@ -15,6 +15,7 @@
     <dimen name="size_46dp">46dp</dimen>
 
     <!-- Text dimensions-->
+    <dimen name="text_size_12sp">12sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
     <dimen name="_32sp">32sp</dimen>

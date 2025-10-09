@@ -18,7 +18,7 @@
     <color name="button_text">@color/white_universal</color>
     <color name="transparent">#00000000</color>
     <color name="g_board">#E8EAED</color>
-    <color name="back_arrow">#1A1B22</color>
+    <color name="back_arrow">@color/black_universal</color>
     <color name="placeholder">@color/gray_light</color>
     <color name="hint_color_filter_screen">@color/gray</color>
     <color name="salary_input">@color/gray_light</color>
