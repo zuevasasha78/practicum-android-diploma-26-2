@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,6 +41,18 @@ class MainFilterFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
+            val place = bundle.getString(PLACE_RESULT_KEY) ?: ""
+            mainFilterViewModel.onPlaceChanged(place)
+            updateFieldState(binding.placeInputLayout, place.isNotEmpty())
+        }
+
+        setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
+            val industry = bundle.getString(INDUSTRY_RESULT_KEY) ?: ""
+            mainFilterViewModel.onIndustryChanged(industry)
+            updateFieldState(binding.industryInputLayout, industry.isNotEmpty())
+        }
+
         mainFilterViewModel.buttonsVisible.observe(viewLifecycleOwner) { isVisible ->
             isButtonsApplyAndResetVisible(isVisible)
         }
@@ -55,6 +68,7 @@ class MainFilterFragment : Fragment() {
             binding.placeInputLayout.apply {
                 updateFieldState(this, true)
             }
+            // Удалить с 66 до 71 строки включительно, нижнюю раскоментить
             // findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
         }
 
@@ -72,6 +86,7 @@ class MainFilterFragment : Fragment() {
             binding.industryInputLayout.apply {
                 updateFieldState(this, true)
             }
+            // Удалить с 84 до 89 строки включительно, нижние раскоментить
 //            findNavController().navigate(
 //                R.id.action_mainFilterFragment_to_chooserFragment,
 //                bundleOf(ARG_NAME to ChooserType.SectorType),
@@ -177,5 +192,13 @@ class MainFilterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val PLACE_REQUEST_KEY = "place_request"
+        const val PLACE_RESULT_KEY = "place"
+
+        const val INDUSTRY_REQUEST_KEY = "industry_request"
+        const val INDUSTRY_RESULT_KEY = "industry"
     }
 }
