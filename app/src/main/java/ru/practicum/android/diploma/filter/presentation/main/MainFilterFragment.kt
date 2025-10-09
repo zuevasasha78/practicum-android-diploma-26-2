@@ -55,7 +55,7 @@ class MainFilterFragment : Fragment() {
             binding.placeInputLayout.apply {
                 updateFieldState(this, true)
             }
-            //findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
+            // findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
         }
 
         binding.placeInputLayout.setEndIconOnClickListener {
@@ -135,9 +135,9 @@ class MainFilterFragment : Fragment() {
         val hasFocus = binding.salaryEditText.hasFocus()
         val hasText = binding.salaryEditText.text?.isNotEmpty() == true
         val colorResId = when {
-            hasFocus -> R.color.blue  // При фокусе - синий
-            hasText -> R.color.black_universal  // Заполнено без фокуса - черный
-            else -> R.color.salary_text_hint  // Пустое без фокуса - серый/белый в зависимости от темы
+            hasFocus -> R.color.blue // При фокусе - синий
+            hasText -> R.color.black_universal // Заполнено без фокуса - черный
+            else -> R.color.salary_text_hint // Пустое без фокуса - серый/белый в зависимости от темы
         }
         binding.salaryInputLayout.defaultHintTextColor = ColorStateList.valueOf(
             ContextCompat.getColor(requireContext(), colorResId)
