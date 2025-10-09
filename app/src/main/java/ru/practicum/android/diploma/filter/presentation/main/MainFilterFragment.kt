@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
 import ru.practicum.android.diploma.filter.domain.ChooserType
@@ -38,32 +39,46 @@ class MainFilterFragment : Fragment() {
 
         binding.placeEditText.setOnClickListener {
             binding.placeEditText.setText("Москва")
-            binding.placeInputLayout.setEndIconDrawable(R.drawable.icon_close)
-            updateHintColor(true)
+
+            binding.placeInputLayout.apply {
+                setEndIconDrawable(R.drawable.icon_close)
+                updateHintColor(this, true)
+            }
             //findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
         }
 
         binding.placeInputLayout.setEndIconOnClickListener {
             binding.placeEditText.setText("")
-            binding.placeInputLayout.setEndIconDrawable(R.drawable.leading_icon)
-            updateHintColor(false)
+            binding.placeInputLayout.apply {
+                setEndIconDrawable(R.drawable.leading_icon)
+                updateHintColor(this, false)
+            }
         }
 
-        binding.sectorChooserButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mainFilterFragment_to_chooserFragment,
-                bundleOf(ARG_NAME to ChooserType.SectorType),
-            )
+        binding.industryEditText.setOnClickListener {
+            binding.industryEditText.setText("IT")
+            binding.industryInputLayout.apply {
+                setEndIconDrawable(R.drawable.icon_close)
+                updateHintColor(this, true)
+            }
+//            findNavController().navigate(
+//                R.id.action_mainFilterFragment_to_chooserFragment,
+//                bundleOf(ARG_NAME to ChooserType.SectorType),
+//            )
+        }
+
+        binding.industryInputLayout.setEndIconOnClickListener {
+            binding.industryEditText.setText("")
+            binding.industryInputLayout.apply {
+                setEndIconDrawable(R.drawable.leading_icon)
+                updateHintColor(this, false)
+            }
         }
     }
 
-
-
-
-
-    private fun updateHintColor(hasText: Boolean) {
+    private fun updateHintColor(textInputLayout: TextInputLayout, hasText: Boolean) {
         val colorResId = if (hasText) R.color.text_color else R.color.hint_color_filter_screen
-        binding.placeInputLayout.defaultHintTextColor = ColorStateList.valueOf(
+        textInputLayout.defaultHintTextColor = ColorStateList.valueOf(
             ContextCompat.getColor(requireContext(), colorResId)
         )
     }
