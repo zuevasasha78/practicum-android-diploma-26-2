@@ -42,19 +42,15 @@ class MainFilterFragment : Fragment() {
         }
 
         setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
-            val place = bundle.getString(PLACE_RESULT_KEY) ?: ""
-            mainFilterViewModel.onPlaceChanged(place)
+            val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
+            mainFilterViewModel.setPlace(place)
             updateFieldState(binding.placeInputLayout, place.isNotEmpty())
         }
 
         setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
-            val industry = bundle.getString(INDUSTRY_RESULT_KEY) ?: ""
-            mainFilterViewModel.onIndustryChanged(industry)
+            val industry = bundle.getString(INDUSTRY_RESULT_KEY).orEmpty()
+            mainFilterViewModel.setIndustry(industry)
             updateFieldState(binding.industryInputLayout, industry.isNotEmpty())
-        }
-
-        mainFilterViewModel.buttonsVisible.observe(viewLifecycleOwner) { isVisible ->
-            isButtonsApplyAndResetVisible(isVisible)
         }
 
         mainFilterViewModel.filters.observe(viewLifecycleOwner) { filterUiState ->
@@ -64,7 +60,7 @@ class MainFilterFragment : Fragment() {
         binding.placeEditText.setOnClickListener {
             // Заглушка для теста, удалится после реализации экрана "Место работы"
             val text = "Москва"
-            mainFilterViewModel.onPlaceChanged(text)
+            mainFilterViewModel.setPlace(text)
             binding.placeInputLayout.apply {
                 updateFieldState(this, true)
             }
@@ -73,7 +69,7 @@ class MainFilterFragment : Fragment() {
         }
 
         binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.onPlaceChanged("")
+            mainFilterViewModel.setPlace("")
             binding.placeInputLayout.apply {
                 updateFieldState(this, false)
             }
@@ -82,7 +78,7 @@ class MainFilterFragment : Fragment() {
         binding.industryEditText.setOnClickListener {
             // Заглушка для теста, удалится после реализации экрана "Отрасль"
             val text = "IT"
-            mainFilterViewModel.onIndustryChanged(text)
+            mainFilterViewModel.setIndustry(text)
             binding.industryInputLayout.apply {
                 updateFieldState(this, true)
             }
@@ -94,14 +90,13 @@ class MainFilterFragment : Fragment() {
         }
 
         binding.industryInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.onIndustryChanged("")
+            mainFilterViewModel.setIndustry("")
             binding.industryInputLayout.apply {
                 updateFieldState(this, false)
             }
         }
 
-        binding.salaryEditText.setOnFocusChangeListener { _, _
-            ->
+        binding.salaryEditText.setOnFocusChangeListener { _, _ ->
             updateSalaryField()
         }
 
@@ -113,17 +108,17 @@ class MainFilterFragment : Fragment() {
             val textString = text.toString()
             if (textString != mainFilterViewModel.filters.value?.salary) {
                 updateSalaryField()
-                mainFilterViewModel.onSalaryChanged(textString)
+                mainFilterViewModel.setSalary(textString)
             }
         }
 
         binding.salaryInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.onSalaryChanged("")
+            mainFilterViewModel.setSalary("")
             updateSalaryField()
         }
 
         binding.onlyWithSalaryCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            mainFilterViewModel.onOnlyWithSalaryChanged(isChecked)
+            mainFilterViewModel.setOnlyWithSalary(isChecked)
         }
 
         binding.applyButton.setOnClickListener {
@@ -180,6 +175,7 @@ class MainFilterFragment : Fragment() {
             binding.salaryEditText.setText(filterUIState.salary)
         }
         binding.onlyWithSalaryCheckbox.isChecked = filterUIState.onlyWithSalary
+        isButtonsApplyAndResetVisible(filterUIState.hasAnyFilter)
     }
 
     private fun resetFilter() {
