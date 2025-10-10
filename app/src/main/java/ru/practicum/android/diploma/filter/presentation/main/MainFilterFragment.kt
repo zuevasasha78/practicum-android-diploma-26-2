@@ -44,13 +44,11 @@ class MainFilterFragment : Fragment() {
         setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
             val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
             mainFilterViewModel.setPlace(place)
-            updateFieldState(binding.placeInputLayout, place.isNotEmpty())
         }
 
         setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
             val industry = bundle.getString(INDUSTRY_RESULT_KEY).orEmpty()
             mainFilterViewModel.setIndustry(industry)
-            updateFieldState(binding.industryInputLayout, industry.isNotEmpty())
         }
 
         mainFilterViewModel.filters.observe(viewLifecycleOwner) { filterUiState ->
@@ -61,28 +59,17 @@ class MainFilterFragment : Fragment() {
             // Заглушка для теста, удалится после реализации экрана "Место работы"
             val text = "Москва"
             mainFilterViewModel.setPlace(text)
-            binding.placeInputLayout.apply {
-                updateFieldState(this, true)
-            }
-            // Удалить с 66 до 71 строки включительно, нижнюю раскоментить
             // findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
         }
 
         binding.placeInputLayout.setEndIconOnClickListener {
             mainFilterViewModel.setPlace("")
-            binding.placeInputLayout.apply {
-                updateFieldState(this, false)
-            }
         }
 
         binding.industryEditText.setOnClickListener {
             // Заглушка для теста, удалится после реализации экрана "Отрасль"
             val text = "IT"
             mainFilterViewModel.setIndustry(text)
-            binding.industryInputLayout.apply {
-                updateFieldState(this, true)
-            }
-            // Удалить с 84 до 89 строки включительно, нижние раскоментить
 //            findNavController().navigate(
 //                R.id.action_mainFilterFragment_to_chooserFragment,
 //                bundleOf(ARG_NAME to ChooserType.SectorType),
@@ -91,9 +78,6 @@ class MainFilterFragment : Fragment() {
 
         binding.industryInputLayout.setEndIconOnClickListener {
             mainFilterViewModel.setIndustry("")
-            binding.industryInputLayout.apply {
-                updateFieldState(this, false)
-            }
         }
 
         binding.salaryEditText.setOnFocusChangeListener { _, _ ->
@@ -107,14 +91,12 @@ class MainFilterFragment : Fragment() {
         binding.salaryEditText.addTextChangedListener { text ->
             val textString = text.toString()
             if (textString != mainFilterViewModel.filters.value?.salary) {
-                updateSalaryField()
                 mainFilterViewModel.setSalary(textString)
             }
         }
 
         binding.salaryInputLayout.setEndIconOnClickListener {
             mainFilterViewModel.setSalary("")
-            updateSalaryField()
         }
 
         binding.onlyWithSalaryCheckbox.setOnCheckedChangeListener { _, isChecked ->
@@ -170,19 +152,22 @@ class MainFilterFragment : Fragment() {
 
     private fun render(filterUIState: FilterUiState) {
         binding.placeEditText.setText(filterUIState.place)
+        updateFieldState(binding.placeInputLayout, filterUIState.place.isNotEmpty())
+
         binding.industryEditText.setText(filterUIState.industry)
+        updateFieldState(binding.industryInputLayout, filterUIState.industry.isNotEmpty())
+
         if (binding.salaryEditText.text.toString() != filterUIState.salary) {
             binding.salaryEditText.setText(filterUIState.salary)
         }
+        updateSalaryField()
+
         binding.onlyWithSalaryCheckbox.isChecked = filterUIState.onlyWithSalary
         isButtonsApplyAndResetVisible(filterUIState.hasAnyFilter)
     }
 
     private fun resetFilter() {
         mainFilterViewModel.reset()
-        updateFieldState(binding.placeInputLayout, hasText = false)
-        updateFieldState(binding.industryInputLayout, hasText = false)
-        updateSalaryField()
     }
 
     override fun onDestroyView() {
