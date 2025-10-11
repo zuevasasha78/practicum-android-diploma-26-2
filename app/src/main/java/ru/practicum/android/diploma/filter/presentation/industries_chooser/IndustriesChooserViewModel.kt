@@ -10,7 +10,9 @@ import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenS
 
 class IndustriesChooserViewModel(industriesInteractor: IndustriesInteractor): ViewModel() {
 
-    private val _screenState: MutableLiveData<IndustriesChooserScreenState> = MutableLiveData()
+    private val _screenState: MutableLiveData<IndustriesChooserScreenState> = MutableLiveData(
+        IndustriesChooserScreenState.Loading
+    )
     val screenState: LiveData<IndustriesChooserScreenState> get() = _screenState
 
     init {
