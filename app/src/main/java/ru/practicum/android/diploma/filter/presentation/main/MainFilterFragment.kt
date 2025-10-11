@@ -34,10 +34,6 @@ class MainFilterFragment : Fragment() {
             findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
         }
         binding.sectorChooserButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mainFilterFragment_to_chooserFragment,
-                bundleOf(ARG_NAME to ChooserType.SectorType),
-            )
         }
     }
 
