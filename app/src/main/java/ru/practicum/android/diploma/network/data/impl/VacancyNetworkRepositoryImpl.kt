@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.network.data.DiplomaApiService
 import ru.practicum.android.diploma.network.data.NetworkClient
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
-import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
+import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
@@ -19,7 +19,7 @@ class VacancyNetworkRepositoryImpl(
         return networkClient.doRequest { diplomaApiService.getAreas() }
     }
 
-    override suspend fun getIndustries(): ApiResult<List<FilterIndustry>> {
+    override suspend fun getIndustries(): ApiResult<List<FilterIndustryDto>> {
         return networkClient.doRequest { diplomaApiService.getIndustries() }
     }
 

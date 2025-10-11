@@ -49,4 +49,6 @@
     <string name="response_to_vacancy">Отклик на вакансию</string>
     <string name="favourite">Избранное</string>
     <string name="empty_favourite_list">Список пуст</string>
+
+    <string name="industries_chooser_title">Выбор отрасли</string>
 </resources>

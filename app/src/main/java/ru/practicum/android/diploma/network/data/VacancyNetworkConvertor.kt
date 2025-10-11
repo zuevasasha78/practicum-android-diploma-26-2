@@ -1,9 +1,11 @@
 package ru.practicum.android.diploma.network.data
 
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
+import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
+import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
@@ -89,5 +91,9 @@ object VacancyNetworkConvertor {
                 employerLogo = vacancyDetail.employerLogoUrl.let { it } ?: "",
             )
         }
+    }
+
+    fun FilterIndustryDto.convertToFilterIndustry(): FilterIndustry {
+        return FilterIndustry(this.id, this.name)
     }
 }

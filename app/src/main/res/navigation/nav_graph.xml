@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_chooser">
         <argument
             android:name="type"
-            app:argType="ru.practicum.android.diploma.filter.domain.ChooserType"/>
+            app:argType="ru.practicum.android.diploma.filter.domain.model.ChooserType"/>
     </fragment>
     <fragment
         android:id="@+id/mainFilterFragment"
@@ -58,8 +58,8 @@
             android:id="@+id/action_mainFilterFragment_to_workPlaceFragment"
             app:destination="@id/workPlaceFragment" />
         <action
-            android:id="@+id/action_mainFilterFragment_to_chooserFragment"
-            app:destination="@id/chooserFragment" />
+            android:id="@+id/action_mainFilterFragment_to_industriesChooserFragment"
+            app:destination="@id/industriesChooserFragment" />
     </fragment>
     <fragment
         android:id="@+id/workPlaceFragment"
@@ -71,4 +71,9 @@
             app:destination="@id/chooserFragment"
             />
     </fragment>
+    <fragment
+        android:id="@+id/industriesChooserFragment"
+        tools:layout="@layout/fragment_industries_chooser"
+        android:name="ru.practicum.android.diploma.filter.presentation.industries_chooser.IndustriesChooserFragment"
+        android:label="IndustriesChooserFragment" />
 </navigation>

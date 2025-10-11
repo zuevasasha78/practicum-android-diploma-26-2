@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
-import ru.practicum.android.diploma.filter.domain.ChooserType
+import ru.practicum.android.diploma.filter.domain.model.ChooserType
 import ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment.Companion.ARG_NAME
 
 class MainFilterFragment : Fragment() {
