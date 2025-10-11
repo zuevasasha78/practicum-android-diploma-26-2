@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_mainFilterFragment_to_chooserFragment"
             app:destination="@id/chooserFragment" />
+        <action
+            android:id="@+id/action_mainFilterFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/workPlaceFragment"
