@@ -56,10 +56,9 @@ class MainFilterFragment : Fragment() {
         }
 
         binding.placeEditText.setOnClickListener {
-            // Заглушка для теста, удалится после реализации экрана "Место работы"
-            val text = "Москва"
-            mainFilterViewModel.setPlace(text)
-            // findNavController().navigate(R.id.action_mainFilterFragment_to_workPlaceFragment)
+            findNavController().navigate(
+                R.id.workPlaceFragment
+            )
         }
 
         binding.placeInputLayout.setEndIconOnClickListener {
