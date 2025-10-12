@@ -77,6 +77,6 @@
     <fragment
         android:id="@+id/industriesChooserFragment"
         tools:layout="@layout/fragment_industries_chooser"
-        android:name="ru.practicum.android.diploma.filter.presentation.industries_chooser.IndustriesChooserFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.chooser.industries.IndustriesChooserFragment"
         android:label="IndustriesChooserFragment" />
 </navigation>

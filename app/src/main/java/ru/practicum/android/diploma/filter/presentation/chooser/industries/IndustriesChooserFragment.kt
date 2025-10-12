@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.industries_chooser
+package ru.practicum.android.diploma.filter.presentation.chooser.industries
 
 import android.content.Context
 import android.os.Bundle
@@ -10,11 +10,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustriesChooserBinding
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
-import ru.practicum.android.diploma.filter.presentation.industries_chooser.adapter.IndustriesAdapter
+import ru.practicum.android.diploma.filter.presentation.chooser.industries.adapter.IndustriesAdapter
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.search.presentation.models.Placeholder
 
@@ -23,7 +24,7 @@ class IndustriesChooserFragment : Fragment() {
     private var _binding: FragmentIndustriesChooserBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<IndustriesChooserViewModel>()
-    private val adapter by lazy { IndustriesAdapter() }
+    private val adapter by lazy { IndustriesAdapter(viewModel.getIndustry(), adapterListener) }
     private var fullList: List<FilterIndustry> = emptyList()
 
     override fun onCreateView(
@@ -40,11 +41,14 @@ class IndustriesChooserFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         binding.industriesRv.adapter = adapter
         viewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is IndustriesChooserScreenState.Loading -> setLoadingState()
-                is IndustriesChooserScreenState.Success -> setSuccessState(state.industriesList)
+                is IndustriesChooserScreenState.Success -> setSuccessState(state.industriesList, state.isChosen)
                 is IndustriesChooserScreenState.Error -> setErrorState(state.placeholder)
             }
         }
@@ -61,13 +65,19 @@ class IndustriesChooserFragment : Fragment() {
             },
             afterTextChanged = { text: Editable? ->
                 adapter.setList(fullList.filter {
-                    it.name.startsWith(
-                        text.toString(),
-                        true
-                    ) || it.name.contains(text.toString(), true)
+                    it.name.startsWith(text.toString(), true)
+                        || it.name.contains(text.toString(), true)
                 })
             },
         )
+
+        binding.confirmButton.setOnClickListener {
+            viewModel.setIndustryId(adapter.getChosenIndustry())
+            findNavController().popBackStack()
+        }
+        if (viewModel.getIndustry().id != -1) {
+            binding.confirmButton.isVisible = true
+        }
     }
 
     private fun setLoadingState() {
@@ -76,9 +86,10 @@ class IndustriesChooserFragment : Fragment() {
         binding.industriesRv.isVisible = false
     }
 
-    private fun setSuccessState(list: List<FilterIndustry>) {
+    private fun setSuccessState(list: List<FilterIndustry>, isChosen: Boolean) {
         fullList = list
         adapter.setList(list)
+        binding.confirmButton.isVisible = isChosen
         binding.placeholder.root.isVisible = false
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = true
@@ -99,6 +110,9 @@ class IndustriesChooserFragment : Fragment() {
         binding.editText.text?.clear()
         adapter.setList(fullList)
     }
+
+    private val adapterListener =
+        IndustriesAdapter.IndustryAdapterListener { viewModel.setButtonVisible() }
 
     override fun onDestroyView() {
         super.onDestroyView()

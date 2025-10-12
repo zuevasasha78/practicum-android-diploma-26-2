@@ -1,6 +1,5 @@
-package ru.practicum.android.diploma.filter.presentation.industries_chooser.adapter
+package ru.practicum.android.diploma.filter.presentation.chooser.industries.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
-class IndustriesAdapter(defaultId: Int = -1) : RecyclerView.Adapter<IndustriesAdapter.IndustriesViewHolder>() {
+class IndustriesAdapter(
+    defaultId: FilterIndustry = FilterIndustry(-1, ""),
+    private val listener: IndustryAdapterListener
+) : RecyclerView.Adapter<IndustriesAdapter.IndustriesViewHolder>() {
 
     private var list: List<FilterIndustry> = mutableListOf()
-    private var chosenPosition = -1
-    private var chosenId = defaultId
+    private var chosenIndustry = defaultId
 
     fun setList(list: List<FilterIndustry>) {
         this.list = list
-        Log.d("TEST", list.toString())
         notifyDataSetChanged()
     }
 
-    fun getChosenId() = chosenId
+    fun getChosenIndustry() = chosenIndustry
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val view =
@@ -33,29 +33,30 @@ class IndustriesAdapter(defaultId: Int = -1) : RecyclerView.Adapter<IndustriesAd
     override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
-        val id = holder.bind(list[position])
-        if (id == chosenId) {
-            chosenPosition = holder.adapterPosition
-        }
+        val industry = holder.bind(list[position])
         holder.itemView.setOnClickListener {
-            chosenId = id
-            chosenPosition = holder.adapterPosition
+            chosenIndustry = industry
+            listener.onClick()
             notifyDataSetChanged()
         }
         holder.radioButton.setOnClickListener {
-            chosenId = id
-            chosenPosition = holder.adapterPosition
+            chosenIndustry = industry
+            listener.onClick()
             notifyDataSetChanged()
         }
-        holder.radioButton.isChecked = holder.adapterPosition == chosenPosition
+        holder.radioButton.isChecked = chosenIndustry.id == industry.id
     }
 
     class IndustriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val radioButton = itemView.findViewById<RadioButton>(R.id.radio_button)
-        fun bind(industry: FilterIndustry): Int {
+        fun bind(industry: FilterIndustry): FilterIndustry {
             itemView.findViewById<TextView>(R.id.industry_name).text = industry.name
-            return industry.id
+            return industry
         }
+    }
+
+    fun interface IndustryAdapterListener {
+        fun onClick()
     }
 }
