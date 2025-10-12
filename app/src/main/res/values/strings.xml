@@ -7,6 +7,7 @@
     <string name="search_screen_title">Поиск вакансий</string>
     <string name="vacancy">Вакансия</string>
     <string name="enter_query">Введите запрос</string>
+    <string name="enter_region">Введите регион</string>
     <string name="enter_amount">Введите сумму</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
@@ -44,6 +45,8 @@
     <string name="check_internet_connection">Проверьте подключение к интернету</string>
     <string name="error_occurred">Произошла ошибка</string>
     <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
+    <string name="cant_get_area_list">Не удалось получить список</string>
+    <string name="area_not_found">Такого региона нет</string>
 
     <string name="select_mail_app">Выберите почтовое приложение</string>
     <string name="response_to_vacancy">Отклик на вакансию</string>
@@ -57,4 +60,6 @@
     <string name="country">Страна</string>
     <string name="region">Регион</string>
     <string name="choosing_work_place">Выбор места работы</string>
+    <string name="choosing_country">Выбор страны</string>
+    <string name="choosing_region">Выбор региона</string>
 </resources>

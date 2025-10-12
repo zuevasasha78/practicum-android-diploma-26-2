@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.bundle.bundleOf
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -17,6 +18,8 @@ import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
+import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
+import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_NAME
 
 class MainFilterFragment : Fragment() {
     private var _binding: FragmentMainFilterBinding? = null
@@ -41,43 +44,13 @@ class MainFilterFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
-            val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
-            mainFilterViewModel.setPlace(place)
-        }
-
-        setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
-            val industry = bundle.getString(INDUSTRY_RESULT_KEY).orEmpty()
-            mainFilterViewModel.setIndustry(industry)
-        }
-
+        setListeners()
         mainFilterViewModel.filters.observe(viewLifecycleOwner) { filterUiState ->
             render(filterUiState)
         }
 
-        binding.placeEditText.setOnClickListener {
-            findNavController().navigate(
-                R.id.workPlaceFragment
-            )
-        }
-
-        binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setPlace("")
-        }
-
-        binding.industryEditText.setOnClickListener {
-            // Заглушка для теста, удалится после реализации экрана "Отрасль"
-            val text = "IT"
-            mainFilterViewModel.setIndustry(text)
-//            findNavController().navigate(
-//                R.id.action_mainFilterFragment_to_chooserFragment,
-//                bundleOf(ARG_NAME to ChooserType.SectorType),
-//            )
-        }
-
-        binding.industryInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setIndustry("")
-        }
+        setPlaceListeners()
+        setIndustryListeners()
 
         binding.salaryEditText.setOnFocusChangeListener { _, _ ->
             updateSalaryField()
@@ -110,6 +83,54 @@ class MainFilterFragment : Fragment() {
 
         binding.resetButton.setOnClickListener {
             resetFilter()
+        }
+    }
+
+    private fun setIndustryListeners() {
+        binding.industryEditText.setOnClickListener {
+            // Заглушка для теста, удалится после реализации экрана "Отрасль"
+            val text = "IT"
+            mainFilterViewModel.setIndustry(text)
+            // findNavController().navigate(
+            //     R.id.action_mainFilterFragment_to_chooserFragment,
+            //     bundleOf(ARG_NAME to ChooserType.SectorType),
+            // )
+        }
+
+        binding.industryInputLayout.setEndIconOnClickListener {
+            mainFilterViewModel.setIndustry("")
+        }
+    }
+
+    private fun setPlaceListeners() {
+        binding.placeEditText.setOnClickListener {
+            // todo заменить на значение из сохраненного фильтра
+            val countryName = null
+            val regionName = null
+            val args = bundleOf(
+                COUNTRY_NAME to countryName,
+                REGION_NAME to regionName,
+            )
+            findNavController().navigate(
+                R.id.workplaceFragment,
+                args
+            )
+        }
+
+        binding.placeInputLayout.setEndIconOnClickListener {
+            mainFilterViewModel.setPlace("")
+        }
+    }
+
+    private fun setListeners() {
+        setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
+            val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
+            mainFilterViewModel.setPlace(place)
+        }
+
+        setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
+            val industry = bundle.getString(INDUSTRY_RESULT_KEY).orEmpty()
+            mainFilterViewModel.setIndustry(industry)
         }
     }
 

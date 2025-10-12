@@ -18,7 +18,7 @@
         app:titleMarginStart="@dimen/size_0dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/work_place_recycler_view"
+        android:id="@+id/workplace_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_16dp"
