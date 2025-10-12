@@ -53,4 +53,8 @@
     <string name="work_place">Место работы</string>
     <string name="industry">Отрасль</string>
     <string name="without_salary">Не показывать без зарплаты</string>
+
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
+    <string name="choosing_work_place">Выбор места работы</string>
 </resources>

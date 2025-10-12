@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/employerName"
-            style="@style/vacancy_item_text"
+            style="@style/display_regular_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/salary"
-            style="@style/vacancy_item_text"
+            style="@style/display_regular_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
