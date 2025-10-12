@@ -27,11 +27,11 @@ class IndustriesChooserViewModel(
     }
 
     fun getIndustry(): FilterIndustry {
-        return sharedPrefInteractor.getChosenIndustryId()
+        return sharedPrefInteractor.getChosenIndustry()
     }
 
     fun setIndustryId(industry: FilterIndustry) {
-        sharedPrefInteractor.setIndustryId(industry)
+        sharedPrefInteractor.setIndustry(industry)
     }
 
     fun setButtonVisible() {

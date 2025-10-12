@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.network.data
+package ru.practicum.android.diploma.network.domain.models
 
 sealed class ApiResult<out T> {
     data class Success<T>(val data: T) : ApiResult<T>()

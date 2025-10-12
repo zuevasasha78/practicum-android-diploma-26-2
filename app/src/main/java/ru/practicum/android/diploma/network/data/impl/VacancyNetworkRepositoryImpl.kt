@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.network.data.impl
 
-import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.ApiResultDto
 import ru.practicum.android.diploma.network.data.DiplomaApiService
 import ru.practicum.android.diploma.network.data.NetworkClient
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
@@ -15,19 +15,19 @@ class VacancyNetworkRepositoryImpl(
     private val diplomaApiService: DiplomaApiService
 ) : VacancyNetworkRepository {
 
-    override suspend fun getAreas(): ApiResult<List<FilterArea>> {
+    override suspend fun getAreas(): ApiResultDto<List<FilterArea>> {
         return networkClient.doRequest { diplomaApiService.getAreas() }
     }
 
-    override suspend fun getIndustries(): ApiResult<List<FilterIndustryDto>> {
+    override suspend fun getIndustries(): ApiResultDto<List<FilterIndustryDto>> {
         return networkClient.doRequest { diplomaApiService.getIndustries() }
     }
 
-    override suspend fun getVacancy(id: String): ApiResult<VacancyDetailDto> {
+    override suspend fun getVacancy(id: String): ApiResultDto<VacancyDetailDto> {
         return networkClient.doRequest { diplomaApiService.getVacancy(id) }
     }
 
-    override suspend fun getVacancies(vacanciesFilterDto: VacanciesFilterDto): ApiResult<VacancyResponseDto> {
+    override suspend fun getVacancies(vacanciesFilterDto: VacanciesFilterDto): ApiResultDto<VacancyResponseDto> {
         val map = mutableMapOf<String, String>()
         vacanciesFilterDto.area?.let { map["area"] = it.toString() }
         vacanciesFilterDto.industry?.let { map["industry"] = it.toString() }
