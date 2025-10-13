@@ -57,6 +57,9 @@
     <string name="industry">Отрасль</string>
     <string name="without_salary">Не показывать без зарплаты</string>
 
+    <string name="industries_chooser_title">Выбор отрасли</string>
+    <string name="industries_chooser_confirm_button">Выбрать</string>
+
     <string name="country">Страна</string>
     <string name="region">Регион</string>
     <string name="choosing_work_place">Выбор места работы</string>

@@ -2,11 +2,15 @@ package ru.practicum.android.diploma.network.data
 
 import ru.practicum.android.diploma.filter.domain.Workplace
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyResponse
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
+import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
+import ru.practicum.android.diploma.network.domain.models.ApiResult
+import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
@@ -31,16 +35,23 @@ object VacancyNetworkConvertor {
             this.pages,
             this.page,
             this.items.map {
-                it.convertToVacancy()
-            }
+                it.convertToVacancy() }
         )
     }
 
-    fun ApiResult<VacancyResponseDto>.convertToApiResultVacancyResponse(): ApiResult<VacancyResponse> {
+    fun ApiResultDto<List<FilterIndustryDto>>.convertToApiResultFilterIndustries(): ApiResult<List<FilterIndustry>> {
         return when (this) {
-            is ApiResult.Success -> ApiResult.Success(data.convertToVacancyResponse())
-            is ApiResult.Error -> ApiResult.Error(code)
-            is ApiResult.NoInternetConnection -> ApiResult.NoInternetConnection
+            is ApiResultDto.Success -> ApiResult.Success(data.map { it.convertToFilterIndustry() })
+            is ApiResultDto.Error -> ApiResult.Error(code)
+            is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
+        }
+    }
+
+    fun ApiResultDto<VacancyResponseDto>.convertToApiResultVacancyResponse(): ApiResult<VacancyResponse> {
+        return when (this) {
+            is ApiResultDto.Success -> ApiResult.Success(data.convertToVacancyResponse())
+            is ApiResultDto.Error -> ApiResult.Error(code)
+            is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
         }
     }
 
@@ -90,8 +101,20 @@ object VacancyNetworkConvertor {
                 name = vacancyDetail.name,
                 employerName = vacancyDetail.employerName,
                 salaryDto = vacancyDetail.salary,
-                employerLogo = vacancyDetail.employerLogoUrl.let { it } ?: "",
+                employerLogo = vacancyDetail.employerLogoUrl ?: "",
             )
+        }
+    }
+
+    fun FilterIndustryDto.convertToFilterIndustry(): FilterIndustry {
+        return FilterIndustry(this.id, this.name)
+    }
+
+    fun FilterIndustry?.convertToFilterIndustryDto(): FilterIndustryDto? {
+        return if (this != null) {
+            FilterIndustryDto(this.id, this.name)
+        } else {
+            null
         }
     }
 

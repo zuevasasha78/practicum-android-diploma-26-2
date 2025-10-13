@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
+import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
@@ -56,7 +56,7 @@ class SearchViewModel(
                 if (page > 1 && _screenState.value is SearchScreenState.Success) {
                     val current = _screenState.value as SearchScreenState.Success
                     val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
-                        is SearchPlaceholder.NoInternet -> R.string.check_internet_connection
+                        is Placeholder.NoInternet -> R.string.check_internet_connection
                         else -> R.string.error_occurred
                     }
                     setScreenState(

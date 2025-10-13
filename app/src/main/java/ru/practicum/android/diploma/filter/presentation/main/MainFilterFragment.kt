@@ -20,6 +20,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_NAME
+import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
 class MainFilterFragment : Fragment() {
     private var _binding: FragmentMainFilterBinding? = null
@@ -40,33 +41,28 @@ class MainFilterFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbarFilter.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        setListeners()
+        setNavigation()
         mainFilterViewModel.filters.observe(viewLifecycleOwner) { filterUiState ->
             render(filterUiState)
         }
 
         setPlaceListeners()
-        setIndustryListeners()
 
+        binding.industryInputLayout.setEndIconOnClickListener {
+            mainFilterViewModel.setIndustry(FilterIndustry(-1, ""))
+        }
         binding.salaryEditText.setOnFocusChangeListener { _, _ ->
             updateSalaryField()
         }
-
         binding.root.setOnClickListener {
             hideKeyboardAndClearFocus()
         }
 
         binding.salaryEditText.addTextChangedListener { text ->
-            val textString = text.toString()
-            if (textString != mainFilterViewModel.filters.value?.salary) {
-                mainFilterViewModel.setSalary(textString)
+            if (text.toString() != mainFilterViewModel.filters.value?.salary) {
+                mainFilterViewModel.setSalary(text.toString())
             }
         }
-
         binding.salaryInputLayout.setEndIconOnClickListener {
             mainFilterViewModel.setSalary("")
         }
@@ -74,63 +70,27 @@ class MainFilterFragment : Fragment() {
         binding.onlyWithSalaryCheckbox.setOnCheckedChangeListener { _, isChecked ->
             mainFilterViewModel.setOnlyWithSalary(isChecked)
         }
-
         binding.applyButton.setOnClickListener {
+            mainFilterViewModel.apply()
             findNavController().navigate(
                 R.id.action_mainFilterFragment_to_searchFragment
             )
         }
-
         binding.resetButton.setOnClickListener {
             resetFilter()
         }
     }
 
-    private fun setIndustryListeners() {
-        binding.industryEditText.setOnClickListener {
-            // Заглушка для теста, удалится после реализации экрана "Отрасль"
-            val text = "IT"
-            mainFilterViewModel.setIndustry(text)
-            // findNavController().navigate(
-            //     R.id.action_mainFilterFragment_to_chooserFragment,
-            //     bundleOf(ARG_NAME to ChooserType.SectorType),
-            // )
+    private fun setNavigation() {
+        binding.toolbarFilter.setNavigationOnClickListener {
+            findNavController().navigateUp()
         }
-
-        binding.industryInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setIndustry("")
-        }
-    }
-
-    private fun setPlaceListeners() {
-        binding.placeEditText.setOnClickListener {
-            // todo заменить на значение из сохраненного фильтра
-            val countryName = null
-            val regionName = null
-            val args = bundleOf(
-                COUNTRY_NAME to countryName,
-                REGION_NAME to regionName,
-            )
-            findNavController().navigate(
-                R.id.workplaceFragment,
-                args
-            )
-        }
-
-        binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setPlace("")
-        }
-    }
-
-    private fun setListeners() {
         setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
             val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
             mainFilterViewModel.setPlace(place)
         }
-
-        setFragmentResultListener(INDUSTRY_REQUEST_KEY) { _, bundle ->
-            val industry = bundle.getString(INDUSTRY_RESULT_KEY).orEmpty()
-            mainFilterViewModel.setIndustry(industry)
+        binding.industryEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFilterFragment_to_industriesChooserFragment)
         }
     }
 
@@ -174,8 +134,8 @@ class MainFilterFragment : Fragment() {
         binding.placeEditText.setText(filterUIState.place)
         updateFieldState(binding.placeInputLayout, filterUIState.place.isNotEmpty())
 
-        binding.industryEditText.setText(filterUIState.industry)
-        updateFieldState(binding.industryInputLayout, filterUIState.industry.isNotEmpty())
+        binding.industryEditText.setText(filterUIState.industry?.name)
+        updateFieldState(binding.industryInputLayout, filterUIState.industry?.name?.isNotEmpty() ?: false)
 
         if (binding.salaryEditText.text.toString() != filterUIState.salary) {
             binding.salaryEditText.setText(filterUIState.salary)
@@ -186,8 +146,33 @@ class MainFilterFragment : Fragment() {
         isButtonsApplyAndResetVisible(filterUIState.hasAnyFilter)
     }
 
+    private fun setPlaceListeners() {
+        binding.placeEditText.setOnClickListener {
+            // todo заменить на значение из сохраненного фильтра
+            val countryName = null
+            val regionName = null
+            val args = bundleOf(
+                COUNTRY_NAME to countryName,
+                REGION_NAME to regionName,
+            )
+            findNavController().navigate(
+                R.id.workplaceFragment,
+                args
+            )
+        }
+
+        binding.placeInputLayout.setEndIconOnClickListener {
+            mainFilterViewModel.setPlace("")
+        }
+    }
+
     private fun resetFilter() {
         mainFilterViewModel.reset()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainFilterViewModel.getAllFilters()
     }
 
     override fun onDestroyView() {

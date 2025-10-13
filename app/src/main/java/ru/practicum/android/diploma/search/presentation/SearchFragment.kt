@@ -24,7 +24,7 @@ import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
-import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
+import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class SearchFragment : Fragment() {
@@ -92,7 +92,7 @@ class SearchFragment : Fragment() {
     private fun setUi(screenState: SearchScreenState) {
         when (screenState) {
             is SearchScreenState.Init -> {
-                showPlaceholder(SearchPlaceholder.SearchInitPlaceholder)
+                showPlaceholder(Placeholder.InitPlaceholder)
             }
 
             is SearchScreenState.Error -> {
@@ -139,7 +139,7 @@ class SearchFragment : Fragment() {
         binding.progressBar.isVisible = true
     }
 
-    private fun showPlaceholder(placeholder: SearchPlaceholder) {
+    private fun showPlaceholder(placeholder: Placeholder) {
         binding.placeholder.apply {
             image.setImageResource(placeholder.image)
             placeholderText.text = placeholder.text?.let { getString(it) } ?: ""
@@ -148,7 +148,7 @@ class SearchFragment : Fragment() {
 
         binding.progressBar.isVisible = false
         binding.vacancyRv.isVisible = false
-        if (placeholder is SearchPlaceholder.NoSearchResult) {
+        if (placeholder is Placeholder.NoResult) {
             binding.searchInfo.apply {
                 isVisible = true
                 text = requireContext().getString(R.string.search_info_no_vacancy)

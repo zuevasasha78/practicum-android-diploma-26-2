@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import ru.practicum.android.diploma.databinding.FragmentChooserBinding
-import ru.practicum.android.diploma.filter.domain.ChooserType
+import ru.practicum.android.diploma.filter.domain.model.ChooserType
 
 class ChooserFragment : Fragment() {
     private var _binding: FragmentChooserBinding? = null
