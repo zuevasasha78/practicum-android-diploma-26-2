@@ -107,4 +107,12 @@ object VacancyNetworkConvertor {
     fun FilterIndustryDto.convertToFilterIndustry(): FilterIndustry {
         return FilterIndustry(this.id, this.name)
     }
+
+    fun FilterIndustry?.convertToFilterIndustryDto(): FilterIndustryDto? {
+        return if (this != null) {
+            FilterIndustryDto(this.id, this.name)
+        } else {
+            null
+        }
+    }
 }

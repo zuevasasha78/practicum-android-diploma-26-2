@@ -22,5 +22,5 @@ val interactorModule = module {
     factory { StringUtils(get()) }
     factory<FavouriteVacancyInteractor> { FavouriteVacancyInteractorImpl(get()) }
     factory<IndustriesInteractor> { IndustriesInteractorImpl(get()) }
-    factory<SharedPrefInteractor> { SharedPrefInteractorImpl(get(), get()) }
+    factory<SharedPrefInteractor> { SharedPrefInteractorImpl(get()) }
 }
