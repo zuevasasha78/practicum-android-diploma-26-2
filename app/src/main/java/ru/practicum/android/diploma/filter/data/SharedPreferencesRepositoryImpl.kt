@@ -9,24 +9,58 @@ class SharedPreferencesRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : SharedPreferencesRepository {
+
     override fun getChosenIndustry(): FilterIndustryDto {
-        val res = gson.fromJson(
-            sharedPreferences.getString(INDUSTRY_TAG, gson.toJson(DEFAULT_INDUSTRY_JSON)),
-            FilterIndustryDto::class.java
-        )
-        return res
+        return try {
+            val jsonString = sharedPreferences.getString(INDUSTRY_TAG, null)
+            if (!jsonString.isNullOrEmpty()) {
+                gson.fromJson(jsonString, FilterIndustryDto::class.java) ?: DEFAULT_INDUSTRY_JSON
+            } else {
+                DEFAULT_INDUSTRY_JSON
+            }
+        } catch (e: Exception) {
+            DEFAULT_INDUSTRY_JSON
+        }
     }
 
     override fun setIndustry(industry: FilterIndustryDto?) {
-        sharedPreferences.edit().putString(INDUSTRY_TAG, gson.toJson(industry)).apply()
+        val industryToSave = industry ?: DEFAULT_INDUSTRY_JSON
+        val jsonString = gson.toJson(industryToSave)
+        sharedPreferences.edit().putString(INDUSTRY_TAG, jsonString).apply()
     }
 
     override fun resetIndustry() {
-        sharedPreferences.edit().putString(INDUSTRY_TAG, gson.toJson(DEFAULT_INDUSTRY_JSON)).apply()
+        val jsonString = gson.toJson(DEFAULT_INDUSTRY_JSON)
+        sharedPreferences.edit().putString(INDUSTRY_TAG, jsonString).apply()
+    }
+
+    override fun getSalary(): String {
+        return sharedPreferences.getString(SALARY_TAG, "") ?: ""
+    }
+
+    override fun setSalary(salary: String) {
+        sharedPreferences.edit().putString(SALARY_TAG, salary).apply()
+    }
+
+    override fun getOnlyWithSalary(): Boolean {
+        return sharedPreferences.getBoolean(ONLY_WITH_SALARY_TAG, false)
+    }
+
+    override fun setOnlyWithSalary(onlyWithSalary: Boolean) {
+        sharedPreferences.edit().putBoolean(ONLY_WITH_SALARY_TAG, onlyWithSalary).apply()
+    }
+
+    override fun resetSalarySettings() {
+        sharedPreferences.edit()
+            .remove(SALARY_TAG)
+            .remove(ONLY_WITH_SALARY_TAG)
+            .apply()
     }
 
     companion object {
         const val INDUSTRY_TAG = "INDUSTRY_TAG"
+        const val SALARY_TAG = "SALARY_TAG"
+        const val ONLY_WITH_SALARY_TAG = "ONLY_WITH_SALARY_TAG"
         private val DEFAULT_INDUSTRY_JSON = FilterIndustryDto(-1, "")
     }
 }

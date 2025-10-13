@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
@@ -13,7 +14,8 @@ import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
-    private val searchScreenInteractor: SearchScreenInteractor
+    private val searchScreenInteractor: SearchScreenInteractor,
+    private val sharedPrefInteractor: SharedPrefInteractor
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -47,8 +49,21 @@ class SearchViewModel(
         viewModelScope.launch {
             _canLoadNextPage.postValue(false)
             var isLastPage = false
-            val result = searchScreenInteractor.searchVacancy(text, page)
+            val industry = sharedPrefInteractor.getChosenIndustry()
+            val salary = sharedPrefInteractor.getSalary()
+            val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
 
+            val result = searchScreenInteractor.searchVacancy(
+                text = text,
+                page = page,
+                industry = if (industry.id != -1) {
+                    industry.id
+                } else {
+                    null
+                },
+                salary = salary,
+                onlyWithSalary = onlyWithSalary
+            )
             if (result is SearchScreenState.Success) {
                 isLastPage = result.lastPage == currentPage
                 loadNewItems(page, result)
@@ -96,5 +111,25 @@ class SearchViewModel(
         currentPage++
         setScreenState(currentState.copy(paginationState = PaginationState.Loading))
         searchVacancy(lastSearch, currentPage)
+    }
+
+    private fun getCurrentFilters(): Map<String, String> {
+        val filters = mutableMapOf<String, String>()
+
+        val industry = sharedPrefInteractor.getChosenIndustry()
+        if (industry.id != -1) {
+            filters["industry"] = industry.id.toString()
+        }
+
+        val salary = sharedPrefInteractor.getSalary()
+        if (salary.isNotBlank()) {
+            filters["salary"] = salary
+        }
+
+        if (sharedPrefInteractor.getOnlyWithSalary()) {
+            filters["only_with_salary"] = "true"
+        }
+
+        return filters
     }
 }

@@ -23,19 +23,22 @@ class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor
     }
 
     fun setSalary(salary: String) {
+        sharedPrefInteractor.setSalary(salary)
         _filters.value = _filters.value?.copy(salary = salary) ?: FilterUiState(salary = salary)
     }
 
     fun setOnlyWithSalary(onlyWithSalary: Boolean) {
+        sharedPrefInteractor.setOnlyWithSalary(onlyWithSalary)
         _filters.value =
             _filters.value?.copy(onlyWithSalary = onlyWithSalary) ?: FilterUiState(onlyWithSalary = onlyWithSalary)
     }
 
     fun getAllFilters() {
-        val industry = sharedPrefInteractor.getChosenIndustry()
-        if (industry.id != -1) {
-            setIndustry(industry)
-        }
+        _filters.value = FilterUiState(
+            industry = sharedPrefInteractor.getChosenIndustry().takeIf { it.id != -1 },
+            salary = sharedPrefInteractor.getSalary(),
+            onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
+        )
     }
 
     fun apply() {
@@ -45,5 +48,6 @@ class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor
     fun reset() {
         _filters.value = FilterUiState()
         sharedPrefInteractor.resetIndustry()
+        sharedPrefInteractor.resetSalarySettings()
     }
 }
