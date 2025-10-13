@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.bundle.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkplaceBinding
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
+import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.COUNTRY_RESULT_KEY
+import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.PLACE_REQUEST_KEY
+import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.REGION_RESULT_KEY
 import ru.practicum.android.diploma.filter.presentation.workplace.adapter.WorkplaceAdapter
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.WorkplaceViewModel
 
@@ -54,7 +58,14 @@ class WorkplaceFragment : Fragment() {
 
     private fun initBackButton() {
         viewBinding.toolbar.setOnClickListener {
-            findNavController().navigate(R.id.mainFilterFragment)
+            setFragmentResult(
+                PLACE_REQUEST_KEY,
+                bundleOf(
+                    COUNTRY_RESULT_KEY to viewModel.countyValue,
+                    REGION_RESULT_KEY to viewModel.regionValue
+                )
+            )
+            findNavController().popBackStack(R.id.mainFilterFragment, false)
         }
     }
 

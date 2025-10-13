@@ -27,6 +27,9 @@ class MainFilterFragment : Fragment() {
     private val binding get() = _binding!!
     private val mainFilterViewModel by viewModel<MainFilterViewModel>()
 
+    private var country: String? = null
+    private var region: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,7 +89,11 @@ class MainFilterFragment : Fragment() {
             findNavController().navigateUp()
         }
         setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
-            val place = bundle.getString(PLACE_RESULT_KEY).orEmpty()
+            country = bundle.getString(COUNTRY_RESULT_KEY)
+            region = bundle.getString(REGION_RESULT_KEY)
+            val place = listOfNotNull(country, region)
+                .filter { it.isNotBlank() }
+                .joinToString(", ")
             mainFilterViewModel.setPlace(place)
         }
         binding.industryEditText.setOnClickListener {
@@ -148,12 +155,9 @@ class MainFilterFragment : Fragment() {
 
     private fun setPlaceListeners() {
         binding.placeEditText.setOnClickListener {
-            // todo заменить на значение из сохраненного фильтра
-            val countryName = null
-            val regionName = null
             val args = bundleOf(
-                COUNTRY_NAME to countryName,
-                REGION_NAME to regionName,
+                COUNTRY_NAME to country,
+                REGION_NAME to region,
             )
             findNavController().navigate(
                 R.id.workplaceFragment,
@@ -181,8 +185,9 @@ class MainFilterFragment : Fragment() {
     }
 
     companion object {
-        const val PLACE_REQUEST_KEY = "place_request"
-        const val PLACE_RESULT_KEY = "place"
+        const val PLACE_REQUEST_KEY = "country_request"
+        const val COUNTRY_RESULT_KEY = "country_result"
+        const val REGION_RESULT_KEY = "region_result"
 
         const val INDUSTRY_REQUEST_KEY = "industry_request"
         const val INDUSTRY_RESULT_KEY = "industry"
