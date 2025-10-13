@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.network.data
 
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyResponse
+import ru.practicum.android.diploma.filter.domain.Workplace
+import ru.practicum.android.diploma.filter.domain.WorkplaceType
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
+import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
@@ -113,6 +115,21 @@ object VacancyNetworkConvertor {
             FilterIndustryDto(this.id, this.name)
         } else {
             null
+        }
+    }
+
+    fun List<FilterArea>.convertToWorkplace(): List<Workplace> {
+        return this.map { area ->
+            val type = if (area.parentId == null) {
+                WorkplaceType.COUNTRY
+            } else {
+                WorkplaceType.REGION
+            }
+            Workplace(
+                id = area.id,
+                value = area.name,
+                type = type
+            )
         }
     }
 }
