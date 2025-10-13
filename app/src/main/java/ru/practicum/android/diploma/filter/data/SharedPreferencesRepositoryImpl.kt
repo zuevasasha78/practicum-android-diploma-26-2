@@ -11,16 +11,11 @@ class SharedPreferencesRepositoryImpl(
 ) : SharedPreferencesRepository {
 
     override fun getChosenIndustry(): FilterIndustryDto {
-        return try {
-            val jsonString = sharedPreferences.getString(INDUSTRY_TAG, null)
-            if (!jsonString.isNullOrEmpty()) {
-                gson.fromJson(jsonString, FilterIndustryDto::class.java) ?: DEFAULT_INDUSTRY_JSON
-            } else {
-                DEFAULT_INDUSTRY_JSON
-            }
-        } catch (e: Exception) {
-            DEFAULT_INDUSTRY_JSON
-        }
+        val res = gson.fromJson(
+            sharedPreferences.getString(INDUSTRY_TAG, gson.toJson(DEFAULT_INDUSTRY_JSON)),
+            FilterIndustryDto::class.java
+        )
+        return res
     }
 
     override fun setIndustry(industry: FilterIndustryDto?) {

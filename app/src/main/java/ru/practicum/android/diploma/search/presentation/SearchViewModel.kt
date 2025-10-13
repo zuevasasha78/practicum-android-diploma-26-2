@@ -112,24 +112,4 @@ class SearchViewModel(
         setScreenState(currentState.copy(paginationState = PaginationState.Loading))
         searchVacancy(lastSearch, currentPage)
     }
-
-    private fun getCurrentFilters(): Map<String, String> {
-        val filters = mutableMapOf<String, String>()
-
-        val industry = sharedPrefInteractor.getChosenIndustry()
-        if (industry.id != -1) {
-            filters["industry"] = industry.id.toString()
-        }
-
-        val salary = sharedPrefInteractor.getSalary()
-        if (salary.isNotBlank()) {
-            filters["salary"] = salary
-        }
-
-        if (sharedPrefInteractor.getOnlyWithSalary()) {
-            filters["only_with_salary"] = "true"
-        }
-
-        return filters
-    }
 }
