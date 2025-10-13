@@ -14,8 +14,14 @@ class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor
         getAllFilters()
     }
 
-    fun setPlace(place: String) {
-        _filters.value = _filters.value?.copy(place = place) ?: FilterUiState(place = place)
+    fun setPlace(country: String?, region: String?) {
+        _filters.value = _filters.value?.copy(
+            country = country,
+            region = region
+        ) ?: FilterUiState(
+            country = country,
+            region = region
+        )
     }
 
     fun setIndustry(industry: FilterIndustry) {

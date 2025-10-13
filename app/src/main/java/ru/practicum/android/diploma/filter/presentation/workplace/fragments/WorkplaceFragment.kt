@@ -5,17 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.bundle.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkplaceBinding
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
-import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.COUNTRY_RESULT_KEY
-import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.PLACE_REQUEST_KEY
-import ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment.Companion.REGION_RESULT_KEY
 import ru.practicum.android.diploma.filter.presentation.workplace.adapter.WorkplaceAdapter
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.WorkplaceViewModel
 
@@ -37,10 +34,10 @@ class WorkplaceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         val countyValue = arguments?.getString(COUNTRY_NAME)
         val regionValue = arguments?.getString(REGION_NAME)
-        viewModel.uploadWorkplace(regionValue, countyValue)
+        viewModel.uploadWorkplace(countyValue, regionValue)
+        initView()
         setData()
 
     }
@@ -54,17 +51,28 @@ class WorkplaceFragment : Fragment() {
     private fun initView() {
         initList()
         initBackButton()
+        initConfirmButton()
+    }
+
+    private fun initConfirmButton() {
+        viewModel.workplace.observe(viewLifecycleOwner) { workplaces ->
+            val country = workplaces.find { it.type == WorkplaceType.COUNTRY }?.value
+            val region = workplaces.find { it.type == WorkplaceType.REGION }?.value
+
+            if (country != null || region != null) {
+                viewBinding.confirmButton.isVisible = true
+            } else {
+                viewBinding.confirmButton.isVisible = false
+            }
+            viewBinding.confirmButton.setOnClickListener {
+                viewModel.updateWorkplace(country, region)
+                findNavController().popBackStack(R.id.mainFilterFragment, false)
+            }
+        }
     }
 
     private fun initBackButton() {
         viewBinding.toolbar.setOnClickListener {
-            setFragmentResult(
-                PLACE_REQUEST_KEY,
-                bundleOf(
-                    COUNTRY_RESULT_KEY to viewModel.countyValue,
-                    REGION_RESULT_KEY to viewModel.regionValue
-                )
-            )
             findNavController().popBackStack(R.id.mainFilterFragment, false)
         }
     }
@@ -73,18 +81,18 @@ class WorkplaceFragment : Fragment() {
         workplaceAdapter = WorkplaceAdapter { place ->
             when (place.type) {
                 WorkplaceType.COUNTRY -> {
-                    if (viewModel.countyValue != null) {
+                    if (place.value != null) {
                         viewModel.clearCountry()
                     } else {
                         findNavController().navigate(R.id.selectCountryFragment)
                     }
                 }
                 WorkplaceType.REGION -> {
-                    if (viewModel.regionValue != null) {
+                    if (place.value != null) {
                         viewModel.clearRegion()
                     } else {
-                        val countryName = arguments?.getString(COUNTRY_NAME)
-                        val args = bundleOf(COUNTRY_NAME to countryName)
+                        val countyValue = arguments?.getString(COUNTRY_NAME)
+                        val args = bundleOf(COUNTRY_NAME to countyValue)
                         findNavController().navigate(R.id.selectRegionFragment, args)
                     }
                 }

@@ -9,4 +9,8 @@ interface SharedPreferencesRepository {
     fun setIndustry(industry: FilterIndustryDto?)
 
     fun resetIndustry()
+
+    fun setValue(key: String, value: String?)
+
+    fun getValue(key: String): String?
 }

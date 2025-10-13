@@ -14,19 +14,14 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
     private val _workplace: MutableLiveData<List<Workplace>> = MutableLiveData<List<Workplace>>()
 
     val workplace: LiveData<List<Workplace>> = _workplace
-    var countyValue: String? = null
-    var regionValue: String? = null
 
-    fun uploadWorkplace(regionValue: String?, countryValue: String?) {
-        this.countyValue = countryValue
-        this.regionValue = regionValue
+    fun uploadWorkplace(countryValue: String?, regionValue: String?) {
         viewModelScope.launch {
-            _workplace.postValue(workplaceInteractor.getWorkplace(regionValue, countryValue))
+            _workplace.postValue(workplaceInteractor.getWorkplace(countryValue, regionValue))
         }
     }
 
     fun clearCountry() {
-        countyValue = null
         val workplace = _workplace.value.map { place ->
             if (place.type == WorkplaceType.COUNTRY) {
                 place.copy(value = null)
@@ -38,7 +33,6 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
     }
 
     fun clearRegion() {
-        regionValue = null
         val workplace = _workplace.value.map { place ->
             if (place.type == WorkplaceType.REGION) {
                 place.copy(value = null)
@@ -47,5 +41,22 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
             }
         }
         _workplace.postValue(workplace)
+    }
+
+    fun updateWorkplace(country: String?, region: String?) {
+        val workplace = _workplace.value.map { place ->
+            when (place.type) {
+                WorkplaceType.COUNTRY -> {
+                    place.copy(value = country)
+                }
+                WorkplaceType.REGION -> {
+                    place.copy(value = region)
+                }
+            }
+        }
+        _workplace.postValue(workplace)
+        viewModelScope.launch {
+            workplaceInteractor.updateWorkplace(country, region)
+        }
     }
 }

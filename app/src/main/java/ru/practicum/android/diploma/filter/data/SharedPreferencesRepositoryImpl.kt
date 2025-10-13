@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.filter.data
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
@@ -23,6 +24,14 @@ class SharedPreferencesRepositoryImpl(
 
     override fun resetIndustry() {
         sharedPreferences.edit().putString(INDUSTRY_TAG, gson.toJson(DEFAULT_INDUSTRY_JSON)).apply()
+    }
+
+    override fun setValue(key: String, value: String?) {
+        sharedPreferences.edit { putString(key, value) }
+    }
+
+    override fun getValue(key: String): String? {
+        return sharedPreferences.getString(key, null)
     }
 
     companion object {
