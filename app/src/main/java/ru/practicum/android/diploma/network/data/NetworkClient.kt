@@ -7,16 +7,16 @@ import ru.practicum.android.diploma.utils.NetworkUtils
 
 class NetworkClient(private val networkUtils: NetworkUtils) {
 
-    suspend fun <T> doRequest(serviceRequest: suspend () -> T): ApiResult<T> {
+    suspend fun <T> doRequest(serviceRequest: suspend () -> T): ApiResultDto<T> {
         if (networkUtils.isInternetAvailable() == false) {
-            return ApiResult.NoInternetConnection
+            return ApiResultDto.NoInternetConnection
         }
         return withContext(Dispatchers.IO) {
             try {
                 val response = serviceRequest()
-                ApiResult.Success(response)
+                ApiResultDto.Success(response)
             } catch (e: HttpException) {
-                ApiResult.Error(e.code())
+                ApiResultDto.Error(e.code())
             }
         }
     }
