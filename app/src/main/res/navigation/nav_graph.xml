@@ -85,6 +85,9 @@
         <action
             android:id="@+id/action_workplaceFragment_to_selectRegionFragment"
             app:destination="@id/selectRegionFragment" />
+        <action
+            android:id="@+id/action_workplaceFragment_to_mainFilterFragment"
+            app:destination="@id/mainFilterFragment" />
     </fragment>
 
     <fragment

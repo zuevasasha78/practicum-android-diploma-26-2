@@ -2,10 +2,9 @@ package ru.practicum.android.diploma.network.data
 
 import ru.practicum.android.diploma.filter.domain.Workplace
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyResponse
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
-import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
+import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
@@ -35,7 +34,8 @@ object VacancyNetworkConvertor {
             this.pages,
             this.page,
             this.items.map {
-                it.convertToVacancy() }
+                it.convertToVacancy()
+            }
         )
     }
 

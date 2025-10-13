@@ -54,7 +54,7 @@ class WorkplaceFragment : Fragment() {
 
     private fun initBackButton() {
         viewBinding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.mainFilterFragment)
         }
     }
 

@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.filter.domain
 
 import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
-import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.ApiResultDto
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToWorkplace
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
@@ -11,9 +11,9 @@ class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository
     override suspend fun getCountries(): AreaScreenState {
         val result = networkRepository.getAreas()
         return when (result) {
-            is ApiResult.Error<*> -> AreaScreenState.Error
-            ApiResult.NoInternetConnection -> AreaScreenState.Error
-            is ApiResult.Success<List<FilterArea>> -> {
+            is ApiResultDto.Error<*> -> AreaScreenState.Error
+            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
+            is ApiResultDto.Success<List<FilterArea>> -> {
                 if (result.data.isEmpty()) {
                     AreaScreenState.Empty
                 } else {
@@ -26,9 +26,9 @@ class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository
     override suspend fun getRegions(name: String?): AreaScreenState {
         val result = networkRepository.getAreas()
         return when (result) {
-            is ApiResult.Error<*> -> AreaScreenState.Error
-            ApiResult.NoInternetConnection -> AreaScreenState.Error
-            is ApiResult.Success<List<FilterArea>> -> {
+            is ApiResultDto.Error<*> -> AreaScreenState.Error
+            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
+            is ApiResultDto.Success<List<FilterArea>> -> {
                 if (result.data.isEmpty()) {
                     AreaScreenState.Empty
                 } else {
@@ -49,9 +49,9 @@ class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository
     override suspend fun getRegionsByName(name: String): AreaScreenState {
         val result = networkRepository.getAreas()
         return when (result) {
-            is ApiResult.Error<*> -> AreaScreenState.Error
-            ApiResult.NoInternetConnection -> AreaScreenState.Error
-            is ApiResult.Success<List<FilterArea>> -> {
+            is ApiResultDto.Error<*> -> AreaScreenState.Error
+            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
+            is ApiResultDto.Success<List<FilterArea>> -> {
                 if (result.data.isEmpty()) {
                     AreaScreenState.Empty
                 } else {
