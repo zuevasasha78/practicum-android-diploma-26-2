@@ -10,6 +10,16 @@ interface SharedPreferencesRepository {
 
     fun resetIndustry()
 
+    fun getSalary(): String
+
+    fun setSalary(salary: String)
+
+    fun getOnlyWithSalary(): Boolean
+
+    fun setOnlyWithSalary(onlyWithSalary: Boolean)
+
+    fun resetSalarySettings()
+
     fun setValue(key: String, value: String?)
 
     fun getValue(key: String): String?

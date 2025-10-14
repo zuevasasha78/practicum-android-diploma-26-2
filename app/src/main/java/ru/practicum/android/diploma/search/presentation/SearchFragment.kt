@@ -17,9 +17,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
@@ -33,6 +35,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var vacancyAdapter: VacancyAdapter? = null
+    private val sharedPrefInteractor: SharedPrefInteractor by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +49,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setOnMenuItemClickListener(menuListener)
+
+        updateFilterButtonHighlight()
 
         vacancyAdapter = VacancyAdapter(adapterListener)
         binding.vacancyRv.apply {
@@ -182,6 +187,28 @@ class SearchFragment : Fragment() {
             R.id.action_searchFragment_to_vacancyFragment,
             bundleOf(ARG_NAME to it.id)
         )
+    }
+
+    private fun updateFilterButtonHighlight() {
+        val filterButton = binding.toolbar.menu.findItem(R.id.filter_button)
+
+        val hasActiveFilters =
+            sharedPrefInteractor.getChosenIndustry().id != -1 ||
+                sharedPrefInteractor.getSalary().isNotBlank() ||
+                sharedPrefInteractor.getOnlyWithSalary()
+
+        val iconRes = if (hasActiveFilters) {
+            R.drawable.icon_filter_on
+        } else {
+            R.drawable.icon_filter_off
+        }
+
+        filterButton?.setIcon(iconRes)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateFilterButtonHighlight()
     }
 
     override fun onDestroyView() {

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
+import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
@@ -13,7 +15,8 @@ import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
-    private val searchScreenInteractor: SearchScreenInteractor
+    private val searchScreenInteractor: SearchScreenInteractor,
+    private val sharedPrefInteractor: SharedPrefInteractor
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -47,8 +50,19 @@ class SearchViewModel(
         viewModelScope.launch {
             _canLoadNextPage.postValue(false)
             var isLastPage = false
-            val result = searchScreenInteractor.searchVacancy(text, page)
+            val industry = sharedPrefInteractor.getChosenIndustry()
+            val salary = sharedPrefInteractor.getSalary()
+            val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
 
+            val filter = VacanciesFilter(
+                text = text,
+                page = page,
+                industry = if (industry.id != -1) industry.id else null,
+                salary = salary.toIntOrNull(),
+                onlyWithSalary = onlyWithSalary
+            )
+
+            val result = searchScreenInteractor.searchVacancy(filter)
             if (result is SearchScreenState.Success) {
                 isLastPage = result.lastPage == currentPage
                 loadNewItems(page, result)

@@ -65,4 +65,9 @@
     <string name="choosing_work_place">Выбор места работы</string>
     <string name="choosing_country">Выбор страны</string>
     <string name="choosing_region">Выбор региона</string>
+
+   <string name="industry_selection">Выбор отрасли</string>
+    <string name="enter_industry">Введите отрасль</string>
+    <string name="industry_load_error">Ошибка загрузки отраслей</string>
+    <string name="choose">Выбрать</string>
 </resources>
