@@ -7,28 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.bundle.bundleOf
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
-import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
-import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_NAME
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
 class MainFilterFragment : Fragment() {
     private var _binding: FragmentMainFilterBinding? = null
     private val binding get() = _binding!!
     private val mainFilterViewModel by viewModel<MainFilterViewModel>()
-
-    private var country: String? = null
-    private var region: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,14 +81,6 @@ class MainFilterFragment : Fragment() {
         binding.toolbarFilter.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        setFragmentResultListener(PLACE_REQUEST_KEY) { _, bundle ->
-            country = bundle.getString(COUNTRY_RESULT_KEY)
-            region = bundle.getString(REGION_RESULT_KEY)
-            val place = listOfNotNull(country, region)
-                .filter { it.isNotBlank() }
-                .joinToString(", ")
-            mainFilterViewModel.setPlace(place)
-        }
         binding.industryEditText.setOnClickListener {
             findNavController().navigate(R.id.action_mainFilterFragment_to_industriesChooserFragment)
         }
@@ -138,8 +123,11 @@ class MainFilterFragment : Fragment() {
     }
 
     private fun render(filterUIState: FilterUiState) {
-        binding.placeEditText.setText(filterUIState.place)
-        updateFieldState(binding.placeInputLayout, filterUIState.place.isNotEmpty())
+        val place = listOfNotNull(filterUIState.country, filterUIState.region)
+            .filter { it.isNotBlank() }
+            .joinToString(", ")
+        binding.placeEditText.setText(place)
+        updateFieldState(binding.placeInputLayout, filterUIState.country != null || filterUIState.region != null)
 
         binding.industryEditText.setText(filterUIState.industry?.name)
         updateFieldState(binding.industryInputLayout, filterUIState.industry?.name?.isNotEmpty() ?: false)
@@ -155,18 +143,10 @@ class MainFilterFragment : Fragment() {
 
     private fun setPlaceListeners() {
         binding.placeEditText.setOnClickListener {
-            val args = bundleOf(
-                COUNTRY_NAME to country,
-                REGION_NAME to region,
-            )
-            findNavController().navigate(
-                R.id.workplaceFragment,
-                args
-            )
+            findNavController().navigate(R.id.workplaceFragment)
         }
-
         binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setPlace("")
+            mainFilterViewModel.setPlace(null, null)
         }
     }
 
@@ -185,10 +165,6 @@ class MainFilterFragment : Fragment() {
     }
 
     companion object {
-        const val PLACE_REQUEST_KEY = "country_request"
-        const val COUNTRY_RESULT_KEY = "country_result"
-        const val REGION_RESULT_KEY = "region_result"
-
         const val INDUSTRY_REQUEST_KEY = "industry_request"
         const val INDUSTRY_RESULT_KEY = "industry"
     }

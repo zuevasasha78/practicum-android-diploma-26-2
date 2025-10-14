@@ -78,7 +78,17 @@
             app:argType="string"
             app:nullable="true" />
         <argument
+            android:name="countryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
             android:name="regionName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="regionId"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />

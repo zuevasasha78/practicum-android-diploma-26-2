@@ -95,7 +95,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="17dp"
         android:layout_marginBottom="24dp"
-        android:text="@string/industries_chooser_confirm_button"
+        android:text="@string/select_button"
         android:paddingVertical="20dp"
         android:visibility="gone"
         style="@style/button_general"
