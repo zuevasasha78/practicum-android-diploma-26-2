@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
+import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
@@ -53,17 +54,15 @@ class SearchViewModel(
             val salary = sharedPrefInteractor.getSalary()
             val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
 
-            val result = searchScreenInteractor.searchVacancy(
+            val filter = VacanciesFilter(
                 text = text,
                 page = page,
-                industry = if (industry.id != -1) {
-                    industry.id
-                } else {
-                    null
-                },
-                salary = salary,
+                industry = if (industry.id != -1) industry.id else null,
+                salary = salary.toIntOrNull(),
                 onlyWithSalary = onlyWithSalary
             )
+
+            val result = searchScreenInteractor.searchVacancy(filter)
             if (result is SearchScreenState.Success) {
                 isLastPage = result.lastPage == currentPage
                 loadNewItems(page, result)

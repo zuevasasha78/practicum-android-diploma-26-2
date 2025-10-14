@@ -12,23 +12,9 @@ class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository
 ) : SearchScreenInteractor {
 
-    override suspend fun searchVacancy(
-        text: String,
-        page: Int,
-        industry: Int?,
-        salary: String,
-        onlyWithSalary: Boolean
-    ): SearchScreenState {
-        val vacanciesFilter = VacanciesFilter(
-            text = text,
-            page = page,
-            industry = industry,
-            salary = salary.toIntOrNull(),
-            onlyWithSalary = onlyWithSalary
-        )
-
+    override suspend fun searchVacancy(filter: VacanciesFilter): SearchScreenState {
         val res = vacancyNetworkRepository.getVacancies(
-            vacanciesFilter.convertToVacanciesFilterDto()
+            filter.convertToVacanciesFilterDto()
         ).convertToApiResultVacancyResponse()
 
         return when (res) {
