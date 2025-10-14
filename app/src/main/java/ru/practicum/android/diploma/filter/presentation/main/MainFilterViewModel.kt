@@ -3,10 +3,14 @@ package ru.practicum.android.diploma.filter.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.practicum.android.diploma.filter.domain.PlaceInteractor
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
-class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor) : ViewModel() {
+class MainFilterViewModel(
+    private val sharedPrefInteractor: SharedPrefInteractor,
+    private val placeInteractor: PlaceInteractor
+) : ViewModel() {
     private val _filters = MutableLiveData(FilterUiState())
     val filters: LiveData<FilterUiState> = _filters
 
@@ -41,6 +45,8 @@ class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor
 
     fun getAllFilters() {
         _filters.value = FilterUiState(
+            country = placeInteractor.getCountry(),
+            region = placeInteractor.getRegion(),
             industry = sharedPrefInteractor.getChosenIndustry().takeIf { it.id != -1 },
             salary = sharedPrefInteractor.getSalary(),
             onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
@@ -55,5 +61,6 @@ class MainFilterViewModel(private val sharedPrefInteractor: SharedPrefInteractor
         _filters.value = FilterUiState()
         sharedPrefInteractor.resetIndustry()
         sharedPrefInteractor.resetSalarySettings()
+        placeInteractor.resetPlace()
     }
 }
