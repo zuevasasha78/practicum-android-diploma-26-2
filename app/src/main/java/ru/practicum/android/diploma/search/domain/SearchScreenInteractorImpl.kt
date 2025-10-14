@@ -12,10 +12,11 @@ class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository
 ) : SearchScreenInteractor {
 
-    override suspend fun searchVacancy(text: String, page: Int): SearchScreenState {
+    override suspend fun searchVacancy(filter: VacanciesFilter): SearchScreenState {
         val res = vacancyNetworkRepository.getVacancies(
-            VacanciesFilter(text = text, page = page).convertToVacanciesFilterDto()
+            filter.convertToVacanciesFilterDto()
         ).convertToApiResultVacancyResponse()
+
         return when (res) {
             is ApiResult.NoInternetConnection -> SearchScreenState.Error(Placeholder.NoInternet)
             is ApiResult.Error -> SearchScreenState.Error(Placeholder.ServerError)

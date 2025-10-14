@@ -9,4 +9,14 @@ interface SharedPreferencesRepository {
     fun setIndustry(industry: FilterIndustryDto?)
 
     fun resetIndustry()
+
+    fun getSalary(): String
+
+    fun setSalary(salary: String)
+
+    fun getOnlyWithSalary(): Boolean
+
+    fun setOnlyWithSalary(onlyWithSalary: Boolean)
+
+    fun resetSalarySettings()
 }
