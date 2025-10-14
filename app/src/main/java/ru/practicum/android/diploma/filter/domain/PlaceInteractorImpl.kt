@@ -10,6 +10,10 @@ class PlaceInteractorImpl(private val sharedPreferences: SharedPreferencesReposi
         return sharedPreferences.getValue(REGION)
     }
 
+    override fun getPlaceId(): Int? {
+        return sharedPreferences.getValue(PLACE_ID)?.toInt()
+    }
+
     override fun resetPlace() {
         sharedPreferences.setValue(COUNTRY, null)
         sharedPreferences.setValue(REGION, null)
@@ -18,5 +22,6 @@ class PlaceInteractorImpl(private val sharedPreferences: SharedPreferencesReposi
     companion object {
         private const val COUNTRY = "country"
         private const val REGION = "region"
+        private const val PLACE_ID = "placeId"
     }
 }

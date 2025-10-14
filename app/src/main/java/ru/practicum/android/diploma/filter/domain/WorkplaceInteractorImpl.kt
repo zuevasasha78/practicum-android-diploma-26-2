@@ -11,13 +11,15 @@ class WorkplaceInteractorImpl(private val sharedPrefer: SharedPreferencesReposit
         )
     }
 
-    override suspend fun updateWorkplace(country: String?, region: String?) {
+    override suspend fun updateWorkplace(country: String?, region: String?, placeId: String?) {
         sharedPrefer.setValue(COUNTRY, country)
         sharedPrefer.setValue(REGION, region)
+        sharedPrefer.setValue(PLACE_ID, placeId)
     }
 
     companion object {
         private const val COUNTRY = "country"
         private const val REGION = "region"
+        private const val PLACE_ID = "placeId"
     }
 }

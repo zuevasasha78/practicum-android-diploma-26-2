@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.PlaceInteractor
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
@@ -17,7 +17,8 @@ import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
     private val searchScreenInteractor: SearchScreenInteractor,
-    private val sharedPrefInteractor: SharedPrefInteractor
+    private val sharedPrefInteractor: SharedPrefInteractor,
+    private val placeInteractor: PlaceInteractor,
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -54,8 +55,16 @@ class SearchViewModel(
             val industry = sharedPrefInteractor.getChosenIndustry()
             val salary = sharedPrefInteractor.getSalary()
             val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
+            val area = placeInteractor.getPlaceId()
 
-            val filter = createFilter(text, page, industry, salary, onlyWithSalary)
+            val filter = VacanciesFilter(
+                area = area,
+                text = text,
+                page = page,
+                industry = if (industry.id != -1) industry.id else null,
+                salary = salary.toIntOrNull(),
+                onlyWithSalary = onlyWithSalary
+            )
 
             val result = searchScreenInteractor.searchVacancy(filter)
             if (result is SearchScreenState.Success) {
@@ -63,14 +72,7 @@ class SearchViewModel(
                 loadNewItems(page, result)
             } else {
                 if (page > 1 && _screenState.value is SearchScreenState.Success) {
-                    val current = _screenState.value as SearchScreenState.Success
-                    val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
-                        is Placeholder.NoInternet -> R.string.check_internet_connection
-                        else -> R.string.error_occurred
-                    }
-                    setScreenState(
-                        current.copy(paginationState = PaginationState.Error(errorMessage))
-                    )
+                    loadNextPage(result)
                 } else {
                     setScreenState(result)
                 }
@@ -80,19 +82,16 @@ class SearchViewModel(
         }
     }
 
-    private fun createFilter(
-        text: String,
-        page: Int,
-        industry: FilterIndustry,
-        salary: String,
-        onlyWithSalary: Boolean
-    ): VacanciesFilter = VacanciesFilter(
-        text = text,
-        page = page,
-        industry = if (industry.id != -1) industry.id else null,
-        salary = salary.toIntOrNull(),
-        onlyWithSalary = onlyWithSalary
-    )
+    private fun loadNextPage(result: SearchScreenState) {
+        val current = _screenState.value as SearchScreenState.Success
+        val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
+            is Placeholder.NoInternet -> R.string.check_internet_connection
+            else -> R.string.error_occurred
+        }
+        setScreenState(
+            current.copy(paginationState = PaginationState.Error(errorMessage))
+        )
+    }
 
     private fun loadNewItems(page: Int, result: SearchScreenState.Success) {
         if (page > 1 && _screenState.value is SearchScreenState.Success) {

@@ -43,7 +43,7 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
         _workplace.postValue(workplace)
     }
 
-    fun updateWorkplace(country: String?, region: String?) {
+    fun updateWorkplace(country: String?, region: String?, placeId: String?) {
         val workplace = _workplace.value.map { place ->
             when (place.type) {
                 WorkplaceType.COUNTRY -> {
@@ -56,7 +56,7 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
         }
         _workplace.postValue(workplace)
         viewModelScope.launch {
-            workplaceInteractor.updateWorkplace(country, region)
+            workplaceInteractor.updateWorkplace(country, region, placeId)
         }
     }
 }

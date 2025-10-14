@@ -59,13 +59,20 @@ class WorkplaceFragment : Fragment() {
             val country = workplaces.find { it.type == WorkplaceType.COUNTRY }?.value
             val region = workplaces.find { it.type == WorkplaceType.REGION }?.value
 
+            val countryId = arguments?.getString(COUNTRY_ID)
+            val regionId = arguments?.getString(REGION_ID)
+            val placeId = if (regionId != null) {
+                regionId
+            } else {
+                countryId
+            }
             if (country != null || region != null) {
                 viewBinding.confirmButton.isVisible = true
             } else {
                 viewBinding.confirmButton.isVisible = false
             }
             viewBinding.confirmButton.setOnClickListener {
-                viewModel.updateWorkplace(country, region)
+                viewModel.updateWorkplace(country, region, placeId)
                 findNavController().popBackStack(R.id.mainFilterFragment, false)
             }
         }
@@ -116,6 +123,8 @@ class WorkplaceFragment : Fragment() {
 
     companion object {
         const val COUNTRY_NAME = "countryName"
+        const val COUNTRY_ID = "countryId"
+        const val REGION_ID = "regionId"
         const val REGION_NAME = "regionName"
     }
 }

@@ -45,6 +45,7 @@ class MainFilterViewModel(
 
     fun getAllFilters() {
         _filters.value = FilterUiState(
+            placeId = placeInteractor.getPlaceId(),
             country = placeInteractor.getCountry(),
             region = placeInteractor.getRegion(),
             industry = sharedPrefInteractor.getChosenIndustry().takeIf { it.id != -1 },

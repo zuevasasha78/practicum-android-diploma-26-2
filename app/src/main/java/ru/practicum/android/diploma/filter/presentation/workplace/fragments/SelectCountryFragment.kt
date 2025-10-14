@@ -15,7 +15,9 @@ import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
 import ru.practicum.android.diploma.filter.domain.Workplace
 import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
 import ru.practicum.android.diploma.filter.presentation.workplace.adapter.WorkplaceAdapter
+import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_ID
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
+import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_ID
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_NAME
 import ru.practicum.android.diploma.filter.presentation.workplace.models.AreaPlaceholder
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.SelectCountryViewModel
@@ -94,7 +96,9 @@ class SelectCountryFragment : Fragment() {
         workplaceAdapter = WorkplaceAdapter { place ->
             val args = bundleOf(
                 COUNTRY_NAME to place.value,
+                COUNTRY_ID to place.id.toString(),
                 REGION_NAME to null,
+                REGION_ID to null,
             )
             findNavController().navigate(R.id.workplaceFragment, args)
         }
