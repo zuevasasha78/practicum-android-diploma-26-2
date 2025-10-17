@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_chooser">
         <argument
             android:name="type"
-            app:argType="ru.practicum.android.diploma.filter.domain.ChooserType"/>
+            app:argType="ru.practicum.android.diploma.filter.domain.model.ChooserType"/>
     </fragment>
     <fragment
         android:id="@+id/mainFilterFragment"
@@ -55,20 +55,71 @@
         android:label="MainFilterFragment"
         tools:layout="@layout/fragment_main_filter">
         <action
-            android:id="@+id/action_mainFilterFragment_to_workPlaceFragment"
-            app:destination="@id/workPlaceFragment" />
+            android:id="@+id/action_mainFilterFragment_to_workplaceFragment"
+            app:destination="@id/workplaceFragment" />
         <action
-            android:id="@+id/action_mainFilterFragment_to_chooserFragment"
-            app:destination="@id/chooserFragment" />
+            android:id="@+id/action_mainFilterFragment_to_industriesChooserFragment"
+            app:destination="@id/industriesChooserFragment" />
+        <action
+            android:id="@+id/action_mainFilterFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workplaceFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment"
+        android:label="WorkplaceFragment">
+        <action
+            android:id="@+id/action_workplaceFragment_to_selectionFragment"
+            app:destination="@id/selectCountryFragment" />
+        <argument
+            android:name="countryName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="countryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="regionName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="regionId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_workplaceFragment_to_selectRegionFragment"
+            app:destination="@id/selectRegionFragment" />
+        <action
+            android:id="@+id/action_workplaceFragment_to_mainFilterFragment"
+            app:destination="@id/mainFilterFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectCountryFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.workplace.fragments.SelectCountryFragment"
+        android:label="SelectionFragment">
+        <action
+            android:id="@+id/action_selectCountryFragment_to_workplaceFragment"
+            app:destination="@id/workplaceFragment" />
+        <argument
+            android:name="countryName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/workPlaceFragment"
-        android:name="ru.practicum.android.diploma.filter.presentation.workplace.WorkPlaceFragment"
-        android:label="WorkPlaceFragment"
-        tools:layout="@layout/fragment_work_place">
-        <action
-            android:id="@+id/action_workPlaceFragment_to_chooserFragment"
-            app:destination="@id/chooserFragment"
-            />
-    </fragment>
+        android:id="@+id/selectRegionFragment"
+        android:name="ru.practicum.android.diploma.filter.presentation.workplace.fragments.SelectRegionFragment"
+        android:label="SelectRegionFragment" />
+    <fragment
+        android:id="@+id/industriesChooserFragment"
+        tools:layout="@layout/fragment_industries_chooser"
+        android:name="ru.practicum.android.diploma.filter.presentation.chooser.industries.IndustriesChooserFragment"
+        android:label="IndustriesChooserFragment" />
 </navigation>

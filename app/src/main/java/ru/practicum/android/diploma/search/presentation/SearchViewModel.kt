@@ -6,14 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.PlaceInteractor
+import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
+import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.models.SearchPlaceholder
+import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
-    private val searchScreenInteractor: SearchScreenInteractor
+    private val searchScreenInteractor: SearchScreenInteractor,
+    private val sharedPrefInteractor: SharedPrefInteractor,
+    private val placeInteractor: PlaceInteractor,
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -47,21 +52,27 @@ class SearchViewModel(
         viewModelScope.launch {
             _canLoadNextPage.postValue(false)
             var isLastPage = false
-            val result = searchScreenInteractor.searchVacancy(text, page)
+            val industry = sharedPrefInteractor.getChosenIndustry()
+            val salary = sharedPrefInteractor.getSalary()
+            val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
+            val area = placeInteractor.getPlaceId()
 
+            val filter = VacanciesFilter(
+                area = area,
+                text = text,
+                page = page,
+                industry = if (industry.id != -1) industry.id else null,
+                salary = salary.toIntOrNull(),
+                onlyWithSalary = onlyWithSalary
+            )
+
+            val result = searchScreenInteractor.searchVacancy(filter)
             if (result is SearchScreenState.Success) {
                 isLastPage = result.lastPage == currentPage
                 loadNewItems(page, result)
             } else {
                 if (page > 1 && _screenState.value is SearchScreenState.Success) {
-                    val current = _screenState.value as SearchScreenState.Success
-                    val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
-                        is SearchPlaceholder.NoInternet -> R.string.check_internet_connection
-                        else -> R.string.error_occurred
-                    }
-                    setScreenState(
-                        current.copy(paginationState = PaginationState.Error(errorMessage))
-                    )
+                    loadNextPage(result)
                 } else {
                     setScreenState(result)
                 }
@@ -69,6 +80,17 @@ class SearchViewModel(
 
             _canLoadNextPage.postValue(!isLastPage)
         }
+    }
+
+    private fun loadNextPage(result: SearchScreenState) {
+        val current = _screenState.value as SearchScreenState.Success
+        val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
+            is Placeholder.NoInternet -> R.string.check_internet_connection
+            else -> R.string.error_occurred
+        }
+        setScreenState(
+            current.copy(paginationState = PaginationState.Error(errorMessage))
+        )
     }
 
     private fun loadNewItems(page: Int, result: SearchScreenState.Success) {

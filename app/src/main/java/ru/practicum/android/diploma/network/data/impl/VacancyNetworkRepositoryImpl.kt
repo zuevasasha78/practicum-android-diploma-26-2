@@ -1,11 +1,11 @@
 package ru.practicum.android.diploma.network.data.impl
 
-import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.ApiResultDto
 import ru.practicum.android.diploma.network.data.DiplomaApiService
 import ru.practicum.android.diploma.network.data.NetworkClient
 import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterArea
-import ru.practicum.android.diploma.network.data.dto.response.FilterIndustry
+import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
@@ -15,19 +15,19 @@ class VacancyNetworkRepositoryImpl(
     private val diplomaApiService: DiplomaApiService
 ) : VacancyNetworkRepository {
 
-    override suspend fun getAreas(): ApiResult<List<FilterArea>> {
+    override suspend fun getAreas(): ApiResultDto<List<FilterArea>> {
         return networkClient.doRequest { diplomaApiService.getAreas() }
     }
 
-    override suspend fun getIndustries(): ApiResult<List<FilterIndustry>> {
+    override suspend fun getIndustries(): ApiResultDto<List<FilterIndustryDto>> {
         return networkClient.doRequest { diplomaApiService.getIndustries() }
     }
 
-    override suspend fun getVacancy(id: String): ApiResult<VacancyDetailDto> {
+    override suspend fun getVacancy(id: String): ApiResultDto<VacancyDetailDto> {
         return networkClient.doRequest { diplomaApiService.getVacancy(id) }
     }
 
-    override suspend fun getVacancies(vacanciesFilterDto: VacanciesFilterDto): ApiResult<VacancyResponseDto> {
+    override suspend fun getVacancies(vacanciesFilterDto: VacanciesFilterDto): ApiResultDto<VacancyResponseDto> {
         val map = mutableMapOf<String, String>()
         vacanciesFilterDto.area?.let { map["area"] = it.toString() }
         vacanciesFilterDto.industry?.let { map["industry"] = it.toString() }

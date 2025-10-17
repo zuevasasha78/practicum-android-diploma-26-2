@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.vacancy.domain
 
 import android.util.Log
 import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
-import ru.practicum.android.diploma.network.data.ApiResult
+import ru.practicum.android.diploma.network.data.ApiResultDto
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyDetail
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
@@ -22,19 +22,19 @@ class VacancyInteractor(
                 return VacancyState.Content(favoriteVacancy)
             }
             when (val result = networkRepository.getVacancy(vacancyId)) {
-                is ApiResult.Success -> {
+                is ApiResultDto.Success -> {
                     val vacancyDetail = result.data.convertToVacancyDetail()
                     VacancyState.Content(vacancyDetail)
                 }
 
-                is ApiResult.Error -> {
+                is ApiResultDto.Error -> {
                     if (result.code == CODE_404) {
                         VacancyState.VacancyNotFound
                     } else {
                         VacancyState.ServerError
                     }
                 }
-                is ApiResult.NoInternetConnection -> VacancyState.NoInternet
+                is ApiResultDto.NoInternetConnection -> VacancyState.NoInternet
             }
         } catch (e: SocketTimeoutException) {
             Log.e("VacancyInteractor", "Unknown error for vacancy $vacancyId", e)
