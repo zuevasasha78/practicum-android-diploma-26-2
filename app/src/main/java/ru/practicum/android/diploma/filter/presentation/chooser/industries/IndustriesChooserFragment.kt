@@ -56,7 +56,6 @@ class IndustriesChooserFragment : Fragment() {
         setupConfirmButton()
     }
 
-
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
