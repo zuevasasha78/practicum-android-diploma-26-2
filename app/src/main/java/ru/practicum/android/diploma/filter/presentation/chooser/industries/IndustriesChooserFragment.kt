@@ -24,7 +24,7 @@ class IndustriesChooserFragment : Fragment() {
     private var _binding: FragmentIndustriesChooserBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<IndustriesChooserViewModel>()
-    private lateinit var adapter: IndustriesAdapter
+    private var adapter: IndustriesAdapter? = null
     private var fullList: List<FilterIndustry> = emptyList()
 
     override fun onCreateView(
@@ -36,17 +36,26 @@ class IndustriesChooserFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = IndustriesAdapter(
+            selectedIndustry = viewModel.getIndustry().takeIf { it.id != -1 },
+            listener = object : IndustriesAdapter.IndustryAdapterListener {
+                override fun onIndustrySelected(industry: FilterIndustry) {
+                    viewModel.selectIndustry(industry)
+                    binding.confirmButton.isVisible = true
+                }
+            }
+        )
+
         setupToolbar()
         setupAdapter()
         setupObservers()
         setupSearchField()
         setupConfirmButton()
     }
+
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
@@ -72,13 +81,13 @@ class IndustriesChooserFragment : Fragment() {
             when (state) {
                 is IndustriesChooserScreenState.Loading -> setLoadingState()
                 is IndustriesChooserScreenState.Success -> setSuccessState(state.industries, state.isChosen)
-                is IndustriesChooserScreenState.Empty -> setEmptyState() // Новое состояние
+                is IndustriesChooserScreenState.Empty -> setEmptyState()
                 is IndustriesChooserScreenState.Error -> setErrorState(state.placeholder)
             }
         }
 
         viewModel.selectedIndustry.observe(viewLifecycleOwner) { selectedIndustry ->
-            adapter.updateSelectedIndustry(selectedIndustry)
+            adapter?.updateSelectedIndustry(selectedIndustry)
             binding.confirmButton.isVisible = selectedIndustry != null
         }
     }
@@ -127,7 +136,7 @@ class IndustriesChooserFragment : Fragment() {
 
     private fun setSuccessState(list: List<FilterIndustry>, isChosen: Boolean) {
         fullList = list
-        adapter.setList(list)
+        adapter?.setList(list)
         binding.confirmButton.isVisible = isChosen
         binding.placeholder.root.isVisible = false
         binding.industryNotFoundPlaceholder.isVisible = false
@@ -136,7 +145,6 @@ class IndustriesChooserFragment : Fragment() {
     }
 
     private fun setEmptyState() {
-        // Показываем кастомный placeholder для пустого списка
         binding.placeholder.root.isVisible = false
         binding.industryNotFoundPlaceholder.isVisible = true
         binding.progressBar.isVisible = false
