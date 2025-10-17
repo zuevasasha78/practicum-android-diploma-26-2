@@ -15,7 +15,11 @@ class IndustriesInteractorImpl(
             is ApiResult.NoInternetConnection -> IndustriesChooserScreenState.Error(Placeholder.NoInternet)
             is ApiResult.Error -> IndustriesChooserScreenState.Error(Placeholder.ServerError)
             is ApiResult.Success -> {
-                IndustriesChooserScreenState.Success(res.data)
+                if (res.data.isEmpty()) {
+                    IndustriesChooserScreenState.Empty
+                } else {
+                    IndustriesChooserScreenState.Success(res.data)
+                }
             }
         }
     }

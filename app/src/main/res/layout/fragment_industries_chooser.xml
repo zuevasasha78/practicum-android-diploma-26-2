@@ -63,6 +63,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_layout" />
 
+    <LinearLayout
+        android:id="@+id/industry_not_found_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="135dp"
+        android:layout_marginHorizontal="@dimen/_16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_layout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/no_result_placeholder"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/industry_not_found"
+            style="@style/vacancy_text_22_medium"
+            android:layout_marginTop="@dimen/_16dp"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+    
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/industries_rv"
         android:layout_width="match_parent"
