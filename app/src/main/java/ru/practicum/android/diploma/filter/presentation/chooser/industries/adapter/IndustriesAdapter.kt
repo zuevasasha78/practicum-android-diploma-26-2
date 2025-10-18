@@ -9,14 +9,14 @@ import ru.practicum.android.diploma.databinding.IndustryItemBinding
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
 class IndustriesAdapter(
-    private var selectedIndustry: FilterIndustry?,
     private val listener: IndustryAdapterListener
 ) : ListAdapter<FilterIndustry, IndustriesAdapter.IndustryViewHolder>(DiffCallback) {
 
-    private var industriesList: List<FilterIndustry> = emptyList()
+    private var selectedIndustry: FilterIndustry? = null
 
     interface IndustryAdapterListener {
         fun onIndustrySelected(industry: FilterIndustry)
+        fun onIndustryDeselected()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryViewHolder {
@@ -30,16 +30,12 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustryViewHolder, position: Int) {
         val industry = getItem(position)
-        holder.bind(industry, isSelected = selectedIndustry?.id == industry.id)
+        val isSelected = selectedIndustry?.id == industry.id
+        holder.bind(industry, isSelected)
     }
 
     fun setList(newList: List<FilterIndustry>) {
-        industriesList = newList
         submitList(newList)
-    }
-
-    fun getChosenIndustry(): FilterIndustry {
-        return selectedIndustry ?: FilterIndustry(-1, "")
     }
 
     fun updateSelectedIndustry(industry: FilterIndustry?) {
@@ -56,9 +52,15 @@ class IndustriesAdapter(
             binding.radioButton.isChecked = isSelected
 
             binding.root.setOnClickListener {
-                selectedIndustry = industry
-                notifyDataSetChanged()
-                listener.onIndustrySelected(industry)
+                if (isSelected) {
+                    selectedIndustry = null
+                    notifyDataSetChanged()
+                    listener.onIndustryDeselected()
+                } else {
+                    selectedIndustry = industry
+                    notifyDataSetChanged()
+                    listener.onIndustrySelected(industry)
+                }
             }
         }
     }

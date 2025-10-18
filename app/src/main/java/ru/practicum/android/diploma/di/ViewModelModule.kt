@@ -16,7 +16,7 @@ val viewModelModule = module {
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { VacancyViewModel(get(), get()) }
     viewModel { FavouriteVacanciesViewModel(get()) }
-    viewModel { IndustriesChooserViewModel(get(), get()) }
+    viewModel { IndustriesChooserViewModel(get()) }
     viewModel { MainFilterViewModel(get(), get()) }
     viewModel { SelectCountryViewModel(get()) }
     viewModel { WorkplaceViewModel(get()) }

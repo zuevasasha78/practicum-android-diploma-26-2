@@ -25,7 +25,6 @@ class IndustriesChooserFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<IndustriesChooserViewModel>()
     private var adapter: IndustriesAdapter? = null
-    private var fullList: List<FilterIndustry> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,18 +35,11 @@ class IndustriesChooserFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = IndustriesAdapter(
-            selectedIndustry = viewModel.getIndustry().takeIf { it.id != -1 },
-            listener = object : IndustriesAdapter.IndustryAdapterListener {
-                override fun onIndustrySelected(industry: FilterIndustry) {
-                    viewModel.selectIndustry(industry)
-                    binding.confirmButton.isVisible = true
-                }
-            }
-        )
 
         setupToolbar()
         setupAdapter()
@@ -64,15 +56,20 @@ class IndustriesChooserFragment : Fragment() {
 
     private fun setupAdapter() {
         adapter = IndustriesAdapter(
-            selectedIndustry = viewModel.getIndustry().takeIf { it.id != -1 },
             listener = object : IndustriesAdapter.IndustryAdapterListener {
                 override fun onIndustrySelected(industry: FilterIndustry) {
                     viewModel.selectIndustry(industry)
-                    binding.confirmButton.isVisible = true
+                }
+
+                override fun onIndustryDeselected() {
+                    viewModel.clearSelection()
                 }
             }
         )
         binding.industriesRv.adapter = adapter
+        viewModel.getSelectedIndustry()?.let { selectedIndustry ->
+            adapter?.updateSelectedIndustry(selectedIndustry)
+        }
     }
 
     private fun setupObservers() {
@@ -84,16 +81,9 @@ class IndustriesChooserFragment : Fragment() {
                 is IndustriesChooserScreenState.Error -> setErrorState(state.placeholder)
             }
         }
-
-        viewModel.selectedIndustry.observe(viewLifecycleOwner) { selectedIndustry ->
-            adapter?.updateSelectedIndustry(selectedIndustry)
-            binding.confirmButton.isVisible = selectedIndustry != null
-        }
     }
 
     private fun setupSearchField() {
-        binding.editText.hint = getString(R.string.enter_industry)
-
         binding.editText.addTextChangedListener(
             beforeTextChanged = { _: CharSequence?, _: Int, _: Int, _: Int -> },
             onTextChanged = { text: CharSequence?, _: Int, _: Int, _: Int ->
@@ -114,38 +104,37 @@ class IndustriesChooserFragment : Fragment() {
 
     private fun setupConfirmButton() {
         binding.confirmButton.setOnClickListener {
-            val selectedIndustry = viewModel.selectedIndustry.value
-            if (selectedIndustry != null) {
-                viewModel.setIndustryId(selectedIndustry)
-            }
+            viewModel.saveSelectedIndustry()
             findNavController().popBackStack()
         }
 
-        val initialIndustry = viewModel.getIndustry()
-        binding.confirmButton.isVisible = initialIndustry.id != -1
+        val initialIndustry = viewModel.getSelectedIndustry()
+        binding.confirmButton.isVisible = initialIndustry != null
     }
 
     private fun setLoadingState() {
         binding.placeholder.root.isVisible = false
-        binding.industryNotFoundPlaceholder.isVisible = false
         binding.progressBar.isVisible = true
         binding.industriesRv.isVisible = false
         binding.confirmButton.isVisible = false
     }
 
     private fun setSuccessState(list: List<FilterIndustry>, isChosen: Boolean) {
-        fullList = list
         adapter?.setList(list)
+        viewModel.getSelectedIndustry()?.let { selectedIndustry ->
+            adapter?.updateSelectedIndustry(selectedIndustry)
+        }
+
         binding.confirmButton.isVisible = isChosen
         binding.placeholder.root.isVisible = false
-        binding.industryNotFoundPlaceholder.isVisible = false
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = true
     }
 
     private fun setEmptyState() {
-        binding.placeholder.root.isVisible = false
-        binding.industryNotFoundPlaceholder.isVisible = true
+        binding.placeholder.image.setImageResource(R.drawable.no_result_placeholder)
+        binding.placeholder.placeholderText.setText(R.string.industry_not_found)
+        binding.placeholder.root.isVisible = true
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = false
         binding.confirmButton.isVisible = false
@@ -155,7 +144,6 @@ class IndustriesChooserFragment : Fragment() {
         binding.placeholder.image.setImageResource(placeholder.image)
         placeholder.text?.let { binding.placeholder.placeholderText.setText(it) }
         binding.placeholder.root.isVisible = true
-        binding.industryNotFoundPlaceholder.isVisible = false
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = false
         binding.confirmButton.isVisible = false
@@ -171,5 +159,6 @@ class IndustriesChooserFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        adapter = null
     }
 }
