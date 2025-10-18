@@ -6,41 +6,83 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.IndustriesInteractor
-import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
 class IndustriesChooserViewModel(
-    private val industriesInteractor: IndustriesInteractor,
-    private val sharedPrefInteractor: SharedPrefInteractor
+    private val industriesInteractor: IndustriesInteractor
 ) : ViewModel() {
-
     private val _screenState: MutableLiveData<IndustriesChooserScreenState> = MutableLiveData(
         IndustriesChooserScreenState.Loading
     )
     val screenState: LiveData<IndustriesChooserScreenState> get() = _screenState
 
+    private var allIndustries: List<FilterIndustry> = emptyList()
+    private var selectedIndustry: FilterIndustry? = industriesInteractor.getSelectedIndustry().takeIf { it.id != -1 }
+
     init {
+        loadIndustries()
+    }
+
+    private fun loadIndustries() {
         viewModelScope.launch {
-            _screenState.postValue(industriesInteractor.getIndustries())
-        }
-    }
-
-    fun getIndustry(): FilterIndustry {
-        return sharedPrefInteractor.getChosenIndustry()
-    }
-
-    fun setIndustryId(industry: FilterIndustry) {
-        sharedPrefInteractor.setIndustry(industry)
-    }
-
-    fun setButtonVisible() {
-        when (_screenState.value) {
-            is IndustriesChooserScreenState.Success -> {
-                _screenState.value = (_screenState.value as IndustriesChooserScreenState.Success).copy(isChosen = true)
+            _screenState.value = industriesInteractor.getIndustries()
+            val currentState = _screenState.value
+            if (currentState is IndustriesChooserScreenState.Success) {
+                allIndustries = currentState.industries
             }
-
-            else -> {}
         }
+    }
+
+    fun selectIndustry(industry: FilterIndustry) {
+        selectedIndustry = industry
+        updateScreenStateWithSelection(true)
+    }
+
+    fun clearSelection() {
+        selectedIndustry = null
+        updateScreenStateWithSelection(false)
+    }
+
+    fun filterIndustries(query: String) {
+        val filteredList = if (query.isBlank()) {
+            allIndustries
+        } else {
+            allIndustries.filter { industry ->
+                industry.name.contains(query, ignoreCase = true)
+            }
+        }
+
+        val isSelectedIndustryInFilteredList = selectedIndustry?.let { selected ->
+            filteredList.any { it.id == selected.id }
+        } ?: false
+
+        _screenState.value = if (filteredList.isEmpty()) {
+            IndustriesChooserScreenState.Empty
+        } else {
+            IndustriesChooserScreenState.Success(
+                industries = filteredList,
+                isChosen = isSelectedIndustryInFilteredList
+            )
+        }
+    }
+
+    private fun updateScreenStateWithSelection(isChosen: Boolean) {
+        val currentState = _screenState.value
+        if (currentState is IndustriesChooserScreenState.Success) {
+            _screenState.value = currentState.copy(isChosen = isChosen)
+        }
+    }
+
+    fun saveSelectedIndustry() {
+        selectedIndustry?.let { industry ->
+            industriesInteractor.saveSelectedIndustry(industry)
+        } ?: run {
+            industriesInteractor.clearSelectedIndustry()
+        }
+    }
+
+    fun getSelectedIndustry(): FilterIndustry? {
+        return selectedIndustry
     }
 }
