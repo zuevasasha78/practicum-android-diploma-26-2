@@ -43,9 +43,13 @@ class SelectRegionViewModel(private val locationInteractor: LocationInteractor) 
                     is AreaResult.Error -> LocationScreenState.Error
                     is AreaResult.Success -> {
                         val locationUis = areaResult.areas.map { it.convertToLocationUi() }
-                        LocationScreenState.Content(
-                            locationUis
-                        )
+                        if (locationUis.isEmpty()) {
+                            LocationScreenState.Empty
+                        } else {
+                            LocationScreenState.Content(
+                                locationUis
+                            )
+                        }
                     }
                 }
                 _regions.postValue(locationScreenState)
