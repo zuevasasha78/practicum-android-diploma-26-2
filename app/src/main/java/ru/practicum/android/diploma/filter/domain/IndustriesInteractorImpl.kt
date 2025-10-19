@@ -29,15 +29,15 @@ class IndustriesInteractorImpl(
         }
     }
 
-    override fun getSelectedIndustry(): FilterIndustry {
+    override suspend fun getSelectedIndustry(): FilterIndustry {
         return sharedPrefInteractor.getChosenIndustry()
     }
 
-    override fun saveSelectedIndustry(industry: FilterIndustry) {
+    override suspend fun saveSelectedIndustry(industry: FilterIndustry) {
         sharedPrefInteractor.setIndustry(industry)
     }
 
-    override fun clearSelectedIndustry() {
+    override suspend fun clearSelectedIndustry() {
         sharedPrefInteractor.resetIndustry()
     }
 }

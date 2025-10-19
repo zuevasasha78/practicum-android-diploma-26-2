@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 interface IndustriesInteractor {
 
     suspend fun getIndustries(): IndustriesChooserScreenState
-    fun getSelectedIndustry(): FilterIndustry
-    fun saveSelectedIndustry(industry: FilterIndustry)
-    fun clearSelectedIndustry()
+    suspend fun getSelectedIndustry(): FilterIndustry
+    suspend fun saveSelectedIndustry(industry: FilterIndustry)
+    suspend fun clearSelectedIndustry()
 }
