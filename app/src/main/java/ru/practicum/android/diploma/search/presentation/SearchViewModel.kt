@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.filter.domain.PlaceInteractor
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
+import ru.practicum.android.diploma.filter.domain.workplace.WorkplaceInteractor
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
@@ -18,7 +18,7 @@ import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 class SearchViewModel(
     private val searchScreenInteractor: SearchScreenInteractor,
     private val sharedPrefInteractor: SharedPrefInteractor,
-    private val placeInteractor: PlaceInteractor,
+    private val workplaceInteractor: WorkplaceInteractor
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -55,7 +55,7 @@ class SearchViewModel(
             val industry = sharedPrefInteractor.getChosenIndustry()
             val salary = sharedPrefInteractor.getSalary()
             val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
-            val area = placeInteractor.getPlaceId()
+            val area = workplaceInteractor.getPlaceId()
 
             val filter = VacanciesFilter(
                 area = area,

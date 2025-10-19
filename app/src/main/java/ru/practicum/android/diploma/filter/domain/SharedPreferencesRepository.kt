@@ -20,7 +20,6 @@ interface SharedPreferencesRepository {
 
     fun resetSalarySettings()
 
-    fun setValue(key: String, value: String?)
-
-    fun getValue(key: String): String?
+    fun <T> setValue(key: String, value: T?)
+    fun <T> getValue(key: String, clazz: Class<T>): T?
 }

@@ -4,25 +4,25 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.PlaceItemViewBinding
-import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceType
+import ru.practicum.android.diploma.filter.presentation.workplace.models.LocationUi
 
-class WorkplaceAdapter(private val clickListener: WorkplaceClickListener) :
-    RecyclerView.Adapter<WorkplaceViewHolder>() {
+class LocationAdapter(private val clickListener: LocationClickListener) :
+    RecyclerView.Adapter<LocationViewHolder>() {
 
-    private var placeItems: List<WorkplaceType> = mutableListOf()
+    private var placeItems: List<LocationUi> = mutableListOf()
 
-    fun setItems(places: List<WorkplaceType>) {
+    fun setItems(places: List<LocationUi>) {
         placeItems = places
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkplaceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = PlaceItemViewBinding.inflate(layoutInflater, parent, false)
-        return WorkplaceViewHolder(binding)
+        return LocationViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: WorkplaceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
         placeItems.getOrNull(position)?.let { place ->
             holder.bind(place)
             holder.itemView.setOnClickListener { clickListener.onPlaceClick(place) }
@@ -33,7 +33,7 @@ class WorkplaceAdapter(private val clickListener: WorkplaceClickListener) :
         return placeItems.size
     }
 
-    fun interface WorkplaceClickListener {
-        fun onPlaceClick(place: WorkplaceType)
+    fun interface LocationClickListener {
+        fun onPlaceClick(place: LocationUi)
     }
 }

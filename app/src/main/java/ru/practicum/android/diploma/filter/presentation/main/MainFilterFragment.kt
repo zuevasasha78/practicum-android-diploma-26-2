@@ -146,7 +146,7 @@ class MainFilterFragment : Fragment() {
             findNavController().navigate(R.id.workplaceFragment)
         }
         binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setPlace(null, null)
+            mainFilterViewModel.clearPlace()
         }
     }
 

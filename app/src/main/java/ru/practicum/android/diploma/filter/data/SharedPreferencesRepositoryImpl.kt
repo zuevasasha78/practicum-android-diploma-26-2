@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.data
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.google.gson.Gson
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
@@ -53,12 +52,14 @@ class SharedPreferencesRepositoryImpl(
             .apply()
     }
 
-    override fun setValue(key: String, value: String?) {
-        sharedPreferences.edit { putString(key, value) }
+    override fun <T> setValue(key: String, value: T?) {
+        val json = gson.toJson(value)
+        return sharedPreferences.edit().putString(key, json).apply()
     }
 
-    override fun getValue(key: String): String? {
-        return sharedPreferences.getString(key, null)
+    override fun <T> getValue(key: String, clazz: Class<T>): T? {
+        val json = sharedPreferences.getString(key, null)
+        return json?.let { gson.fromJson(it, clazz) }
     }
 
     companion object {
