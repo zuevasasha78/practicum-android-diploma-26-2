@@ -1,68 +1,54 @@
 package ru.practicum.android.diploma.filter.domain
 
 import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
-import ru.practicum.android.diploma.network.data.ApiResultDto
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultFilterArea
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToWorkplace
-import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
+import ru.practicum.android.diploma.network.domain.models.ApiResult
 
 class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository) : AreaInteractor {
 
     override suspend fun getCountries(): AreaScreenState {
-        val result = networkRepository.getAreas()
-        return when (result) {
-            is ApiResultDto.Error<*> -> AreaScreenState.Error
-            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
-            is ApiResultDto.Success<List<FilterArea>> -> {
-                if (result.data.isEmpty()) {
-                    AreaScreenState.Empty
-                } else {
-                    AreaScreenState.Content(result.data.convertToWorkplace())
-                }
-            }
+        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+            is ApiResult.ServerError -> AreaScreenState.Error
+            is ApiResult.NoInternetConnection -> AreaScreenState.Error
+            is ApiResult.Success -> AreaScreenState.Content(res.data.convertToWorkplace())
+            is ApiResult.NotFound -> AreaScreenState.Empty
         }
     }
 
     override suspend fun getRegions(name: String?): AreaScreenState {
-        val result = networkRepository.getAreas()
-        return when (result) {
-            is ApiResultDto.Error<*> -> AreaScreenState.Error
-            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
-            is ApiResultDto.Success<List<FilterArea>> -> {
-                if (result.data.isEmpty()) {
-                    AreaScreenState.Empty
+        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+            is ApiResult.ServerError -> AreaScreenState.Error
+            is ApiResult.NoInternetConnection -> AreaScreenState.Error
+            is ApiResult.Success -> {
+                if (name != null) {
+                    val data = res.data.first {
+                        it.name == name
+                    }.areas
+                    AreaScreenState.Content(data.convertToWorkplace())
                 } else {
-                    if (name != null) {
-                        val data = result.data.first {
-                            it.name == name
-                        }.areas
-                        AreaScreenState.Content(data.convertToWorkplace())
-                    } else {
-                        val data = result.data.flatMap { it.areas }
-                        AreaScreenState.Content(data.convertToWorkplace())
-                    }
+                    val data = res.data.flatMap { it.areas }
+                    AreaScreenState.Content(data.convertToWorkplace())
                 }
             }
+            is ApiResult.NotFound -> AreaScreenState.Empty
         }
     }
 
     override suspend fun getRegionsByName(name: String): AreaScreenState {
-        val result = networkRepository.getAreas()
-        return when (result) {
-            is ApiResultDto.Error<*> -> AreaScreenState.Error
-            ApiResultDto.NoInternetConnection -> AreaScreenState.Error
-            is ApiResultDto.Success<List<FilterArea>> -> {
-                if (result.data.isEmpty()) {
+        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+            is ApiResult.ServerError -> AreaScreenState.Error
+            is ApiResult.NoInternetConnection -> AreaScreenState.Error
+            is ApiResult.Success -> {
+                val data = res.data.flatMap { it.areas }.filter { it.name.lowercase().contains(name) }
+                if (data.isEmpty()) {
                     AreaScreenState.Empty
                 } else {
-                    val data = result.data.flatMap { it.areas }.filter { it.name.lowercase().contains(name) }
-                    if (data.isEmpty()) {
-                        AreaScreenState.Empty
-                    } else {
-                        AreaScreenState.Content(data.convertToWorkplace())
-                    }
+                    AreaScreenState.Content(data.convertToWorkplace())
                 }
             }
+            is ApiResult.NotFound -> AreaScreenState.Empty
         }
     }
 }
