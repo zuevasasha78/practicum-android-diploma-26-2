@@ -36,16 +36,6 @@ class IndustriesChooserViewModel(
         }
     }
 
-    private fun loadIndustries() {
-        viewModelScope.launch {
-            _screenState.value = industriesInteractor.getIndustries()
-            val currentState = _screenState.value
-            if (currentState is IndustriesChooserScreenState.Success) {
-                allIndustries = currentState.industries
-            }
-        }
-    }
-
     fun selectIndustry(industry: FilterIndustry) {
         selectedIndustry = industry
         updateScreenStateWithSelection(true)
