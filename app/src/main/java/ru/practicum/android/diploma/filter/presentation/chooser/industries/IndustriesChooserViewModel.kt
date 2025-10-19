@@ -18,10 +18,22 @@ class IndustriesChooserViewModel(
     val screenState: LiveData<IndustriesChooserScreenState> get() = _screenState
 
     private var allIndustries: List<FilterIndustry> = emptyList()
-    private var selectedIndustry: FilterIndustry? = industriesInteractor.getSelectedIndustry().takeIf { it.id != -1 }
+    private var selectedIndustry: FilterIndustry? = null
 
     init {
-        loadIndustries()
+        loadInitialData()
+    }
+
+    private fun loadInitialData() {
+        viewModelScope.launch {
+            val savedIndustry = industriesInteractor.getSelectedIndustry()
+            selectedIndustry = savedIndustry.takeIf { it.id != -1 }
+            _screenState.value = industriesInteractor.getIndustries()
+            val currentState = _screenState.value
+            if (currentState is IndustriesChooserScreenState.Success) {
+                allIndustries = currentState.industries
+            }
+        }
     }
 
     private fun loadIndustries() {
@@ -75,10 +87,12 @@ class IndustriesChooserViewModel(
     }
 
     fun saveSelectedIndustry() {
-        selectedIndustry?.let { industry ->
-            industriesInteractor.saveSelectedIndustry(industry)
-        } ?: run {
-            industriesInteractor.clearSelectedIndustry()
+        viewModelScope.launch {
+            selectedIndustry?.let { industry ->
+                industriesInteractor.saveSelectedIndustry(industry)
+            } ?: run {
+                industriesInteractor.clearSelectedIndustry()
+            }
         }
     }
 

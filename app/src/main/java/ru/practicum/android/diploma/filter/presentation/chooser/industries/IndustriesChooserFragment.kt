@@ -59,17 +59,16 @@ class IndustriesChooserFragment : Fragment() {
             listener = object : IndustriesAdapter.IndustryAdapterListener {
                 override fun onIndustrySelected(industry: FilterIndustry) {
                     viewModel.selectIndustry(industry)
+                    updateConfirmButtonVisibility(true)
                 }
 
                 override fun onIndustryDeselected() {
                     viewModel.clearSelection()
+                    updateConfirmButtonVisibility(false)
                 }
             }
         )
         binding.industriesRv.adapter = adapter
-        viewModel.getSelectedIndustry()?.let { selectedIndustry ->
-            adapter?.updateSelectedIndustry(selectedIndustry)
-        }
     }
 
     private fun setupObservers() {
@@ -108,8 +107,7 @@ class IndustriesChooserFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val initialIndustry = viewModel.getSelectedIndustry()
-        binding.confirmButton.isVisible = initialIndustry != null
+        binding.confirmButton.isVisible = false
     }
 
     private fun setLoadingState() {
@@ -125,7 +123,7 @@ class IndustriesChooserFragment : Fragment() {
             adapter?.updateSelectedIndustry(selectedIndustry)
         }
 
-        binding.confirmButton.isVisible = isChosen
+        updateConfirmButtonVisibility(isChosen)
         binding.placeholder.root.isVisible = false
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = true
@@ -147,6 +145,10 @@ class IndustriesChooserFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.industriesRv.isVisible = false
         binding.confirmButton.isVisible = false
+    }
+
+    private fun updateConfirmButtonVisibility(isVisible: Boolean) {
+        binding.confirmButton.isVisible = isVisible
     }
 
     private val etEndIconListener = View.OnClickListener {

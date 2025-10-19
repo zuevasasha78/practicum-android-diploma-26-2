@@ -41,4 +41,3 @@ class IndustriesInteractorImpl(
         sharedPrefInteractor.resetIndustry()
     }
 }
-
