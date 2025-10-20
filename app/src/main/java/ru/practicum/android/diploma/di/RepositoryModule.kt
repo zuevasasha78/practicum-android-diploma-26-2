@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.network.data.impl.VacancyNetworkRepositoryIm
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 
 val repositoryModule = module {
-    single<VacancyDbRepository> { VacancyDbRepositoryImpl(get(), get()) }
+    single<VacancyDbRepository> { VacancyDbRepositoryImpl(get()) }
     single<VacancyNetworkRepository> { VacancyNetworkRepositoryImpl(get(), get()) }
     single<SharedPreferencesRepository> { SharedPreferencesRepositoryImpl(get(), get()) }
 }

@@ -1,10 +1,11 @@
 package ru.practicum.android.diploma.db.domain.interactor
 
 import kotlinx.coroutines.flow.Flow
+import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
 interface FavouriteVacancyInteractor {
-    fun getFavouriteVacancies(): Flow<List<VacancyDetail>?>
+    fun getFavouriteVacancies(): Flow<List<Vacancy>?>
 
     suspend fun deleteVacancy(vacancyId: String): Boolean
 
