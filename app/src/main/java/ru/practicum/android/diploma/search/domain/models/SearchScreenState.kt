@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.search.domain.models
 
 import ru.practicum.android.diploma.network.domain.models.Vacancy
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
 
 sealed class SearchScreenState {
     data object Init : SearchScreenState()

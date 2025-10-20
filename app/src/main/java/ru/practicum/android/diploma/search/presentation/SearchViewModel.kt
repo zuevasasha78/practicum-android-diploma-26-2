@@ -11,8 +11,8 @@ import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
+import ru.practicum.android.diploma.search.domain.models.Placeholder
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(

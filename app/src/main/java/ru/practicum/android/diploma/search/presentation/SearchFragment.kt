@@ -23,10 +23,10 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
+import ru.practicum.android.diploma.search.domain.models.Placeholder
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class SearchFragment : Fragment() {

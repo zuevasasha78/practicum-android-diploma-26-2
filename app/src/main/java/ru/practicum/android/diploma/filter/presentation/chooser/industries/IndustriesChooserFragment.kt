@@ -15,9 +15,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustriesChooserBinding
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
+import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
 import ru.practicum.android.diploma.filter.presentation.chooser.industries.adapter.IndustriesAdapter
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
 
 class IndustriesChooserFragment : Fragment() {
 
@@ -76,7 +76,6 @@ class IndustriesChooserFragment : Fragment() {
             when (state) {
                 is IndustriesChooserScreenState.Loading -> setLoadingState()
                 is IndustriesChooserScreenState.Success -> setSuccessState(state.industries, state.isChosen)
-                is IndustriesChooserScreenState.Empty -> setEmptyState()
                 is IndustriesChooserScreenState.Error -> setErrorState(state.placeholder)
             }
         }
@@ -129,16 +128,7 @@ class IndustriesChooserFragment : Fragment() {
         binding.industriesRv.isVisible = true
     }
 
-    private fun setEmptyState() {
-        binding.placeholder.image.setImageResource(R.drawable.no_result_placeholder)
-        binding.placeholder.placeholderText.setText(R.string.industry_not_found)
-        binding.placeholder.root.isVisible = true
-        binding.progressBar.isVisible = false
-        binding.industriesRv.isVisible = false
-        binding.confirmButton.isVisible = false
-    }
-
-    private fun setErrorState(placeholder: Placeholder) {
+    private fun setErrorState(placeholder: IndustriesPlaceholder) {
         binding.placeholder.image.setImageResource(placeholder.image)
         placeholder.text?.let { binding.placeholder.placeholderText.setText(it) }
         binding.placeholder.root.isVisible = true
