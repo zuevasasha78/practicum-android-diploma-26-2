@@ -19,4 +19,6 @@ interface SharedPrefInteractor {
     fun setOnlyWithSalary(onlyWithSalary: Boolean)
 
     fun resetSalarySettings()
+
+    fun isFilterSet(): Boolean
 }

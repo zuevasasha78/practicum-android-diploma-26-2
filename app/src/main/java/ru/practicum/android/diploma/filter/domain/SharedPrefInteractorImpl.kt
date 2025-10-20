@@ -36,4 +36,10 @@ class SharedPrefInteractorImpl(
     override fun resetSalarySettings() {
         sharedPreferences.resetSalarySettings()
     }
+
+    override fun isFilterSet(): Boolean {
+        return sharedPreferences.getChosenIndustry().id != -1 ||
+            sharedPreferences.getSalary().isNotBlank() ||
+            sharedPreferences.getOnlyWithSalary()
+    }
 }

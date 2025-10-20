@@ -119,4 +119,6 @@ class SearchViewModel(
         setScreenState(currentState.copy(paginationState = PaginationState.Loading))
         searchVacancy(lastSearch, currentPage)
     }
+
+    fun isFilterSet() = sharedPrefInteractor.isFilterSet()
 }
