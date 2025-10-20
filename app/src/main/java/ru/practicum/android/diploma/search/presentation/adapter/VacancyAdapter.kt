@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyItemViewBinding
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.network.domain.models.Vacancy
 
 class VacancyAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<VacancyViewHolder>() {
 
-    private var vacancyItems: List<VacancyDetail> = mutableListOf()
+    private var vacancyItems: List<Vacancy> = mutableListOf()
 
-    fun setItems(vacancy: List<VacancyDetail>) {
+    fun setItems(vacancy: List<Vacancy>) {
         vacancyItems = vacancy
         notifyDataSetChanged()
     }
@@ -33,6 +33,6 @@ class VacancyAdapter(private val clickListener: VacancyClickListener) : Recycler
     }
 
     fun interface VacancyClickListener {
-        fun onVacancyClick(vacancy: VacancyDetail)
+        fun onVacancyClick(vacancy: Vacancy)
     }
 }
