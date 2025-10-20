@@ -27,11 +27,11 @@ class StringUtils(private val context: Context) {
 
     fun getShareString(vacancy: VacancyDetail): String {
         return buildString {
-            appendLine(ContextCompat.getString(context, R.string.share_vacancy)+" ${vacancy.name}")
-            appendLine(ContextCompat.getString(context, R.string.share_company)+" ${vacancy.employerName}")
-            appendLine(ContextCompat.getString(context, R.string.share_salary)+" ${getSalaryString(vacancy.salary)}")
-            appendLine(ContextCompat.getString(context, R.string.share_town)+" ${vacancy.area}")
-            append(ContextCompat.getString(context, R.string.share_link)+" ${vacancy.url}")
+            appendLine(ContextCompat.getString(context, R.string.share_vacancy) + " ${vacancy.name}")
+            appendLine(ContextCompat.getString(context, R.string.share_company) + " ${vacancy.employerName}")
+            appendLine(ContextCompat.getString(context, R.string.share_salary) + " ${getSalaryString(vacancy.salary)}")
+            appendLine(ContextCompat.getString(context, R.string.share_town) + " ${vacancy.area}")
+            append(ContextCompat.getString(context, R.string.share_link) + " ${vacancy.url}")
         }
     }
 }

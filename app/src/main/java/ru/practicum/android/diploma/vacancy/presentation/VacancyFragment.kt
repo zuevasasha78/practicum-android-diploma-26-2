@@ -182,7 +182,7 @@ class VacancyFragment : Fragment() {
             putExtra(Intent.EXTRA_TEXT, shareContent)
             type = "text/plain"
         }
-        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_vacancy)))
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_vacancy_title)))
     }
 
     private fun showLoading() {

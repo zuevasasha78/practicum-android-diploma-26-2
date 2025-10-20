@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.domain
 
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultFilterIndustries
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.ApiResult
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
@@ -13,18 +12,15 @@ class IndustriesInteractorImpl(
 ) : IndustriesInteractor {
 
     override suspend fun getIndustries(): IndustriesChooserScreenState {
-        return when (val res = vacancyNetworkRepository.getIndustries().convertToApiResultFilterIndustries()) {
+        return when (val res = vacancyNetworkRepository.getIndustries()) {
             is ApiResult.NoInternetConnection -> IndustriesChooserScreenState.Error(Placeholder.NoInternet)
-            is ApiResult.Error -> IndustriesChooserScreenState.Error(Placeholder.ServerError)
+            is ApiResult.ServerError -> IndustriesChooserScreenState.Error(Placeholder.ServerError)
+            is ApiResult.NotFound -> IndustriesChooserScreenState.Empty
             is ApiResult.Success -> {
-                if (res.data.isEmpty()) {
-                    IndustriesChooserScreenState.Empty
-                } else {
-                    IndustriesChooserScreenState.Success(
-                        industries = res.data,
-                        isChosen = getSelectedIndustry().id != -1
-                    )
-                }
+                IndustriesChooserScreenState.Success(
+                    industries = res.data,
+                    isChosen = getSelectedIndustry().id != -1
+                )
             }
         }
     }

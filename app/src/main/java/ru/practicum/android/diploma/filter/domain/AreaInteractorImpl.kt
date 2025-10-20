@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.domain
 
 import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultFilterArea
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToWorkplace
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.ApiResult
@@ -9,7 +8,7 @@ import ru.practicum.android.diploma.network.domain.models.ApiResult
 class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository) : AreaInteractor {
 
     override suspend fun getCountries(): AreaScreenState {
-        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+        return when (val res = networkRepository.getAreas()) {
             is ApiResult.ServerError -> AreaScreenState.Error
             is ApiResult.NoInternetConnection -> AreaScreenState.Error
             is ApiResult.Success -> AreaScreenState.Content(res.data.convertToWorkplace())
@@ -18,7 +17,7 @@ class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository
     }
 
     override suspend fun getRegions(name: String?): AreaScreenState {
-        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+        return when (val res = networkRepository.getAreas()) {
             is ApiResult.ServerError -> AreaScreenState.Error
             is ApiResult.NoInternetConnection -> AreaScreenState.Error
             is ApiResult.Success -> {
@@ -37,7 +36,7 @@ class AreaInteractorImpl(private val networkRepository: VacancyNetworkRepository
     }
 
     override suspend fun getRegionsByName(name: String): AreaScreenState {
-        return when(val res = networkRepository.getAreas().convertToApiResultFilterArea()) {
+        return when (val res = networkRepository.getAreas()) {
             is ApiResult.ServerError -> AreaScreenState.Error
             is ApiResult.NoInternetConnection -> AreaScreenState.Error
             is ApiResult.Success -> {
