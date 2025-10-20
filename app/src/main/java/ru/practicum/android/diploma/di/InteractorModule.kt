@@ -30,6 +30,6 @@ val interactorModule = module {
     single<WorkplaceInteractor> { WorkplaceInteractorImpl(get()) }
     single<AreaInteractor> { AreaInteractorImpl(get()) }
     single<PlaceInteractor> { PlaceInteractorImpl(get()) }
-    factory<IndustriesInteractor> { IndustriesInteractorImpl(get()) }
+    factory<IndustriesInteractor> { IndustriesInteractorImpl(get(), get()) }
     factory<SharedPrefInteractor> { SharedPrefInteractorImpl(get()) }
 }
