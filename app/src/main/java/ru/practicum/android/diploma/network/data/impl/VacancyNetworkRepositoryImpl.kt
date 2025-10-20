@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.network.data.impl
 
+import ru.practicum.android.diploma.filter.domain.model.Location
 import ru.practicum.android.diploma.network.data.DiplomaApiService
 import ru.practicum.android.diploma.network.data.NetworkClient
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultFilterArea
@@ -8,7 +9,6 @@ import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convert
 import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultVacancyResponse
 import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
 import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.FilterArea
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
@@ -19,7 +19,7 @@ class VacancyNetworkRepositoryImpl(
     private val diplomaApiService: DiplomaApiService
 ) : VacancyNetworkRepository {
 
-    override suspend fun getAreas(): ApiResult<List<FilterArea>> {
+    override suspend fun getAreas(): ApiResult<List<Location>> {
         return networkClient.doRequest { diplomaApiService.getAreas() }.convertToApiResultFilterArea()
     }
 

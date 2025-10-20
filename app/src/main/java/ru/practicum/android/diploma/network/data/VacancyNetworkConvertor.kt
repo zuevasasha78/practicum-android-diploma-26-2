@@ -1,11 +1,7 @@
 package ru.practicum.android.diploma.network.data
 
-import ru.practicum.android.diploma.filter.domain.Workplace
-import ru.practicum.android.diploma.filter.domain.WorkplaceType
-import ru.practicum.android.diploma.network.data.dto.response.FilterAreaDto
 import ru.practicum.android.diploma.filter.domain.model.Location
-import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
-import ru.practicum.android.diploma.network.data.dto.response.FilterArea
+import ru.practicum.android.diploma.network.data.dto.response.FilterAreaDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
@@ -58,13 +54,13 @@ object VacancyNetworkConvertor {
         }
     }
 
-    fun ApiResultDto<List<FilterAreaDto>>.convertToApiResultFilterArea(): ApiResult<List<FilterArea>> {
+    fun ApiResultDto<List<FilterAreaDto>>.convertToApiResultFilterArea(): ApiResult<List<Location>> {
         return when (this) {
             is ApiResultDto.Success -> {
                 if (data.isEmpty()) {
                     ApiResult.NotFound
                 } else {
-                    ApiResult.Success(data.map { it.convertToFilterArea() })
+                    ApiResult.Success(data.map { it.convertToFilterArea() }.convertToLocation())
                 }
             }
 
@@ -168,5 +164,6 @@ object VacancyNetworkConvertor {
                 }
             }
         }
+        return locations
     }
 }

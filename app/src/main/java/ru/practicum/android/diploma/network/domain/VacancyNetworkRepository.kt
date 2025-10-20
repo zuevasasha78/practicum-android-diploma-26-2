@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.network.domain
 
+import ru.practicum.android.diploma.filter.domain.model.Location
 import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.FilterArea
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilt
 
 interface VacancyNetworkRepository {
 
-    suspend fun getAreas(): ApiResult<List<FilterArea>>
+    suspend fun getAreas(): ApiResult<List<Location>>
 
     suspend fun getIndustries(): ApiResult<List<FilterIndustry>>
 

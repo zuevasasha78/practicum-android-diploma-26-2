@@ -20,11 +20,7 @@ class FavouriteFragment : Fragment() {
     private val favouriteViewModel by viewModel<FavouriteVacanciesViewModel>()
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
-    private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: Vacancy) {
-            openVacancy(vacancy.id)
-        }
-    })
+    private val favouriteAdapter = VacancyAdapter { vacancy -> openVacancy(vacancy.id) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
