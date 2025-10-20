@@ -5,29 +5,56 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.filter.domain.AreaInteractor
-import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
+import ru.practicum.android.diploma.filter.domain.model.AreaResult
+import ru.practicum.android.diploma.filter.domain.workplace.LocationInteractor
+import ru.practicum.android.diploma.filter.presentation.states.LocationScreenState
+import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceConvertor.convertToLocationUi
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
-class SelectRegionViewModel(private val areaInteractor: AreaInteractor) : ViewModel() {
+class SelectRegionViewModel(private val locationInteractor: LocationInteractor) : ViewModel() {
 
-    private val _regions: MutableLiveData<AreaScreenState> = MutableLiveData<AreaScreenState>()
+    private val _regions: MutableLiveData<LocationScreenState> = MutableLiveData<LocationScreenState>()
 
-    val regions: LiveData<AreaScreenState> = _regions
+    val regions: LiveData<LocationScreenState> = _regions
+
     private var lastSearch = ""
 
-    fun uploadCountry(name: String?) {
-        viewModelScope.launch {
-            _regions.postValue(areaInteractor.getRegions(name))
+    fun uploadRegions(id: Int?) {
+        uploadRegions { locationInteractor.getRegionsById(id) }
+    }
+
+    fun searchRegions(name: String, id: Int?) {
+        if (lastSearch == name) return
+        lastSearch = name
+        searchDebounce(viewModelScope) {
+            uploadRegions {
+                locationInteractor.getRegionsByName(name, id)
+            }
         }
     }
 
-    fun searchRegionDebounce(text: String) {
-        if (lastSearch == text) return
-        _regions.postValue(AreaScreenState.Loading)
-        lastSearch = text
+    private fun uploadRegions(block: suspend () -> AreaResult) {
+        _regions.postValue(LocationScreenState.Loading)
         searchDebounce(viewModelScope) {
-            _regions.postValue(areaInteractor.getRegionsByName(text))
+            viewModelScope.launch {
+                val areaResult = block()
+                val locationScreenState = when (areaResult) {
+                    is AreaResult.Empty -> LocationScreenState.Empty
+                    is AreaResult.Error -> LocationScreenState.Error
+                    is AreaResult.NoInternetConnection -> LocationScreenState.NoInternet
+                    is AreaResult.Success -> {
+                        val locationUis = areaResult.areas.map { it.convertToLocationUi() }
+                        if (locationUis.isEmpty()) {
+                            LocationScreenState.Empty
+                        } else {
+                            LocationScreenState.Content(
+                                locationUis
+                            )
+                        }
+                    }
+                }
+                _regions.postValue(locationScreenState)
+            }
         }
     }
 }

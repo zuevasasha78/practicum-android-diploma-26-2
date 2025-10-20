@@ -11,5 +11,5 @@ data class FilterUiState(
     val onlyWithSalary: Boolean = false,
 ) {
     val hasAnyFilter: Boolean
-        get() = country != null || region != null || industry != null || salary.isNotBlank() || onlyWithSalary
+        get() = placeId != null || industry != null || salary.isNotBlank() || onlyWithSalary
 }

@@ -3,6 +3,9 @@ package ru.practicum.android.diploma.network.data
 import ru.practicum.android.diploma.filter.domain.Workplace
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
 import ru.practicum.android.diploma.network.data.dto.response.FilterAreaDto
+import ru.practicum.android.diploma.filter.domain.model.Location
+import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
+import ru.practicum.android.diploma.network.data.dto.response.FilterArea
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
@@ -149,18 +152,21 @@ object VacancyNetworkConvertor {
         }
     }
 
-    fun List<FilterArea>.convertToWorkplace(): List<Workplace> {
-        return this.map { area ->
-            val type = if (area.parentId == null) {
-                WorkplaceType.COUNTRY
-            } else {
-                WorkplaceType.REGION
+    fun List<FilterArea>.convertToLocation(): List<Location> {
+        val locations = mutableListOf<Location>()
+        this.forEach { country ->
+            locations.add(Location(country.id, country.name))
+            if (country.areas.isNotEmpty()) {
+                country.areas.forEach { region ->
+                    locations.add(
+                        Location(
+                            id = region.id,
+                            name = region.name,
+                            parent = Location(country.id, country.name)
+                        )
+                    )
+                }
             }
-            Workplace(
-                id = area.id,
-                value = area.name,
-                type = type
-            )
         }
     }
 }
