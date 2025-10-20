@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.filter.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
+import ru.practicum.android.diploma.filter.domain.model.Location
+import ru.practicum.android.diploma.filter.domain.model.Workplace
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 
 class SharedPreferencesRepositoryImpl(
@@ -52,12 +54,34 @@ class SharedPreferencesRepositoryImpl(
             .apply()
     }
 
-    override fun <T> setValue(key: String, value: T?) {
+    override fun clearWorkplace() {
+        setValue(COUNTRY, null)
+        setValue(REGION, null)
+    }
+
+    override fun saveWorkplace(workplace: Workplace) {
+        setValue(COUNTRY, workplace.country)
+        if (workplace.region != null) {
+            setValue(REGION, Location(id = workplace.region!!.id, name = workplace.region!!.name))
+        } else {
+            setValue(REGION, null)
+        }
+    }
+
+    override fun getRegion(): Location? {
+       return getValue(REGION, Location::class.java)
+    }
+
+    override fun getCountry(): Location? {
+       return getValue(COUNTRY, Location::class.java)
+    }
+
+    private fun <T> setValue(key: String, value: T?) {
         val json = gson.toJson(value)
         return sharedPreferences.edit().putString(key, json).apply()
     }
 
-    override fun <T> getValue(key: String, clazz: Class<T>): T? {
+    private fun <T> getValue(key: String, clazz: Class<T>): T? {
         val json = sharedPreferences.getString(key, null)
         return json?.let { gson.fromJson(it, clazz) }
     }
@@ -67,5 +91,8 @@ class SharedPreferencesRepositoryImpl(
         const val SALARY_TAG = "SALARY_TAG"
         const val ONLY_WITH_SALARY_TAG = "ONLY_WITH_SALARY_TAG"
         private val DEFAULT_INDUSTRY_JSON = FilterIndustryDto(-1, "")
+
+        private const val COUNTRY = "country"
+        private const val REGION = "region"
     }
 }
