@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.filter.domain
 
-import ru.practicum.android.diploma.filter.domain.model.Location
-import ru.practicum.android.diploma.filter.domain.model.Workplace
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 
 interface SharedPreferencesRepository {
@@ -21,9 +19,4 @@ interface SharedPreferencesRepository {
     fun setOnlyWithSalary(onlyWithSalary: Boolean)
 
     fun resetSalarySettings()
-
-    fun clearWorkplace()
-    fun saveWorkplace(workplace: Workplace)
-    fun getRegion(): Location?
-    fun getCountry(): Location?
 }

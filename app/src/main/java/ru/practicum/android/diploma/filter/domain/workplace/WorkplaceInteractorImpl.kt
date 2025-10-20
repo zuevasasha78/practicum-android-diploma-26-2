@@ -1,30 +1,30 @@
 package ru.practicum.android.diploma.filter.domain.workplace
 
-import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
+import ru.practicum.android.diploma.filter.domain.WorkplaceRepository
 import ru.practicum.android.diploma.filter.domain.model.Workplace
 
-class WorkplaceInteractorImpl(private val sharedPrefer: SharedPreferencesRepository) : WorkplaceInteractor {
+class WorkplaceInteractorImpl(private val workplaceRepository: WorkplaceRepository) : WorkplaceInteractor {
 
     override suspend fun getWorkplace(): Workplace {
-        val country = sharedPrefer.getCountry()
-        val region = sharedPrefer.getRegion()
+        val country = workplaceRepository.getCountry()
+        val region = workplaceRepository.getRegion()
         return Workplace(country, region)
     }
 
     override suspend fun saveWorkplace(workplace: Workplace) {
-        sharedPrefer.saveWorkplace(workplace)
+        workplaceRepository.saveWorkplace(workplace)
     }
 
     override suspend fun clearWorkplace() {
-        sharedPrefer.clearWorkplace()
+        workplaceRepository.clearWorkplace()
     }
 
     override suspend fun getPlaceId(): Int? {
-        val region = sharedPrefer.getRegion()
+        val region = workplaceRepository.getRegion()
         if (region != null) {
             return region.id
         }
-        val country = sharedPrefer.getCountry()
+        val country = workplaceRepository.getCountry()
         return if (country != null) {
             country.id
         } else {
