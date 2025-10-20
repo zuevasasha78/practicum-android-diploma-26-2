@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.filter.presentation.workplace.models.Workpla
 
 class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) : ViewModel() {
 
-    val workplaceUiMutable: MutableLiveData<WorkplaceUi> = MutableLiveData(WorkplaceUi(null, null))
+    private val workplaceUiMutable: MutableLiveData<WorkplaceUi> = MutableLiveData(WorkplaceUi(null, null))
     val workplaceUi: LiveData<WorkplaceUi> = workplaceUiMutable
 
     init {

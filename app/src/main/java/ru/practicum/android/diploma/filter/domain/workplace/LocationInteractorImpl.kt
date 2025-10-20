@@ -12,7 +12,7 @@ class LocationInteractorImpl(private val networkRepository: VacancyNetworkReposi
         val result = networkRepository.getAreas()
         return when (result) {
             is ApiResultDto.Error<*> -> AreaResult.Error
-            ApiResultDto.NoInternetConnection -> AreaResult.Error
+            ApiResultDto.NoInternetConnection -> AreaResult.NoInternetConnection
             is ApiResultDto.Success<List<FilterArea>> -> {
                 if (result.data.isEmpty()) {
                     AreaResult.Empty

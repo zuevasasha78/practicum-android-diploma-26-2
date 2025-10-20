@@ -65,6 +65,7 @@ class SelectRegionFragment : Fragment() {
                 LocationScreenState.Empty -> showPlaceholder(AreaPlaceholder.Empty)
                 LocationScreenState.Error -> showPlaceholder(AreaPlaceholder.Error)
                 LocationScreenState.Loading -> showLoading()
+                LocationScreenState.NoInternet -> showPlaceholder(AreaPlaceholder.NoInternet)
             }
         }
     }

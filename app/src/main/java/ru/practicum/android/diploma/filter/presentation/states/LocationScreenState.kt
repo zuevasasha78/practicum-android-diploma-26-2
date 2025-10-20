@@ -7,4 +7,5 @@ sealed interface LocationScreenState {
     data class Content(val locationUis: List<LocationUi>) : LocationScreenState
     data object Empty : LocationScreenState
     data object Error : LocationScreenState
+    data object NoInternet : LocationScreenState
 }

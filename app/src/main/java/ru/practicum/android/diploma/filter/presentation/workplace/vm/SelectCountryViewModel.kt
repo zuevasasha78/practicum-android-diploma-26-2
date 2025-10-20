@@ -25,6 +25,7 @@ class SelectCountryViewModel(private val locationInteractor: LocationInteractor)
                 val countriesScreenState: LocationScreenState = when (areaResult) {
                     is AreaResult.Empty -> LocationScreenState.Empty
                     is AreaResult.Error -> LocationScreenState.Error
+                    is AreaResult.NoInternetConnection -> LocationScreenState.NoInternet
                     is AreaResult.Success -> {
                         val locationUis = areaResult.areas.map {
                             LocationUi(it.id, it.name)
