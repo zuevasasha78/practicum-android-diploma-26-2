@@ -72,26 +72,6 @@
         <action
             android:id="@+id/action_workplaceFragment_to_selectionFragment"
             app:destination="@id/selectCountryFragment" />
-        <argument
-            android:name="countryName"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="countryId"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="regionName"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="regionId"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
         <action
             android:id="@+id/action_workplaceFragment_to_selectRegionFragment"
             app:destination="@id/selectRegionFragment" />
@@ -104,19 +84,15 @@
         android:id="@+id/selectCountryFragment"
         android:name="ru.practicum.android.diploma.filter.presentation.workplace.fragments.SelectCountryFragment"
         android:label="SelectionFragment">
-        <action
-            android:id="@+id/action_selectCountryFragment_to_workplaceFragment"
-            app:destination="@id/workplaceFragment" />
-        <argument
-            android:name="countryName"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/selectRegionFragment"
         android:name="ru.practicum.android.diploma.filter.presentation.workplace.fragments.SelectRegionFragment"
         android:label="SelectRegionFragment" />
+    <argument
+        android:name="countryId"
+        app:argType="string"
+        app:nullable="true" />
     <fragment
         android:id="@+id/industriesChooserFragment"
         tools:layout="@layout/fragment_industries_chooser"

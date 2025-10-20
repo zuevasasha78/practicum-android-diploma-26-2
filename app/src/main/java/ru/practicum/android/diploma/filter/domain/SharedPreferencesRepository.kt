@@ -19,8 +19,4 @@ interface SharedPreferencesRepository {
     fun setOnlyWithSalary(onlyWithSalary: Boolean)
 
     fun resetSalarySettings()
-
-    fun setValue(key: String, value: String?)
-
-    fun getValue(key: String): String?
 }
