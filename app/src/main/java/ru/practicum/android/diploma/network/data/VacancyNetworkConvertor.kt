@@ -2,8 +2,6 @@ package ru.practicum.android.diploma.network.data
 
 import ru.practicum.android.diploma.filter.domain.Workplace
 import ru.practicum.android.diploma.filter.domain.WorkplaceType
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterArea
-import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterAreaDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
@@ -16,7 +14,6 @@ import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
-import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 
 object VacancyNetworkConvertor {
 
@@ -112,17 +109,6 @@ object VacancyNetworkConvertor {
         )
     }
 
-    fun VacanciesFilter.convertToVacanciesFilterDto(): VacanciesFilterDto {
-        return VacanciesFilterDto(
-            this.area,
-            this.industry,
-            this.text,
-            this.salary,
-            this.page,
-            this.onlyWithSalary
-        )
-    }
-
     fun SalaryDto.convertToSalary(): Salary {
         return Salary(
             this.from,
@@ -149,18 +135,6 @@ object VacancyNetworkConvertor {
             skills = this.skills.joinToString("\n") { "• $it" },
             url = this.url
         )
-    }
-
-    fun List<VacancyDetail>.convertToVacancyList(): List<Vacancy> {
-        return this.map { vacancyDetail ->
-            Vacancy(
-                id = vacancyDetail.id,
-                name = vacancyDetail.name,
-                employerName = vacancyDetail.employerName,
-                salaryDto = vacancyDetail.salary,
-                employerLogo = vacancyDetail.employerLogoUrl ?: "",
-            )
-        }
     }
 
     fun FilterIndustryDto.convertToFilterIndustry(): FilterIndustry {
