@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.db.domain.interactor
+package ru.practicum.android.diploma.favourites.domain.db
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.network.domain.models.Vacancy

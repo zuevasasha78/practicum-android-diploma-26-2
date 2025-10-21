@@ -1,13 +1,13 @@
-package ru.practicum.android.diploma.db.data.impl
+package ru.practicum.android.diploma.favourites.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.practicum.android.diploma.db.data.VacancyDbConvertor
-import ru.practicum.android.diploma.db.data.dao.VacancyDao
-import ru.practicum.android.diploma.db.domain.VacancyDbRepository
+import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
+import ru.practicum.android.diploma.favourites.data.converter.VacancyDbConvertor
+import ru.practicum.android.diploma.favourites.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 

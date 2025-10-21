@@ -1,6 +1,6 @@
-package ru.practicum.android.diploma.db.data
+package ru.practicum.android.diploma.favourites.data.converter
 
-import ru.practicum.android.diploma.db.data.entity.VacancyEntity
+import ru.practicum.android.diploma.favourites.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail

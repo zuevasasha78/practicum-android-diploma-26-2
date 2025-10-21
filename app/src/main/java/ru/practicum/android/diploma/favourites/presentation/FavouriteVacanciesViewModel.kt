@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
+import ru.practicum.android.diploma.favourites.domain.db.FavouriteVacancyInteractor
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 
 class FavouriteVacanciesViewModel(

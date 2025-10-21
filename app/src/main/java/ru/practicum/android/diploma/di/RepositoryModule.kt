@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.db.data.impl.VacancyDbRepositoryImpl
-import ru.practicum.android.diploma.db.domain.VacancyDbRepository
+import ru.practicum.android.diploma.favourites.data.VacancyDbRepositoryImpl
+import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
 import ru.practicum.android.diploma.filter.data.SharedPreferencesRepositoryImpl
 import ru.practicum.android.diploma.filter.data.WorkplaceRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository

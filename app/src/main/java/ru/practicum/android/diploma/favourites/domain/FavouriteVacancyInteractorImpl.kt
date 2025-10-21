@@ -1,11 +1,13 @@
-package ru.practicum.android.diploma.db.domain.interactor
+package ru.practicum.android.diploma.favourites.domain
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.db.domain.VacancyDbRepository
+import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
+import ru.practicum.android.diploma.favourites.domain.db.FavouriteVacancyInteractor
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
-class FavouriteVacancyInteractorImpl(private val repository: VacancyDbRepository) : FavouriteVacancyInteractor {
+class FavouriteVacancyInteractorImpl(private val repository: VacancyDbRepository) :
+    FavouriteVacancyInteractor {
     override fun getFavouriteVacancies(): Flow<List<Vacancy>?> {
         return repository.getVacancies()
     }
