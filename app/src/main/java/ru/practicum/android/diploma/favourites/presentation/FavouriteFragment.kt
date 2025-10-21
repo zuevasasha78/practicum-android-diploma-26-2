@@ -12,9 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
 import ru.practicum.android.diploma.favourites.presentation.models.FavoritePlaceholder
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacancyList
 import ru.practicum.android.diploma.network.domain.models.Vacancy
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
@@ -22,11 +20,7 @@ class FavouriteFragment : Fragment() {
     private val favouriteViewModel by viewModel<FavouriteVacanciesViewModel>()
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
-    private val favouriteAdapter = VacancyAdapter(object : VacancyAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: Vacancy) {
-            openVacancy(vacancy.id)
-        }
-    })
+    private val favouriteAdapter = VacancyAdapter { vacancy -> openVacancy(vacancy.id) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,11 +69,10 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun showResult(vacanciesListDetails: List<VacancyDetail>) {
+    private fun showResult(vacanciesList: List<Vacancy>) {
         binding.progressBar.isVisible = false
         binding.placeholder.root.isVisible = false
-        val vacancyList = vacanciesListDetails.convertToVacancyList()
-        favouriteAdapter.setItems(vacancyList)
+        favouriteAdapter.setItems(vacanciesList)
         binding.favouriteRecyclerView.isVisible = true
     }
 

@@ -17,16 +17,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.search.domain.models.PaginationState
+import ru.practicum.android.diploma.search.domain.models.Placeholder
 import ru.practicum.android.diploma.search.domain.models.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class SearchFragment : Fragment() {
@@ -35,7 +33,6 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var vacancyAdapter: VacancyAdapter? = null
-    private val sharedPrefInteractor: SharedPrefInteractor by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -192,10 +189,7 @@ class SearchFragment : Fragment() {
     private fun updateFilterButtonHighlight() {
         val filterButton = binding.toolbar.menu.findItem(R.id.filter_button)
 
-        val hasActiveFilters =
-            sharedPrefInteractor.getChosenIndustry().id != -1 ||
-                sharedPrefInteractor.getSalary().isNotBlank() ||
-                sharedPrefInteractor.getOnlyWithSalary()
+        val hasActiveFilters = searchViewModel.isFilterSet()
 
         val iconRes = if (hasActiveFilters) {
             R.drawable.icon_filter_on

@@ -41,15 +41,6 @@
         app:argType="string"/>
     </fragment>
     <fragment
-        android:id="@+id/chooserFragment"
-        android:name="ru.practicum.android.diploma.filter.presentation.chooser.ChooserFragment"
-        android:label="ChooserFragment"
-        tools:layout="@layout/fragment_chooser">
-        <argument
-            android:name="type"
-            app:argType="ru.practicum.android.diploma.filter.domain.model.ChooserType"/>
-    </fragment>
-    <fragment
         android:id="@+id/mainFilterFragment"
         android:name="ru.practicum.android.diploma.filter.presentation.main.MainFilterFragment"
         android:label="MainFilterFragment"

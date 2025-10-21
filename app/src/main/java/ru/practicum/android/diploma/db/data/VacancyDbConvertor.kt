@@ -1,12 +1,28 @@
 package ru.practicum.android.diploma.db.data
 
-import com.google.gson.Gson
 import ru.practicum.android.diploma.db.data.entity.VacancyEntity
 import ru.practicum.android.diploma.network.domain.models.Salary
+import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
-class VacancyDbConvertor(private val gson: Gson) {
-    fun convertToVacancy(vacancyEntity: VacancyEntity): VacancyDetail {
+object VacancyDbConvertor {
+
+    fun convertToVacancy(vacancyEntity: VacancyEntity): Vacancy {
+        val salary = Salary(
+            from = vacancyEntity.salaryFrom.takeIf { it.isNotEmpty() }?.toInt(),
+            to = vacancyEntity.salaryTo.takeIf { it.isNotEmpty() }?.toInt(),
+            currency = vacancyEntity.salaryCurrency.takeIf { it.isNotEmpty() }
+        )
+        return Vacancy(
+            id = vacancyEntity.vacancyId,
+            name = vacancyEntity.name,
+            salaryDto = salary,
+            employerName = vacancyEntity.employerName,
+            employerLogo = vacancyEntity.employerLogoUrl ?: ""
+        )
+    }
+
+    fun convertToVacancyDetail(vacancyEntity: VacancyEntity): VacancyDetail {
         val salary = Salary(
             from = vacancyEntity.salaryFrom.takeIf { it.isNotEmpty() }?.toInt(),
             to = vacancyEntity.salaryTo.takeIf { it.isNotEmpty() }?.toInt(),

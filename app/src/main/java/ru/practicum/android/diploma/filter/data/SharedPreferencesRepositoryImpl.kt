@@ -3,23 +3,26 @@ package ru.practicum.android.diploma.filter.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustry
+import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
+import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 
 class SharedPreferencesRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : SharedPreferencesRepository {
 
-    override fun getChosenIndustry(): FilterIndustryDto {
+    override fun getChosenIndustry(): FilterIndustry {
         val res = gson.fromJson(
             sharedPreferences.getString(INDUSTRY_TAG, gson.toJson(DEFAULT_INDUSTRY_JSON)),
             FilterIndustryDto::class.java
         )
-        return res
+        return res.convertToFilterIndustry()
     }
 
-    override fun setIndustry(industry: FilterIndustryDto?) {
-        val industryToSave = industry ?: DEFAULT_INDUSTRY_JSON
+    override fun setIndustry(industry: FilterIndustry?) {
+        val industryToSave = industry.convertToFilterIndustryDto() ?: DEFAULT_INDUSTRY_JSON
         val jsonString = gson.toJson(industryToSave)
         sharedPreferences.edit().putString(INDUSTRY_TAG, jsonString).apply()
     }

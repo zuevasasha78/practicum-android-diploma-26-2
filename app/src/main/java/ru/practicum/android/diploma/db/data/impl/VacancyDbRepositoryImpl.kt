@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.db.data.VacancyDbConvertor
 import ru.practicum.android.diploma.db.data.dao.VacancyDao
 import ru.practicum.android.diploma.db.domain.VacancyDbRepository
+import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 
 class VacancyDbRepositoryImpl(
-    private val vacancyDao: VacancyDao,
-    private val vacancyDbConvertor: VacancyDbConvertor
+    private val vacancyDao: VacancyDao
 ) : VacancyDbRepository {
 
     override suspend fun addVacancy(vacancy: VacancyDetail): Boolean {
-        val vacancyEntity = vacancyDbConvertor.convertToVacancy(vacancy)
+        val vacancyEntity = VacancyDbConvertor.convertToVacancy(vacancy)
         val result = vacancyDao.addVacancy(vacancyEntity)
         return result.toInt() != -1
     }
@@ -26,9 +26,9 @@ class VacancyDbRepositoryImpl(
         return result != 0
     }
 
-    override fun getVacancies(): Flow<List<VacancyDetail>?> = flow<List<VacancyDetail>?> {
+    override fun getVacancies(): Flow<List<Vacancy>?> = flow<List<Vacancy>?> {
         val entities = vacancyDao.getVacancies()
-        val domainVacancies = entities.map { vacancyDbConvertor.convertToVacancy(it) }
+        val domainVacancies = entities.map { VacancyDbConvertor.convertToVacancy(it) }
         emit(domainVacancies)
     }.catch {
         emit(null)
@@ -41,7 +41,7 @@ class VacancyDbRepositoryImpl(
     override suspend fun getVacancyById(vacancyId: String): VacancyDetail? {
         val result = vacancyDao.getVacancy(vacancyId)
         return result?.let {
-            vacancyDbConvertor.convertToVacancy(result)
+            VacancyDbConvertor.convertToVacancyDetail(result)
         }
     }
 }

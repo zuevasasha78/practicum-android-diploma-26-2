@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.presentation.models
+package ru.practicum.android.diploma.search.domain.models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

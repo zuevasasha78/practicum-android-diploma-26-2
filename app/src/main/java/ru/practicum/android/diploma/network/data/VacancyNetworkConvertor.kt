@@ -1,21 +1,22 @@
 package ru.practicum.android.diploma.network.data
 
 import ru.practicum.android.diploma.filter.domain.model.Location
-import ru.practicum.android.diploma.network.data.dto.requests.VacanciesFilterDto
-import ru.practicum.android.diploma.network.data.dto.response.FilterArea
+import ru.practicum.android.diploma.network.data.dto.response.FilterAreaDto
 import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
 import ru.practicum.android.diploma.network.data.dto.response.SalaryDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyDetailDto
 import ru.practicum.android.diploma.network.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.network.domain.models.ApiResult
+import ru.practicum.android.diploma.network.domain.models.FilterArea
 import ru.practicum.android.diploma.network.domain.models.FilterIndustry
 import ru.practicum.android.diploma.network.domain.models.Salary
 import ru.practicum.android.diploma.network.domain.models.Vacancy
 import ru.practicum.android.diploma.network.domain.models.VacancyDetail
 import ru.practicum.android.diploma.network.domain.models.VacancyResponse
-import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
 
 object VacancyNetworkConvertor {
+
+    private const val CODE_404 = 404
 
     fun VacancyDetailDto.convertToVacancy(): Vacancy {
         return Vacancy(
@@ -40,28 +41,70 @@ object VacancyNetworkConvertor {
 
     fun ApiResultDto<List<FilterIndustryDto>>.convertToApiResultFilterIndustries(): ApiResult<List<FilterIndustry>> {
         return when (this) {
-            is ApiResultDto.Success -> ApiResult.Success(data.map { it.convertToFilterIndustry() })
-            is ApiResultDto.Error -> ApiResult.Error(code)
+            is ApiResultDto.Success -> {
+                if (data.isEmpty()) {
+                    ApiResult.NotFound
+                } else {
+                    ApiResult.Success(data.map { it.convertToFilterIndustry() })
+                }
+            }
+
+            is ApiResultDto.Error -> ApiResult.NotFound
+            is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
+        }
+    }
+
+    fun ApiResultDto<List<FilterAreaDto>>.convertToApiResultFilterArea(): ApiResult<List<Location>> {
+        return when (this) {
+            is ApiResultDto.Success -> {
+                if (data.isEmpty()) {
+                    ApiResult.NotFound
+                } else {
+                    ApiResult.Success(data.map { it.convertToFilterArea() }.convertToLocation())
+                }
+            }
+
+            is ApiResultDto.Error -> ApiResult.NotFound
+            is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
+        }
+    }
+
+    fun ApiResultDto<VacancyDetailDto>.convertToApiResultVacancyDetail(): ApiResult<VacancyDetail> {
+        return when (this) {
+            is ApiResultDto.Success -> ApiResult.Success(data.convertToVacancyDetail())
+            is ApiResultDto.Error -> {
+                if (code == CODE_404) {
+                    ApiResult.NotFound
+                } else {
+                    ApiResult.ServerError
+                }
+            }
+
             is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
         }
     }
 
     fun ApiResultDto<VacancyResponseDto>.convertToApiResultVacancyResponse(): ApiResult<VacancyResponse> {
         return when (this) {
-            is ApiResultDto.Success -> ApiResult.Success(data.convertToVacancyResponse())
-            is ApiResultDto.Error -> ApiResult.Error(code)
+            is ApiResultDto.Success -> {
+                if (data.found == 0) {
+                    ApiResult.NotFound
+                } else {
+                    ApiResult.Success(data.convertToVacancyResponse())
+                }
+            }
+
+            is ApiResultDto.Error -> ApiResult.ServerError
             is ApiResultDto.NoInternetConnection -> ApiResult.NoInternetConnection
         }
     }
 
-    fun VacanciesFilter.convertToVacanciesFilterDto(): VacanciesFilterDto {
-        return VacanciesFilterDto(
-            this.area,
-            this.industry,
-            this.text,
-            this.salary,
-            this.page,
-            this.onlyWithSalary
+    fun FilterAreaDto.convertToFilterArea(): FilterArea {
+        return FilterArea(
+            this.id,
+            this.name,
+            this.parentId,
+            this.areas.map { it.convertToFilterArea() }
         )
     }
 
@@ -91,18 +134,6 @@ object VacancyNetworkConvertor {
             skills = this.skills.joinToString("\n") { "• $it" },
             url = this.url
         )
-    }
-
-    fun List<VacancyDetail>.convertToVacancyList(): List<Vacancy> {
-        return this.map { vacancyDetail ->
-            Vacancy(
-                id = vacancyDetail.id,
-                name = vacancyDetail.name,
-                employerName = vacancyDetail.employerName,
-                salaryDto = vacancyDetail.salary,
-                employerLogo = vacancyDetail.employerLogoUrl ?: "",
-            )
-        }
     }
 
     fun FilterIndustryDto.convertToFilterIndustry(): FilterIndustry {
