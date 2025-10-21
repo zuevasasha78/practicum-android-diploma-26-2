@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
 import ru.practicum.android.diploma.favourites.data.converter.VacancyDbConvertor
 import ru.practicum.android.diploma.favourites.data.db.dao.VacancyDao
+import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 

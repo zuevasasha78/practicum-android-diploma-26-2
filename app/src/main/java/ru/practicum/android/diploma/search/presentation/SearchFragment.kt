@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
+import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
 import ru.practicum.android.diploma.search.presentation.models.PaginationState
 import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.search.presentation.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
-import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
 import ru.practicum.android.diploma.vacancy.presentation.VacancyFragment.Companion.ARG_NAME
 
 class SearchFragment : Fragment() {

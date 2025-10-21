@@ -8,8 +8,8 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.filter.domain.workplace.WorkplaceInteractor
-import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
+import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.presentation.models.PaginationState
 import ru.practicum.android.diploma.search.presentation.models.Placeholder
 import ru.practicum.android.diploma.search.presentation.models.SearchScreenState

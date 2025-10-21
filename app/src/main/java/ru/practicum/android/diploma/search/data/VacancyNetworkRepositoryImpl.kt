@@ -1,18 +1,18 @@
 package ru.practicum.android.diploma.search.data
 
 import ru.practicum.android.diploma.filter.domain.model.Location
-import ru.practicum.android.diploma.search.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.search.domain.model.ApiResult
-import ru.practicum.android.diploma.search.domain.model.FilterIndustry
-import ru.practicum.android.diploma.search.domain.model.VacancyDetail
-import ru.practicum.android.diploma.search.domain.model.VacancyResponse
-import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
 import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToApiResultFilterArea
 import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToApiResultFilterIndustries
 import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToApiResultVacancyDetail
 import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToApiResultVacancyResponse
 import ru.practicum.android.diploma.search.data.network.DiplomaApiService
 import ru.practicum.android.diploma.search.data.network.NetworkClient
+import ru.practicum.android.diploma.search.domain.VacancyNetworkRepository
+import ru.practicum.android.diploma.search.domain.model.ApiResult
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
+import ru.practicum.android.diploma.search.domain.model.VacancyResponse
+import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
 
 class VacancyNetworkRepositoryImpl(
     private val networkClient: NetworkClient,

@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.favourites.domain
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
 import ru.practicum.android.diploma.favourites.domain.db.FavouriteVacancyInteractor
+import ru.practicum.android.diploma.favourites.domain.db.VacancyDbRepository
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 

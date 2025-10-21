@@ -1,6 +1,12 @@
 package ru.practicum.android.diploma.search.data.dto.converter
 
 import ru.practicum.android.diploma.filter.domain.model.Location
+import ru.practicum.android.diploma.search.data.dto.ApiResultDto
+import ru.practicum.android.diploma.search.data.dto.response.FilterAreaDto
+import ru.practicum.android.diploma.search.data.dto.response.FilterIndustryDto
+import ru.practicum.android.diploma.search.data.dto.response.SalaryDto
+import ru.practicum.android.diploma.search.data.dto.response.VacancyDetailDto
+import ru.practicum.android.diploma.search.data.dto.response.VacancyResponseDto
 import ru.practicum.android.diploma.search.domain.model.ApiResult
 import ru.practicum.android.diploma.search.domain.model.FilterArea
 import ru.practicum.android.diploma.search.domain.model.FilterIndustry
@@ -8,12 +14,6 @@ import ru.practicum.android.diploma.search.domain.model.Salary
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 import ru.practicum.android.diploma.search.domain.model.VacancyResponse
-import ru.practicum.android.diploma.search.data.dto.ApiResultDto
-import ru.practicum.android.diploma.search.data.dto.response.FilterAreaDto
-import ru.practicum.android.diploma.search.data.dto.response.FilterIndustryDto
-import ru.practicum.android.diploma.search.data.dto.response.SalaryDto
-import ru.practicum.android.diploma.search.data.dto.response.VacancyDetailDto
-import ru.practicum.android.diploma.search.data.dto.response.VacancyResponseDto
 
 object VacancyNetworkConvertor {
 
