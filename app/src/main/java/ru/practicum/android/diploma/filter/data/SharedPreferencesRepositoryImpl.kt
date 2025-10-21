@@ -3,10 +3,10 @@ package ru.practicum.android.diploma.filter.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.filter.domain.SharedPreferencesRepository
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustry
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustryDto
-import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToFilterIndustry
+import ru.practicum.android.diploma.search.data.dto.converter.VacancyNetworkConvertor.convertToFilterIndustryDto
+import ru.practicum.android.diploma.search.data.dto.response.FilterIndustryDto
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class SharedPreferencesRepositoryImpl(
     private val sharedPreferences: SharedPreferences,

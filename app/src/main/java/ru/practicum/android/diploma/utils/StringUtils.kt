@@ -3,8 +3,8 @@ package ru.practicum.android.diploma.utils
 import android.content.Context
 import androidx.core.content.ContextCompat
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.network.domain.models.Salary
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.search.domain.model.Salary
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 import java.util.Currency
 
 class StringUtils(private val context: Context) {

@@ -1,10 +1,9 @@
 package ru.practicum.android.diploma.search.domain
 
-import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
-import ru.practicum.android.diploma.search.domain.models.Placeholder
-import ru.practicum.android.diploma.search.domain.models.SearchScreenState
+import ru.practicum.android.diploma.search.domain.model.ApiResult
+import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
+import ru.practicum.android.diploma.search.presentation.models.Placeholder
+import ru.practicum.android.diploma.search.presentation.models.SearchScreenState
 
 class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository

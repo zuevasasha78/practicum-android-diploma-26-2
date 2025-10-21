@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.favourites.presentation
 
-import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 sealed interface FavouriteScreenState {
     data object Loading : FavouriteScreenState

@@ -17,7 +17,7 @@ import ru.practicum.android.diploma.databinding.FragmentIndustriesChooserBinding
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
 import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
 import ru.practicum.android.diploma.filter.presentation.chooser.industries.adapter.IndustriesAdapter
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesChooserFragment : Fragment() {
 

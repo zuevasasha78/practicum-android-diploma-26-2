@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.main
 
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 data class FilterUiState(
     val placeId: Int? = null,

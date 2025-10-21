@@ -6,8 +6,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.network.data.DiplomaApiService
-import ru.practicum.android.diploma.network.data.NetworkClient
+import ru.practicum.android.diploma.search.data.network.DiplomaApiService
+import ru.practicum.android.diploma.search.data.network.NetworkClient
 
 val networkModule = module {
     single {

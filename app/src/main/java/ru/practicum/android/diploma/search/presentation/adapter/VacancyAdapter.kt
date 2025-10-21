@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyItemViewBinding
-import ru.practicum.android.diploma.network.domain.models.Vacancy
+import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class VacancyAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<VacancyViewHolder>() {
 

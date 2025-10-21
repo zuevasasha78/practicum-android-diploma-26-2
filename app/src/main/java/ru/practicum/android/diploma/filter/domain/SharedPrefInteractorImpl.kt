@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.filter.domain
 
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class SharedPrefInteractorImpl(
     private val sharedPreferences: SharedPreferencesRepository

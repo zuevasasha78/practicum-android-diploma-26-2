@@ -2,9 +2,9 @@ package ru.practicum.android.diploma.filter.domain
 
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
 import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
-import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.VacancyNetworkRepository
+import ru.practicum.android.diploma.search.domain.model.ApiResult
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository,

@@ -15,7 +15,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 import ru.practicum.android.diploma.utils.StringUtils
 import ru.practicum.android.diploma.vacancy.domain.VacancyState
 import ru.practicum.android.diploma.vacancy.presentation.models.VacancyPlaceholder

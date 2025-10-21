@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.IndustriesInteractor
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
 import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesChooserViewModel(
     private val industriesInteractor: IndustriesInteractor
