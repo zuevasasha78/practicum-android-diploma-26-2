@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.filter.domain.workplace
 
 import ru.practicum.android.diploma.filter.domain.model.AreaResult
-import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.network.domain.models.ApiResult
+import ru.practicum.android.diploma.search.domain.VacancyNetworkRepository
+import ru.practicum.android.diploma.search.domain.model.ApiResult
 
 class LocationInteractorImpl(private val networkRepository: VacancyNetworkRepository) : LocationInteractor {
 

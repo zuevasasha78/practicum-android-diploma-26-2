@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.filter.domain.model
 
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 sealed class IndustriesChooserScreenState {
     data object Loading : IndustriesChooserScreenState()

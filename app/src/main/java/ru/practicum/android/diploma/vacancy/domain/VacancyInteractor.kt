@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.vacancy.domain
 
-import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
-import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.favourites.domain.db.FavouriteVacancyInteractor
+import ru.practicum.android.diploma.search.domain.VacancyNetworkRepository
+import ru.practicum.android.diploma.search.domain.model.ApiResult
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 import ru.practicum.android.diploma.utils.StringUtils
 
 class VacancyInteractor(

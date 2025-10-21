@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
 import ru.practicum.android.diploma.filter.domain.workplace.WorkplaceInteractor
 import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceConvertor.convertToWorkplaceUi
 import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceUi
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class MainFilterViewModel(
     private val sharedPrefInteractor: SharedPrefInteractor,

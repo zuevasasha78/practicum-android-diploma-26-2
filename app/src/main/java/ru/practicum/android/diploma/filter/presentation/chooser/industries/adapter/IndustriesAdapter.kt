@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.IndustryItemBinding
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesAdapter(
     private val listener: IndustryAdapterListener
