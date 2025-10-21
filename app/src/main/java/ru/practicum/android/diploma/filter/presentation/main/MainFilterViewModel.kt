@@ -74,7 +74,7 @@ class MainFilterViewModel(
     }
 
     private fun getPlaceId(workplace: WorkplaceUi): Int? {
-        return if (workplace.region == null) {
+        return if (workplace.region != null) {
             workplace.region?.id
         } else {
             workplace.country?.id

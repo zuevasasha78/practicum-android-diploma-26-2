@@ -3,7 +3,8 @@ package ru.practicum.android.diploma.filter.domain
 import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class SharedPrefInteractorImpl(
-    private val sharedPreferences: SharedPreferencesRepository
+    private val sharedPreferences: SharedPreferencesRepository,
+    private val workplaceRepository: WorkplaceRepository,
 ) : SharedPrefInteractor {
     override fun getChosenIndustry(): FilterIndustry {
         return sharedPreferences.getChosenIndustry()
@@ -40,6 +41,8 @@ class SharedPrefInteractorImpl(
     override fun isFilterSet(): Boolean {
         return sharedPreferences.getChosenIndustry().id != -1 ||
             sharedPreferences.getSalary().isNotBlank() ||
-            sharedPreferences.getOnlyWithSalary()
+            sharedPreferences.getOnlyWithSalary() ||
+            workplaceRepository.getRegion() != null ||
+            workplaceRepository.getCountry() != null
     }
 }
