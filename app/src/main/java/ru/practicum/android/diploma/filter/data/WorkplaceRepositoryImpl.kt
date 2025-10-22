@@ -17,10 +17,11 @@ class WorkplaceRepositoryImpl(
     }
 
     override fun saveWorkplace(workplace: Workplace) {
-        setValue(COUNTRY, workplace.country)
         if (workplace.region != null) {
             setValue(REGION, Location(id = workplace.region!!.id, name = workplace.region!!.name))
+            setValue(COUNTRY, workplace.region.parent)
         } else {
+            setValue(COUNTRY, workplace.country)
             setValue(REGION, null)
         }
     }
