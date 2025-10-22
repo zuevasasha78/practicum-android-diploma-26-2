@@ -52,15 +52,23 @@ class IndustriesAdapter(
             binding.radioButton.isChecked = isSelected
 
             binding.root.setOnClickListener {
-                if (isSelected) {
-                    selectedIndustry = null
-                    notifyDataSetChanged()
-                    listener.onIndustryDeselected()
-                } else {
-                    selectedIndustry = industry
-                    notifyDataSetChanged()
-                    listener.onIndustrySelected(industry)
-                }
+                handleIndustrySelection(industry, isSelected)
+            }
+
+            binding.radioButton.setOnClickListener {
+                handleIndustrySelection(industry, isSelected)
+            }
+        }
+
+        private fun handleIndustrySelection(industry: FilterIndustry, isSelected: Boolean) {
+            if (isSelected) {
+                selectedIndustry = null
+                notifyDataSetChanged()
+                listener.onIndustryDeselected()
+            } else {
+                selectedIndustry = industry
+                notifyDataSetChanged()
+                listener.onIndustrySelected(industry)
             }
         }
     }
