@@ -15,8 +15,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustriesChooserBinding
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
-import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
 import ru.practicum.android.diploma.filter.presentation.chooser.industries.adapter.IndustriesAdapter
+import ru.practicum.android.diploma.filter.presentation.chooser.industries.models.IndustriesPlaceholder
 import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesChooserFragment : Fragment() {
@@ -76,7 +76,9 @@ class IndustriesChooserFragment : Fragment() {
             when (state) {
                 is IndustriesChooserScreenState.Loading -> setLoadingState()
                 is IndustriesChooserScreenState.Success -> setSuccessState(state.industries, state.isChosen)
-                is IndustriesChooserScreenState.Error -> setErrorState(state.placeholder)
+                is IndustriesChooserScreenState.NoInternet -> setErrorState(IndustriesPlaceholder.NoInternet)
+                is IndustriesChooserScreenState.ServerError -> setErrorState(IndustriesPlaceholder.ServerError)
+                is IndustriesChooserScreenState.NoResult -> setErrorState(IndustriesPlaceholder.NoResult)
             }
         }
     }

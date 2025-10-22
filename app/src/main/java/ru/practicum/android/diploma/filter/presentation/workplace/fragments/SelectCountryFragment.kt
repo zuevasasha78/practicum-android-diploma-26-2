@@ -12,13 +12,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
-import ru.practicum.android.diploma.filter.presentation.states.LocationScreenState
 import ru.practicum.android.diploma.filter.presentation.workplace.adapter.LocationAdapter
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_ID
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.WORKPLACE_REQUEST_KEY
 import ru.practicum.android.diploma.filter.presentation.workplace.models.AreaPlaceholder
 import ru.practicum.android.diploma.filter.presentation.workplace.models.LocationUi
+import ru.practicum.android.diploma.filter.presentation.workplace.states.LocationScreenState
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.SelectCountryViewModel
 
 class SelectCountryFragment : Fragment() {

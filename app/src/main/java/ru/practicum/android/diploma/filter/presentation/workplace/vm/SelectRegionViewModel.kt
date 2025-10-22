@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.model.AreaResult
 import ru.practicum.android.diploma.filter.domain.workplace.LocationInteractor
-import ru.practicum.android.diploma.filter.presentation.states.LocationScreenState
 import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceConvertor.convertToLocationUi
+import ru.practicum.android.diploma.filter.presentation.workplace.states.LocationScreenState
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SelectRegionViewModel(private val locationInteractor: LocationInteractor) : ViewModel() {
