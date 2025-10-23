@@ -7,7 +7,7 @@ class WorkplaceInteractorImpl(private val workplaceRepository: WorkplaceReposito
 
     override suspend fun getWorkplace(): Workplace {
         val country = workplaceRepository.getCountry()
-        val region = workplaceRepository.getRegion()
+        val region = workplaceRepository.getRegion()?.copy(parent = country)
         return Workplace(country, region)
     }
 

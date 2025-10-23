@@ -22,9 +22,11 @@ class LocationInteractorImpl(private val networkRepository: VacancyNetworkReposi
             is ApiResult.NotFound -> AreaResult.Empty
             is ApiResult.Success -> {
                 val filterData = result.data
-                    .filter { it.parent != null }
-                    .filter { id == null || it.parent?.id == id }
-                    .filter { it.name.lowercase().contains(name.lowercase()) }
+                    .filter {
+                        it.parent != null &&
+                            (id == null || it.parent?.id == id) &&
+                            it.name.lowercase().contains(name.lowercase())
+                    }
                 AreaResult.Success(filterData)
             }
         }
@@ -37,8 +39,7 @@ class LocationInteractorImpl(private val networkRepository: VacancyNetworkReposi
             is ApiResult.NotFound -> AreaResult.Empty
             is ApiResult.Success -> {
                 val filterData = result.data
-                    .filter { it.parent != null }
-                    .filter { id == null || it.parent?.id == id }
+                    .filter { it.parent != null && (id == null || it.parent?.id == id) }
                 AreaResult.Success(filterData)
             }
         }

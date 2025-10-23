@@ -27,9 +27,13 @@ class WorkplaceViewModel(private val workplaceInteractor: WorkplaceInteractor) :
         viewModelScope.launch {
             val current = workplaceUi.value
             val updated = if (country != null || region != null) {
-                val oldCountry = current.region?.parent?.id
-                val newCountryFromRegion = region?.parent?.id
-                if (oldCountry != newCountryFromRegion && current.region != null) {
+                val newCountry = country?.id
+                val countryFromRegion = if (current?.region != null) {
+                    current.region?.parent?.id
+                } else {
+                    region?.parent?.id
+                }
+                if (newCountry != countryFromRegion) {
                     current.copy(country = country, region = null)
                 } else {
                     current.copy(
