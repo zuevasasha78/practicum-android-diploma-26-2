@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.states
+package ru.practicum.android.diploma.filter.presentation.workplace.states
 
 import ru.practicum.android.diploma.filter.presentation.workplace.models.LocationUi
 

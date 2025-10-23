@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.domain.model
+package ru.practicum.android.diploma.filter.presentation.chooser.industries.models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

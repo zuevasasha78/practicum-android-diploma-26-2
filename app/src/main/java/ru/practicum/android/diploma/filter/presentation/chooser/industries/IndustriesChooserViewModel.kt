@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.IndustriesInteractor
 import ru.practicum.android.diploma.filter.domain.model.IndustriesChooserScreenState
-import ru.practicum.android.diploma.filter.domain.model.IndustriesPlaceholder
 import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class IndustriesChooserViewModel(
@@ -61,7 +60,7 @@ class IndustriesChooserViewModel(
         } ?: false
 
         _screenState.value = if (filteredList.isEmpty()) {
-            IndustriesChooserScreenState.Error(IndustriesPlaceholder.NoResult)
+            IndustriesChooserScreenState.NoResult
         } else {
             IndustriesChooserScreenState.Success(
                 industries = filteredList,

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.presentation.models
+package ru.practicum.android.diploma.search.domain.states
 
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 
@@ -12,5 +12,7 @@ sealed class SearchScreenState {
         val paginationState: PaginationState = PaginationState.Idle,
     ) : SearchScreenState()
 
-    data class Error(val placeholder: Placeholder) : SearchScreenState()
+    data object NoInternet : SearchScreenState()
+    data object ServerError : SearchScreenState()
+    data object NotFound : SearchScreenState()
 }
