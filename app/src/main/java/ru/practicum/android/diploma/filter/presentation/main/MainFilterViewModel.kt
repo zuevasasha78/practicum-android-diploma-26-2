@@ -3,13 +3,17 @@ package ru.practicum.android.diploma.filter.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.filter.domain.PlaceInteractor
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.filter.domain.workplace.WorkplaceInteractor
+import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceConvertor.convertToWorkplaceUi
+import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceUi
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class MainFilterViewModel(
     private val sharedPrefInteractor: SharedPrefInteractor,
-    private val placeInteractor: PlaceInteractor
+    private val workplaceInteractor: WorkplaceInteractor
 ) : ViewModel() {
     private val _filters = MutableLiveData(FilterUiState())
     val filters: LiveData<FilterUiState> = _filters
@@ -18,13 +22,11 @@ class MainFilterViewModel(
         getAllFilters()
     }
 
-    fun setPlace(country: String?, region: String?) {
+    fun clearPlace() {
         _filters.value = _filters.value?.copy(
-            country = country,
-            region = region
-        ) ?: FilterUiState(
-            country = country,
-            region = region
+            placeId = null,
+            country = null,
+            region = null,
         )
     }
 
@@ -44,14 +46,18 @@ class MainFilterViewModel(
     }
 
     fun getAllFilters() {
-        _filters.value = FilterUiState(
-            placeId = placeInteractor.getPlaceId(),
-            country = placeInteractor.getCountry(),
-            region = placeInteractor.getRegion(),
-            industry = sharedPrefInteractor.getChosenIndustry().takeIf { it.id != -1 },
-            salary = sharedPrefInteractor.getSalary(),
-            onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
-        )
+        viewModelScope.launch {
+            val workplace = workplaceInteractor.getWorkplace().convertToWorkplaceUi()
+            val placeId = getPlaceId(workplace)
+            _filters.value = FilterUiState(
+                placeId = placeId,
+                country = workplace.country?.name,
+                region = workplace.region?.name,
+                industry = sharedPrefInteractor.getChosenIndustry().takeIf { it.id != -1 },
+                salary = sharedPrefInteractor.getSalary(),
+                onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
+            )
+        }
     }
 
     fun apply() {
@@ -60,8 +66,18 @@ class MainFilterViewModel(
 
     fun reset() {
         _filters.value = FilterUiState()
-        sharedPrefInteractor.resetIndustry()
-        sharedPrefInteractor.resetSalarySettings()
-        placeInteractor.resetPlace()
+        viewModelScope.launch {
+            sharedPrefInteractor.resetIndustry()
+            sharedPrefInteractor.resetSalarySettings()
+            workplaceInteractor.clearWorkplace()
+        }
+    }
+
+    private fun getPlaceId(workplace: WorkplaceUi): Int? {
+        return if (workplace.region != null) {
+            workplace.region?.id
+        } else {
+            workplace.country?.id
+        }
     }
 }

@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.vacancy.domain
 
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 
 sealed class VacancyState {
     data object Loading : VacancyState()

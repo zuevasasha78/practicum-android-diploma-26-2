@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.PlaceItemViewBinding
-import ru.practicum.android.diploma.filter.domain.Workplace
+import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceType
 
 class WorkplaceAdapter(private val clickListener: WorkplaceClickListener) :
     RecyclerView.Adapter<WorkplaceViewHolder>() {
 
-    private var placeItems: List<Workplace> = mutableListOf()
+    private var placeItems: List<WorkplaceType> = mutableListOf()
 
-    fun setItems(places: List<Workplace>) {
+    fun setItems(places: List<WorkplaceType>) {
         placeItems = places
         notifyDataSetChanged()
     }
@@ -34,6 +34,6 @@ class WorkplaceAdapter(private val clickListener: WorkplaceClickListener) :
     }
 
     fun interface WorkplaceClickListener {
-        fun onPlaceClick(place: Workplace)
+        fun onPlaceClick(place: WorkplaceType)
     }
 }

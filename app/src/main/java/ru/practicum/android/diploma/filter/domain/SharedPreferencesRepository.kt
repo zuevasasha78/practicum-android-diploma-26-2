@@ -1,12 +1,12 @@
 package ru.practicum.android.diploma.filter.domain
 
-import ru.practicum.android.diploma.network.data.dto.response.FilterIndustryDto
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 interface SharedPreferencesRepository {
 
-    fun getChosenIndustry(): FilterIndustryDto
+    fun getChosenIndustry(): FilterIndustry
 
-    fun setIndustry(industry: FilterIndustryDto?)
+    fun setIndustry(industry: FilterIndustry?)
 
     fun resetIndustry()
 
@@ -19,8 +19,4 @@ interface SharedPreferencesRepository {
     fun setOnlyWithSalary(onlyWithSalary: Boolean)
 
     fun resetSalarySettings()
-
-    fun setValue(key: String, value: String?)
-
-    fun getValue(key: String): String?
 }

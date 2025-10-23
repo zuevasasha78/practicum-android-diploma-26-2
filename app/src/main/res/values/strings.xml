@@ -38,7 +38,7 @@
     <string name="contacts">Контакты</string>
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
     <string name="salary_not_specified">Зарплата не указана</string>
-    <string name="share_vacancy">Поделиться вакансией</string>
+    <string name="share_vacancy_title">Поделиться вакансией</string>
 
     <string name="server_error">Ошибка сервера</string>
     <string name="no_internet">Нет интернета</string>
@@ -56,6 +56,7 @@
     <string name="work_place">Место работы</string>
     <string name="industry">Отрасль</string>
     <string name="without_salary">Не показывать без зарплаты</string>
+    <string name="industry_not_found">Отрасль не найдена</string>
 
     <string name="industries_chooser_title">Выбор отрасли</string>
     <string name="select_button">Выбрать</string>
@@ -66,8 +67,15 @@
     <string name="choosing_country">Выбор страны</string>
     <string name="choosing_region">Выбор региона</string>
 
-   <string name="industry_selection">Выбор отрасли</string>
+    <string name="industry_selection">Выбор отрасли</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="industry_load_error">Ошибка загрузки отраслей</string>
     <string name="choose">Выбрать</string>
+
+    <string name="share_vacancy">Вакансия:</string>
+    <string name="share_company">Компания:</string>
+    <string name="share_salary">Зарплата:</string>
+    <string name="share_town">Город:</string>
+    <string name="share_link">Ссылка:</string>
+
 </resources>

@@ -5,20 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.filter.domain.PlaceInteractor
 import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
-import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
+import ru.practicum.android.diploma.filter.domain.workplace.WorkplaceInteractor
 import ru.practicum.android.diploma.search.domain.SearchScreenInteractor
-import ru.practicum.android.diploma.search.domain.models.PaginationState
-import ru.practicum.android.diploma.search.domain.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
+import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
+import ru.practicum.android.diploma.search.domain.states.PaginationState
+import ru.practicum.android.diploma.search.domain.states.SearchScreenState
 import ru.practicum.android.diploma.utils.DebounceUtils.searchDebounce
 
 class SearchViewModel(
     private val searchScreenInteractor: SearchScreenInteractor,
     private val sharedPrefInteractor: SharedPrefInteractor,
-    private val placeInteractor: PlaceInteractor,
+    private val workplaceInteractor: WorkplaceInteractor
 ) : ViewModel() {
 
     private var lastSearch = ""
@@ -55,7 +53,7 @@ class SearchViewModel(
             val industry = sharedPrefInteractor.getChosenIndustry()
             val salary = sharedPrefInteractor.getSalary()
             val onlyWithSalary = sharedPrefInteractor.getOnlyWithSalary()
-            val area = placeInteractor.getPlaceId()
+            val area = workplaceInteractor.getPlaceId()
 
             val filter = VacanciesFilter(
                 area = area,
@@ -84,12 +82,14 @@ class SearchViewModel(
 
     private fun loadNextPage(result: SearchScreenState) {
         val current = _screenState.value as SearchScreenState.Success
-        val errorMessage = when ((result as SearchScreenState.Error).placeholder) {
-            is Placeholder.NoInternet -> R.string.check_internet_connection
-            else -> R.string.error_occurred
-        }
         setScreenState(
-            current.copy(paginationState = PaginationState.Error(errorMessage))
+            current.copy(
+                paginationState =
+                when (result) {
+                    is SearchScreenState.NoInternet -> PaginationState.NoInternet
+                    else -> PaginationState.Error
+                }
+            )
         )
     }
 
@@ -119,4 +119,6 @@ class SearchViewModel(
         setScreenState(currentState.copy(paginationState = PaginationState.Loading))
         searchVacancy(lastSearch, currentPage)
     }
+
+    fun isFilterSet() = sharedPrefInteractor.isFilterSet()
 }

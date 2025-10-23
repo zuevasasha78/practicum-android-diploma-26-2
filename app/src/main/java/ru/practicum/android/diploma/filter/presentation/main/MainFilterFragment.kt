@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentMainFilterBinding
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class MainFilterFragment : Fragment() {
     private var _binding: FragmentMainFilterBinding? = null
@@ -146,7 +146,7 @@ class MainFilterFragment : Fragment() {
             findNavController().navigate(R.id.workplaceFragment)
         }
         binding.placeInputLayout.setEndIconOnClickListener {
-            mainFilterViewModel.setPlace(null, null)
+            mainFilterViewModel.clearPlace()
         }
     }
 

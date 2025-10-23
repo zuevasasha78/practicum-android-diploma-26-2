@@ -4,8 +4,7 @@ import androidx.room.Room
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-import ru.practicum.android.diploma.db.data.AppDatabase
-import ru.practicum.android.diploma.db.data.VacancyDbConvertor
+import ru.practicum.android.diploma.favourites.data.db.AppDatabase
 
 val dataBaseModule = module {
     single {
@@ -13,6 +12,5 @@ val dataBaseModule = module {
             .build()
     }
     single { Gson() }
-    single { VacancyDbConvertor(get()) }
     single { get<AppDatabase>().getVacancyDao() }
 }

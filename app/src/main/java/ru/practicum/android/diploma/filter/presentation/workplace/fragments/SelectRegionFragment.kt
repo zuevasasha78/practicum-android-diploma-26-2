@@ -12,26 +12,29 @@ import androidx.core.bundle.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
-import ru.practicum.android.diploma.filter.domain.Workplace
-import ru.practicum.android.diploma.filter.presentation.workplace.AreaScreenState
-import ru.practicum.android.diploma.filter.presentation.workplace.adapter.WorkplaceAdapter
+import ru.practicum.android.diploma.filter.presentation.workplace.adapter.LocationAdapter
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_ID
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.COUNTRY_NAME
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_ID
 import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.REGION_NAME
+import ru.practicum.android.diploma.filter.presentation.workplace.fragments.WorkplaceFragment.Companion.WORKPLACE_REQUEST_KEY
 import ru.practicum.android.diploma.filter.presentation.workplace.models.AreaPlaceholder
+import ru.practicum.android.diploma.filter.presentation.workplace.models.LocationUi
+import ru.practicum.android.diploma.filter.presentation.workplace.states.LocationScreenState
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.SelectRegionViewModel
 
 class SelectRegionFragment : Fragment() {
     private val viewModel: SelectRegionViewModel by viewModel()
     private val viewBinding: FragmentSelectRegionBinding get() = _viewBinding!!
     private var _viewBinding: FragmentSelectRegionBinding? = null
-    private var workplaceAdapter: WorkplaceAdapter? = null
+    private var locationAdapter: LocationAdapter? = null
+    private var countryId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +51,9 @@ class SelectRegionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val countryName = arguments?.getString(COUNTRY_NAME)
-        viewModel.uploadCountry(countryName)
+        countryId = arguments?.getInt(COUNTRY_ID, -1)
+        if (countryId == -1) countryId = null
+        viewModel.uploadRegions(countryId)
         initView()
         setData()
     }
@@ -57,10 +61,11 @@ class SelectRegionFragment : Fragment() {
     private fun setData() {
         viewModel.regions.observe(viewLifecycleOwner) { regionState ->
             when (regionState) {
-                is AreaScreenState.Content -> showResult(regionState.areas)
-                AreaScreenState.Empty -> showPlaceholder(AreaPlaceholder.Empty)
-                AreaScreenState.Error -> showPlaceholder(AreaPlaceholder.Error)
-                AreaScreenState.Loading -> showLoading()
+                is LocationScreenState.Content -> showResult(regionState.locationUis)
+                LocationScreenState.Empty -> showPlaceholder(AreaPlaceholder.Empty)
+                LocationScreenState.Error -> showPlaceholder(AreaPlaceholder.Error)
+                LocationScreenState.Loading -> showLoading()
+                LocationScreenState.NoInternet -> showPlaceholder(AreaPlaceholder.NoInternet)
             }
         }
     }
@@ -70,11 +75,11 @@ class SelectRegionFragment : Fragment() {
         _viewBinding = null
     }
 
-    private fun showResult(areas: List<Workplace>) {
+    private fun showResult(areas: List<LocationUi>) {
         viewBinding.placeholder.root.isVisible = false
         viewBinding.progressBar.isVisible = false
         viewBinding.countryRecyclerView.isVisible = true
-        workplaceAdapter?.let { it.setItems(areas) }
+        locationAdapter?.let { it.setItems(areas) }
     }
 
     private fun showLoading() {
@@ -93,14 +98,14 @@ class SelectRegionFragment : Fragment() {
         viewBinding.editText.addTextChangedListener(
             beforeTextChanged = { _: CharSequence?, _: Int, _: Int, _: Int -> },
             onTextChanged = { text: CharSequence?, _: Int, _: Int, _: Int ->
-                if (!text.isNullOrEmpty()) {
+                if (!text?.toString().isNullOrEmpty()) {
                     viewBinding.etEndIcon.setImageResource(R.drawable.icon_close)
                     viewBinding.etEndIcon.setOnClickListener(etEndIconListener)
-                    viewModel.searchRegionDebounce(text.toString())
                 } else {
                     viewBinding.etEndIcon.setImageResource(R.drawable.icon_search)
                     viewBinding.etEndIcon.setOnClickListener(null)
                 }
+                viewModel.searchRegions(text?.trim().toString(), countryId)
             },
             afterTextChanged = { _: Editable? -> },
         )
@@ -111,7 +116,7 @@ class SelectRegionFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.hideSoftInputFromWindow(it.windowToken, 0)
         viewBinding.editText.text?.clear()
-        workplaceAdapter?.setItems(emptyList())
+        locationAdapter?.setItems(emptyList())
     }
 
     private fun initBackButton() {
@@ -132,15 +137,18 @@ class SelectRegionFragment : Fragment() {
     }
 
     private fun initList() {
-        workplaceAdapter = WorkplaceAdapter { place ->
-            val countryName = arguments?.getString(COUNTRY_NAME)
-            val args = bundleOf(
-                COUNTRY_NAME to countryName,
-                COUNTRY_ID to null,
-                REGION_ID to place.id.toString(),
-                REGION_NAME to place.value,
+        locationAdapter = LocationAdapter { place ->
+            val countryId = place.parent?.id ?: -1
+            setFragmentResult(
+                WORKPLACE_REQUEST_KEY,
+                bundleOf(
+                    REGION_NAME to place.name,
+                    REGION_ID to place.id,
+                    COUNTRY_ID to countryId,
+                    COUNTRY_NAME to place.parent?.name
+                )
             )
-            findNavController().navigate(R.id.workplaceFragment, args)
+            findNavController().popBackStack()
         }
 
         val layoutManager = LinearLayoutManager(
@@ -150,7 +158,7 @@ class SelectRegionFragment : Fragment() {
         )
         viewBinding.apply {
             countryRecyclerView.layoutManager = layoutManager
-            countryRecyclerView.adapter = workplaceAdapter
+            countryRecyclerView.adapter = locationAdapter
         }
     }
 }

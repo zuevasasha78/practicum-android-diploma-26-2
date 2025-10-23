@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import androidx.core.bundle.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkplaceBinding
-import ru.practicum.android.diploma.filter.domain.WorkplaceType
 import ru.practicum.android.diploma.filter.presentation.workplace.adapter.WorkplaceAdapter
+import ru.practicum.android.diploma.filter.presentation.workplace.models.LocationUi
+import ru.practicum.android.diploma.filter.presentation.workplace.models.WorkplaceType
 import ru.practicum.android.diploma.filter.presentation.workplace.vm.WorkplaceViewModel
 
 class WorkplaceFragment : Fragment() {
@@ -34,16 +36,37 @@ class WorkplaceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val countyValue = arguments?.getString(COUNTRY_NAME)
-        val regionValue = arguments?.getString(REGION_NAME)
-        viewModel.uploadWorkplace(countyValue, regionValue)
+        uploadData()
         initView()
         setData()
 
     }
 
+    private fun uploadData() {
+        setFragmentResultListener(WORKPLACE_REQUEST_KEY) { _, bundle ->
+            val countryName = bundle.getString(COUNTRY_NAME)
+            val country = getLocation(countryName, bundle, COUNTRY_ID)
+            val regioName = bundle.getString(REGION_NAME)
+            val region = getLocation(regioName, bundle, REGION_ID)?.copy(parent = country)
+            viewModel.uploadWorkplace(country = country, region = region)
+        }
+    }
+
+    private fun getLocation(name: String?, bundle: Bundle, key: String): LocationUi? {
+        return if (name != null) {
+            val id = bundle.getInt(key, -1)
+            LocationUi(id, name)
+        } else {
+            null
+        }
+    }
+
     private fun setData() {
-        viewModel.workplace.observe(viewLifecycleOwner) { places ->
+        viewModel.workplaceUi.observe(viewLifecycleOwner) { places ->
+            val places = listOf(
+                WorkplaceType.Country(places.country),
+                WorkplaceType.Region(places.region)
+            )
             workplaceAdapter?.let { it.setItems(places) }
         }
     }
@@ -55,25 +78,15 @@ class WorkplaceFragment : Fragment() {
     }
 
     private fun initConfirmButton() {
-        viewModel.workplace.observe(viewLifecycleOwner) { workplaces ->
-            val country = workplaces.find { it.type == WorkplaceType.COUNTRY }?.value
-            val region = workplaces.find { it.type == WorkplaceType.REGION }?.value
-
-            val countryId = arguments?.getString(COUNTRY_ID)
-            val regionId = arguments?.getString(REGION_ID)
-            val placeId = if (regionId != null) {
-                regionId
-            } else {
-                countryId
-            }
-            if (country != null || region != null) {
+        viewModel.workplaceUi.observe(viewLifecycleOwner) { workplaces ->
+            if (workplaces.country != null || workplaces.region != null) {
                 viewBinding.confirmButton.isVisible = true
+                viewBinding.confirmButton.setOnClickListener {
+                    viewModel.saveWorkplace(workplaces)
+                    findNavController().popBackStack(R.id.mainFilterFragment, false)
+                }
             } else {
                 viewBinding.confirmButton.isVisible = false
-            }
-            viewBinding.confirmButton.setOnClickListener {
-                viewModel.updateWorkplace(country, region, placeId)
-                findNavController().popBackStack(R.id.mainFilterFragment, false)
             }
         }
     }
@@ -86,20 +99,24 @@ class WorkplaceFragment : Fragment() {
 
     private fun initList() {
         workplaceAdapter = WorkplaceAdapter { place ->
-            when (place.type) {
-                WorkplaceType.COUNTRY -> {
-                    if (place.value != null) {
+            when (place) {
+                is WorkplaceType.Country -> {
+                    if (place.location != null) {
                         viewModel.clearCountry()
                     } else {
                         findNavController().navigate(R.id.selectCountryFragment)
                     }
                 }
-                WorkplaceType.REGION -> {
-                    if (place.value != null) {
+                is WorkplaceType.Region -> {
+                    if (place.location != null) {
                         viewModel.clearRegion()
                     } else {
-                        val countyValue = arguments?.getString(COUNTRY_NAME)
-                        val args = bundleOf(COUNTRY_NAME to countyValue)
+                        val countyId = viewModel.workplaceUi.value.country?.let { it.id } ?: -1
+                        val countryName = viewModel.workplaceUi.value.country?.name
+                        val args = bundleOf(
+                            COUNTRY_ID to countyId,
+                            COUNTRY_NAME to countryName
+                        )
                         findNavController().navigate(R.id.selectRegionFragment, args)
                     }
                 }
@@ -122,6 +139,7 @@ class WorkplaceFragment : Fragment() {
     }
 
     companion object {
+        const val WORKPLACE_REQUEST_KEY = "country"
         const val COUNTRY_NAME = "countryName"
         const val COUNTRY_ID = "countryId"
         const val REGION_ID = "regionId"

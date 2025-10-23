@@ -1,35 +1,26 @@
 package ru.practicum.android.diploma.search.domain
 
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToApiResultVacancyResponse
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToVacanciesFilterDto
-import ru.practicum.android.diploma.network.domain.VacancyNetworkRepository
-import ru.practicum.android.diploma.network.domain.models.ApiResult
-import ru.practicum.android.diploma.network.domain.models.requests.VacanciesFilter
-import ru.practicum.android.diploma.search.domain.models.SearchScreenState
-import ru.practicum.android.diploma.search.presentation.models.Placeholder
+import ru.practicum.android.diploma.search.domain.model.ApiResult
+import ru.practicum.android.diploma.search.domain.model.requests.VacanciesFilter
+import ru.practicum.android.diploma.search.domain.states.SearchScreenState
 
 class SearchScreenInteractorImpl(
     private val vacancyNetworkRepository: VacancyNetworkRepository
 ) : SearchScreenInteractor {
 
     override suspend fun searchVacancy(filter: VacanciesFilter): SearchScreenState {
-        val res = vacancyNetworkRepository.getVacancies(
-            filter.convertToVacanciesFilterDto()
-        ).convertToApiResultVacancyResponse()
+        val res = vacancyNetworkRepository.getVacancies(filter)
 
         return when (res) {
-            is ApiResult.NoInternetConnection -> SearchScreenState.Error(Placeholder.NoInternet)
-            is ApiResult.Error -> SearchScreenState.Error(Placeholder.ServerError)
+            is ApiResult.NoInternetConnection -> SearchScreenState.NoInternet
+            is ApiResult.ServerError -> SearchScreenState.ServerError
+            is ApiResult.NotFound -> SearchScreenState.NotFound
             is ApiResult.Success -> {
-                if (res.data.found == 0) {
-                    SearchScreenState.Error(Placeholder.NoResult)
-                } else {
-                    SearchScreenState.Success(
-                        amount = res.data.found,
-                        lastPage = res.data.pages,
-                        vacancyList = res.data.items
-                    )
-                }
+                SearchScreenState.Success(
+                    amount = res.data.found,
+                    lastPage = res.data.pages,
+                    vacancyList = res.data.items
+                )
             }
         }
     }

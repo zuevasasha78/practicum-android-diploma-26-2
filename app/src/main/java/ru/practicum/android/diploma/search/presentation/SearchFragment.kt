@@ -9,6 +9,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -17,13 +18,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.domain.SharedPrefInteractor
-import ru.practicum.android.diploma.search.domain.models.PaginationState
-import ru.practicum.android.diploma.search.domain.models.SearchScreenState
+import ru.practicum.android.diploma.search.domain.states.PaginationState
+import ru.practicum.android.diploma.search.domain.states.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapter
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyAdapterItemDecorator
 import ru.practicum.android.diploma.search.presentation.models.Placeholder
@@ -35,7 +34,6 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var vacancyAdapter: VacancyAdapter? = null
-    private val sharedPrefInteractor: SharedPrefInteractor by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,8 +98,16 @@ class SearchFragment : Fragment() {
                 showPlaceholder(Placeholder.InitPlaceholder)
             }
 
-            is SearchScreenState.Error -> {
-                showPlaceholder(screenState.placeholder)
+            is SearchScreenState.ServerError -> {
+                showPlaceholder(Placeholder.ServerError)
+            }
+
+            is SearchScreenState.NoInternet -> {
+                showPlaceholder(Placeholder.NoInternet)
+            }
+
+            is SearchScreenState.NotFound -> {
+                showPlaceholder(Placeholder.NoResult)
             }
 
             is SearchScreenState.Success -> {
@@ -116,19 +122,7 @@ class SearchFragment : Fragment() {
                         screenState.amount
                     )
                 }
-
-                when (screenState.paginationState) {
-                    PaginationState.Idle -> binding.progressBar.isVisible = false
-                    PaginationState.Loading -> binding.progressBar.isVisible = true
-                    is PaginationState.Error -> {
-                        binding.progressBar.isVisible = false
-                        Toast.makeText(
-                            requireContext(),
-                            getString(screenState.paginationState.message),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                setPaginationState(screenState)
             }
 
             is SearchScreenState.Loading -> {
@@ -192,10 +186,7 @@ class SearchFragment : Fragment() {
     private fun updateFilterButtonHighlight() {
         val filterButton = binding.toolbar.menu.findItem(R.id.filter_button)
 
-        val hasActiveFilters =
-            sharedPrefInteractor.getChosenIndustry().id != -1 ||
-                sharedPrefInteractor.getSalary().isNotBlank() ||
-                sharedPrefInteractor.getOnlyWithSalary()
+        val hasActiveFilters = searchViewModel.isFilterSet()
 
         val iconRes = if (hasActiveFilters) {
             R.drawable.icon_filter_on
@@ -204,6 +195,30 @@ class SearchFragment : Fragment() {
         }
 
         filterButton?.setIcon(iconRes)
+    }
+
+    private fun setPaginationState(screenState: SearchScreenState.Success) {
+        when (screenState.paginationState) {
+            PaginationState.Idle -> binding.progressBar.isVisible = false
+            PaginationState.Loading -> binding.progressBar.isVisible = true
+            is PaginationState.Error -> {
+                binding.progressBar.isVisible = false
+                showToast(R.string.error_occurred)
+            }
+
+            is PaginationState.NoInternet -> {
+                binding.progressBar.isVisible = false
+                showToast(R.string.check_internet_connection)
+            }
+        }
+    }
+
+    private fun showToast(@StringRes text: Int) {
+        Toast.makeText(
+            requireContext(),
+            getString(text),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun onResume() {

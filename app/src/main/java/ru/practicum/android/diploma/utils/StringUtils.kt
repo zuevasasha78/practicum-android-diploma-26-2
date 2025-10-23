@@ -3,7 +3,8 @@ package ru.practicum.android.diploma.utils
 import android.content.Context
 import androidx.core.content.ContextCompat
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.network.domain.models.Salary
+import ru.practicum.android.diploma.search.domain.model.Salary
+import ru.practicum.android.diploma.search.domain.model.VacancyDetail
 import java.util.Currency
 
 class StringUtils(private val context: Context) {
@@ -22,5 +23,15 @@ class StringUtils(private val context: Context) {
             string.append(Currency.getInstance(salaryDto.currency).symbol)
         }
         return string.toString()
+    }
+
+    fun getShareString(vacancy: VacancyDetail): String {
+        return buildString {
+            appendLine(ContextCompat.getString(context, R.string.share_vacancy) + " ${vacancy.name}")
+            appendLine(ContextCompat.getString(context, R.string.share_company) + " ${vacancy.employerName}")
+            appendLine(ContextCompat.getString(context, R.string.share_salary) + " ${getSalaryString(vacancy.salary)}")
+            appendLine(ContextCompat.getString(context, R.string.share_town) + " ${vacancy.area}")
+            append(ContextCompat.getString(context, R.string.share_link) + " ${vacancy.url}")
+        }
     }
 }

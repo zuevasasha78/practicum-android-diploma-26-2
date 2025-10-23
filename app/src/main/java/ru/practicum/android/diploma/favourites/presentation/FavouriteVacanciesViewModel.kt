@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.db.domain.interactor.FavouriteVacancyInteractor
-import ru.practicum.android.diploma.network.domain.models.VacancyDetail
+import ru.practicum.android.diploma.favourites.domain.db.FavouriteVacancyInteractor
+import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class FavouriteVacanciesViewModel(
     private val favouriteVacancyInteractor: FavouriteVacancyInteractor
@@ -32,7 +32,7 @@ class FavouriteVacanciesViewModel(
         _screenState.value = favouriteScreenState
     }
 
-    private fun processResult(list: List<VacancyDetail>?) {
+    private fun processResult(list: List<Vacancy>?) {
         when {
             list == null -> renderState(FavouriteScreenState.Error)
             list.isEmpty() -> renderState(FavouriteScreenState.Empty)

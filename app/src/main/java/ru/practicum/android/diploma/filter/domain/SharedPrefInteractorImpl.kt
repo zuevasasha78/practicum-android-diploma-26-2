@@ -1,18 +1,17 @@
 package ru.practicum.android.diploma.filter.domain
 
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustry
-import ru.practicum.android.diploma.network.data.VacancyNetworkConvertor.convertToFilterIndustryDto
-import ru.practicum.android.diploma.network.domain.models.FilterIndustry
+import ru.practicum.android.diploma.search.domain.model.FilterIndustry
 
 class SharedPrefInteractorImpl(
-    private val sharedPreferences: SharedPreferencesRepository
+    private val sharedPreferences: SharedPreferencesRepository,
+    private val workplaceRepository: WorkplaceRepository,
 ) : SharedPrefInteractor {
     override fun getChosenIndustry(): FilterIndustry {
-        return sharedPreferences.getChosenIndustry().convertToFilterIndustry()
+        return sharedPreferences.getChosenIndustry()
     }
 
     override fun setIndustry(industry: FilterIndustry?) {
-        sharedPreferences.setIndustry(industry.convertToFilterIndustryDto())
+        sharedPreferences.setIndustry(industry)
     }
 
     override fun resetIndustry() {
@@ -37,5 +36,13 @@ class SharedPrefInteractorImpl(
 
     override fun resetSalarySettings() {
         sharedPreferences.resetSalarySettings()
+    }
+
+    override fun isFilterSet(): Boolean {
+        return sharedPreferences.getChosenIndustry().id != -1 ||
+            sharedPreferences.getSalary().isNotBlank() ||
+            sharedPreferences.getOnlyWithSalary() ||
+            workplaceRepository.getRegion() != null ||
+            workplaceRepository.getCountry() != null
     }
 }
